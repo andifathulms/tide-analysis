@@ -70,10 +70,10 @@
       "file": "ioc-benoa.json",
       "startSec": 1767229200,
       "endSec": 1785542400,
-      "sampleCount": 5053,
+      "sampleCount": 5000,
       "intervalSec": 3600,
       "datumCode": "ioc-sensor-zero",
-      "gapCount": 16,
+      "gapCount": 69,
       "fetchedOn": "2026-08-12"
     },
     {
@@ -109,10 +109,10 @@
       "file": "ioc-semarang.json",
       "startSec": 1767225600,
       "endSec": 1785542400,
-      "sampleCount": 4363,
+      "sampleCount": 5047,
       "intervalSec": 3600,
       "datumCode": "ioc-sensor-zero",
-      "gapCount": 339,
+      "gapCount": 36,
       "fetchedOn": "2026-08-12"
     },
     {
