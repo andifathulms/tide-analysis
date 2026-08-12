@@ -5,3 +5,4 @@ out/
 *.tsbuildinfo
 .env*
 coverage/
+sweep-results.json

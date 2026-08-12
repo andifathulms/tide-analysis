@@ -13,6 +13,7 @@
     "test:synthetic": "vitest run tests/synthetic",
     "test:rayleigh": "vitest run tests/rayleigh",
     "records:fetch": "tsx scripts/fetch-records.ts",
+    "records:sweep": "tsx scripts/sweep-stations.ts",
     "records:validate": "tsx scripts/validate-records.ts",
     "typecheck": "tsc --noEmit",
     "lint": "next lint"
