@@ -90,6 +90,19 @@
       "fetchedOn": "2026-08-12"
     },
     {
+      "stationId": "ioc-kolinamil",
+      "stationName": "Kolinamil, Pelabuhan Jakarta",
+      "source": "ioc",
+      "file": "ioc-kolinamil.json",
+      "startSec": 1768006800,
+      "endSec": 1785499200,
+      "sampleCount": 4278,
+      "intervalSec": 3600,
+      "datumCode": "ioc-sensor-zero",
+      "gapCount": 68,
+      "fetchedOn": "2026-08-12"
+    },
+    {
       "stationId": "ioc-padang",
       "stationName": "Padang, Sumatera Barat",
       "source": "ioc",
@@ -100,6 +113,19 @@
       "intervalSec": 3600,
       "datumCode": "ioc-sensor-zero",
       "gapCount": 13,
+      "fetchedOn": "2026-08-12"
+    },
+    {
+      "stationId": "ioc-sabang",
+      "stationName": "Sabang, Aceh",
+      "source": "ioc",
+      "file": "ioc-sabang.json",
+      "startSec": 1767229200,
+      "endSec": 1785542400,
+      "sampleCount": 5009,
+      "intervalSec": 3600,
+      "datumCode": "ioc-sensor-zero",
+      "gapCount": 64,
       "fetchedOn": "2026-08-12"
     },
     {

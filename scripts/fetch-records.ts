@@ -107,6 +107,30 @@ const STATIONS: readonly StationSpec[] = [
     timeZoneLabel: 'WIB',
   },
   {
+    // Diurnal — the regime PRD §3 names Tanjung Priok for. This gauge sits in
+    // Jakarta's port, and the sweep put it at F = 3.8: one tide a day.
+    stationId: 'ioc-kolinamil',
+    stationName: 'Kolinamil, Pelabuhan Jakarta',
+    source: 'ioc',
+    code: 'koli',
+    latitude: -6.1,
+    longitude: 106.85,
+    utcOffsetHours: 7,
+    timeZoneLabel: 'WIB',
+  },
+  {
+    // Semidiurnal — the other end of the range, at the mouth of the Malacca
+    // Strait. Two nearly equal tides a day.
+    stationId: 'ioc-sabang',
+    stationName: 'Sabang, Aceh',
+    source: 'ioc',
+    code: 'saba',
+    latitude: 5.88,
+    longitude: 95.32,
+    utcOffsetHours: 7,
+    timeZoneLabel: 'WIB',
+  },
+  {
     stationId: 'ioc-ambon',
     stationName: 'Ambon, Maluku',
     source: 'ioc',

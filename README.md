@@ -15,6 +15,20 @@ Static site, no backend, no runtime network. Indonesian first.
 - **Reports its conditioning.** κ(A) is a required field of every fit result, not an optional diagnostic.
 - **Shows the residual.** Observation minus model, in its own band on the same time axis, never suppressed. Two thirds of each record is fitted and the last third is held out and predicted, so the model is visibly tested on data it never saw.
 
+## Four ports, four characters
+
+The Formzahl number F = (K1 + O1) / (M2 + S2) classifies tidal character, and the archipelago holds all four classes. Every figure below came out of a least-squares fit to that station's own record:
+
+| Station | F | Class |
+|---|---|---|
+| Sabang, Aceh | 0.204 | semidiurnal |
+| Benoa, Bali | 0.413 | mixed, mainly semidiurnal |
+| Ambon | 0.811 | mixed, mainly semidiurnal |
+| Semarang | 1.597 | mixed, mainly diurnal |
+| Kolinamil, Jakarta Port | 3.486 | diurnal |
+
+`pnpm records:sweep` is how those stations were found: it surveys every open Indonesian station on a short window and classifies each one. Its numbers choose stations; they are never reported, because four constituents over 35 days let P1 leak into K1 and inflate F.
+
 ## Astronomy
 
 Constituent speeds are derived from the time derivatives of the five astronomical elements — no frequency is written down as a literal anywhere in the code. `pnpm test:astro` checks them against the published Schureman table to 1e-6 °/h, and checks the element rates against the tropical, synodic, anomalistic and draconic periods and the 18.61-year nodal cycle.
@@ -42,6 +56,7 @@ pnpm test:astro             # Doodson arguments + nodal factors vs published val
 pnpm test:synthetic         # recover known constants from generated records
 pnpm test:rayleigh          # resolution refusal + conditioning, both directions
 pnpm records:fetch          # DEV/CI only — pull station records from open sources
+pnpm records:sweep          # DEV only — survey every open Indonesian station
 pnpm records:validate       # licence gate, datum present, gaps documented
 pnpm typecheck
 ```

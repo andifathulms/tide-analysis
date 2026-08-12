@@ -164,7 +164,22 @@ The site states prominently and repeatedly that this is an educational tool, not
 
 M0–M6 implemented. 229 tests green, `pnpm build` exports 62 pages, `pnpm lint` and `pnpm typecheck` clean.
 
-Six IOC stations bundled — Benoa, Surabaya, Semarang, Bitung, Padang, Ambon — 212 days each, hourly, 1 January to 1 August 2026. Formzahl runs from 0.39 at Padang to 1.60 at Semarang, so two of the four regimes are represented; the diurnal end (Tanjung Priok) has no active open station, so the four-port contrast in PRD §3 is not yet complete.
+Eight IOC stations bundled, 212 days each, hourly, 1 January to 1 August 2026. `pnpm records:sweep` surveyed all 57 open Indonesian stations on a 35-day window and found all four Formzahl regimes, so the four-port contrast in PRD §3 is complete and computed rather than quoted:
+
+| Station | F | Class |
+|---|---|---|
+| Sabang, Aceh | 0.204 | harian ganda |
+| Padang | 0.394 | campuran condong ganda |
+| Benoa | 0.413 | campuran condong ganda |
+| Bitung | 0.578 | campuran condong ganda |
+| Ambon | 0.811 | campuran condong ganda |
+| Surabaya | 1.242 | campuran condong tunggal (borderline) |
+| Semarang | 1.597 | campuran condong tunggal |
+| Kolinamil, Pelabuhan Jakarta | 3.486 | harian tunggal |
+
+The diurnal one is a gauge in Jakarta's port — the regime PRD §3 attributes to Tanjung Priok, recovered from the record. It has the most gaps of the eight (740 hours) and covers 202.5 days rather than 212.
+
+**Sweep F and bundled F are not the same number** and should not be compared as if they were. The sweep fits four constituents over 35 days; a bundled record fits ten over 212. With P1 and K2 unresolvable on a short window they leak into K1 and S2, inflating F — Semarang reads 2.86 on the sweep and 1.597 on its record. The sweep is for choosing stations, not for reporting.
 
 **UHSLC ships disabled, not enabled as PRD §4 assumed.** Its portal attaches per-country attribution conditions set by the operator that owns the gauge, and for Indonesian stations that operator is BIG — the same terms this project has not verified. The adapter is written and tested; enabling it is a manifest change once someone reads the terms. IOC carries the launch alone.
 

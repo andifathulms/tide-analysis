@@ -11,8 +11,12 @@ export const RECORD_LOADERS: Record<string, () => Promise<SerialisedRecord>> = {
     import('./ioc-benoa.json').then((m) => m.default as unknown as SerialisedRecord),
   'ioc-bitung': () =>
     import('./ioc-bitung.json').then((m) => m.default as unknown as SerialisedRecord),
+  'ioc-kolinamil': () =>
+    import('./ioc-kolinamil.json').then((m) => m.default as unknown as SerialisedRecord),
   'ioc-padang': () =>
     import('./ioc-padang.json').then((m) => m.default as unknown as SerialisedRecord),
+  'ioc-sabang': () =>
+    import('./ioc-sabang.json').then((m) => m.default as unknown as SerialisedRecord),
   'ioc-semarang': () =>
     import('./ioc-semarang.json').then((m) => m.default as unknown as SerialisedRecord),
   'ioc-surabaya': () =>

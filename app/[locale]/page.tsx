@@ -1,15 +1,46 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { FormzahlComparison, type FormzahlRow } from '@/components/FormzahlComparison'
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { dictionary, isLocale, type Locale } from '@/lib/i18n/dictionary'
 import { MANIFEST, stations } from '@/lib/records/registry'
 import { formatDate, formatDays } from '@/lib/view/format'
+import { analyseStation } from '@/lib/view/station'
 
-export default function HomePage({ params }: { params: { locale: string } }) {
+/** Fitted at build time, one per bundled station. Nothing is quoted. */
+async function formzahlRows(): Promise<FormzahlRow[]> {
+  const analyses = await Promise.all(stations().map((s) => analyseStation(s.stationId)))
+  const rows: FormzahlRow[] = []
+
+  for (const analysis of analyses) {
+    if (analysis === null) continue
+    const shown =
+      analysis.primary.outcome.type === 'fit' ? analysis.primary : analysis.fallback?.analysis
+    if (shown === undefined || shown.formzahl === null || shown.formzahl.missing.length > 0) continue
+
+    rows.push({
+      stationId: analysis.station.stationId,
+      stationName: analysis.station.stationName,
+      value: shown.formzahl.value,
+      label: shown.formzahl.label,
+      description: shown.formzahl.description,
+      type: shown.formzahl.type,
+      M2: shown.formzahl.amplitudes.M2,
+      S2: shown.formzahl.amplitudes.S2,
+      K1: shown.formzahl.amplitudes.K1,
+      O1: shown.formzahl.amplitudes.O1,
+    })
+  }
+
+  return rows.sort((a, b) => a.value - b.value)
+}
+
+export default async function HomePage({ params }: { params: { locale: string } }) {
   if (!isLocale(params.locale)) notFound()
   const locale = params.locale as Locale
   const dict = dictionary(locale)
   const list = stations()
+  const formzahl = await formzahlRows()
   const blocked = MANIFEST.sources.filter((s) => !s.enabled && s.id !== 'synthetic')
 
   return (
@@ -28,6 +59,14 @@ export default function HomePage({ params }: { params: { locale: string } }) {
           ))}
         </ul>
       </section>
+
+      {formzahl.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="text-xl">{dict.home.characterTitle}</h2>
+          <p className="max-w-3xl text-sm text-traceInk/80">{dict.home.characterLead}</p>
+          <FormzahlComparison dict={dict} locale={locale} rows={formzahl} />
+        </section>
+      )}
 
       <section>
         <h2 className="text-xl">{dict.home.stationsTitle}</h2>

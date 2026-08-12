@@ -75,6 +75,8 @@ export interface Dictionary {
     readonly why: readonly string[]
     readonly stationsTitle: string
     readonly stationsLead: string
+    readonly characterTitle: string
+    readonly characterLead: string
   }
   readonly catatan: {
     readonly title: string
@@ -191,6 +193,9 @@ const id: Dictionary = {
     stationsTitle: 'Stasiun',
     stationsLead:
       'Setiap rekaman membawa sumber, lisensi, periode, dan datumnya. Tidak ada yang diasumsikan merujuk MSL.',
+    characterTitle: 'Empat pelabuhan, empat watak, satu fisika',
+    characterLead:
+      'Bilangan Formzahl F = (K1 + O1) / (M2 + S2) menggolongkan watak pasang surut. Nusantara memuat keempat golongannya: Sabang dua kali sehari nyaris seimbang, Pelabuhan Jakarta sekali sehari, sisanya di antara keduanya. Setiap angka di bawah ini keluar dari pencocokan kuadrat terkecil atas rekaman stasiun itu sendiri — tidak ada yang dikutip dari tabel.',
   },
   catatan: {
     title: 'Catatan',
@@ -314,6 +319,9 @@ const en: Dictionary = {
     stationsTitle: 'Stations',
     stationsLead:
       'Every record carries its source, licence, period and datum. Nothing is assumed to be referenced to MSL.',
+    characterTitle: 'Four ports, four characters, one physics',
+    characterLead:
+      'The Formzahl number F = (K1 + O1) / (M2 + S2) classifies tidal character, and the archipelago holds all four classes: Sabang has two nearly equal tides a day, Jakarta Port has one, and the rest sit between them. Every number below came out of a least-squares fit to that station\'s own record — none of it is quoted from a table.',
   },
   catatan: {
     title: 'The record',
