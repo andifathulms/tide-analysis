@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { MakerSignature } from '@/components/MakerSignature'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 
 export function generateStaticParams() {
@@ -70,15 +71,22 @@ export default function LocaleLayout({
       <main className="mx-auto w-full max-w-page flex-1 px-5 py-8 sm:py-10">{children}</main>
 
       <footer className="mt-16 border-t border-rule bg-surface">
-        <div className="mx-auto max-w-page space-y-3 px-5 py-8 text-caption text-inkMuted">
+        <div className="mx-auto max-w-page px-5 py-8 text-caption text-inkMuted">
+          {/* The notice a reader must not miss, and what the site is. */}
           <p className="max-w-reading">
             <span className="font-medium text-unresolved">{dict.warning.title}.</span>{' '}
             {dict.warning.official}
           </p>
-          <p className="max-w-reading text-inkFaint">
-            {dict.siteName} — {dict.tagline}. Sumber terbuka, tanpa server, tanpa jaringan saat
-            dijalankan.
-          </p>
+
+          {/* The bottom bar: what this is on the left, who made it on the
+              right. One seam for the whole footer — the border above. */}
+          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
+            <p className="max-w-reading text-inkFaint">
+              {dict.siteName} — {dict.tagline}. Sumber terbuka, tanpa server, tanpa jaringan saat
+              dijalankan.
+            </p>
+            <MakerSignature />
+          </div>
         </div>
       </footer>
     </div>
