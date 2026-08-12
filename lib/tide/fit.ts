@@ -13,6 +13,7 @@ import { buildDesignMatrix, evaluateDesign, type DesignMatrix } from './design'
 import { assessResolution, type ResolutionAssessment, type ResolutionConflict } from './rayleigh'
 import { recordCentreSec, recordLengthHours, type TideRecord } from './record'
 import { solveLeastSquares } from './solve'
+import { detectSteps, type DatumStep } from './steps'
 
 export type Method = 'least-squares' | 'admiralty'
 
@@ -36,6 +37,15 @@ export interface ConstituentConstant {
 
 export type Conditioning = 'baik' | 'wajar' | 'marginal' | 'buruk'
 
+/** One datum segment's mean level, and how it got there. */
+export interface LevelSegment {
+  readonly fromSec: number
+  readonly toSec: number
+  readonly meanLevelM: number
+  /** Shift from the previous segment, metres. Null for the first. */
+  readonly shiftFromPreviousM: number | null
+}
+
 export interface HarmonicFit {
   readonly type: 'fit'
   readonly method: Method
@@ -44,9 +54,17 @@ export interface HarmonicFit {
   readonly windowEndSec: number
   readonly sampleCount: number
   readonly lengthDays: number
-  /** Z0 — mean level over the window, in the record's datum. */
+  /**
+   * Z0 — mean level over the window. Where the gauge's zero moved mid-record
+   * this is the level of the last segment, which is the one a prediction
+   * carries forward.
+   */
   readonly meanLevelM: number
   readonly datumCode: string
+  /** One per datum segment; a single entry when the zero never moved. */
+  readonly levels: readonly LevelSegment[]
+  /** Steps the record was found to contain, declared and modelled. */
+  readonly steps: readonly DatumStep[]
   readonly constants: readonly ConstituentConstant[]
   /** κ(A). Not optional, ever. */
   readonly conditionNumber: number
@@ -77,6 +95,12 @@ export interface FitOptions {
   readonly constituents: readonly ConstituentName[]
   /** Overrides the record's centre for f and u. Rarely needed. */
   readonly nodalEpochSec?: number
+  /**
+   * Datum steps to model. Detected from the record when not given; pass an
+   * empty array to fit as though the gauge's zero never moved, which is what
+   * every tide package does by default and what biases the result.
+   */
+  readonly steps?: readonly DatumStep[]
 }
 
 /**
@@ -131,12 +155,28 @@ export function fitHarmonics(options: FitOptions): FitOutcome {
   }
 
   const nodalEpochSec = options.nodalEpochSec ?? recordCentreSec(record)
+  const steps =
+    options.steps ?? detectSteps(record.timesSec, record.heightsM, record.intervalSec)
   const design = buildDesignMatrix({
     timesSec: record.timesSec,
     constituents,
     nodalEpochSec,
+    steps,
   })
   const solution = solveLeastSquares(design, record.heightsM)
+
+  const levels: LevelSegment[] = design.levels.map((level, index) => {
+    const meanLevelM = solution.coefficients[level.column] as number
+    const previousColumn = index === 0 ? null : (design.levels[index - 1]?.column ?? null)
+    const previous =
+      previousColumn === null ? null : (solution.coefficients[previousColumn] as number)
+    return {
+      fromSec: level.fromSec,
+      toSec: level.toSec,
+      meanLevelM,
+      shiftFromPreviousM: previous === null ? null : meanLevelM - previous,
+    }
+  })
 
   const constants = design.pairs.map((pair): ConstituentConstant => {
     const a = solution.coefficients[pair.cosColumn] as number
@@ -179,8 +219,10 @@ export function fitHarmonics(options: FitOptions): FitOutcome {
     windowEndSec: record.timesSec[n - 1] as number,
     sampleCount: n,
     lengthDays: availableHours / 24,
-    meanLevelM: solution.coefficients[0] as number,
+    meanLevelM: (levels[levels.length - 1] as LevelSegment).meanLevelM,
     datumCode: record.datum.code,
+    levels,
+    steps: design.steps,
     constants: [...constants].sort((x, y) => y.amplitudeM - x.amplitudeM),
     conditionNumber: solution.conditionNumber,
     conditioning: conditioningOf(solution.conditionNumber),
@@ -197,6 +239,7 @@ export function modelAtRecordTimes(record: TideRecord, fit: HarmonicFit): Float6
     timesSec: record.timesSec,
     constituents: fit.constants.map((c) => c.name),
     nodalEpochSec: fit.nodalEpochSec,
+    steps: fit.steps,
   })
   return evaluateDesign(design, coefficientsFrom(fit, design))
 }
@@ -204,7 +247,14 @@ export function modelAtRecordTimes(record: TideRecord, fit: HarmonicFit): Float6
 /** Rebuild the design-matrix coefficient vector from reported constants. */
 export function coefficientsFrom(fit: HarmonicFit, design: DesignMatrix): Float64Array {
   const coefficients = new Float64Array(design.columns)
-  coefficients[0] = fit.meanLevelM
+  // Each segment carries its own level. A design matrix built for a different
+  // window may have fewer segments than the fit did; the nearest one applies.
+  for (const level of design.levels) {
+    const match =
+      fit.levels.find((segment) => level.fromSec >= segment.fromSec && level.fromSec <= segment.toSec) ??
+      fit.levels[fit.levels.length - 1]
+    coefficients[level.column] = match?.meanLevelM ?? fit.meanLevelM
+  }
   for (const pair of design.pairs) {
     const constant = fit.constants.find((c) => c.name === pair.name)
     if (constant === undefined) continue

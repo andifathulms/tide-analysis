@@ -85,6 +85,29 @@ export function TideChart({
             ))}
         </g>
 
+        {/* Where the gauge's zero moved. Everything left of the mark is in a
+            different datum from everything right of it. */}
+        {model.datumStepMarks.map((mark) => (
+          <g key={`step${mark.x}`}>
+            <line
+              x1={mark.x}
+              x2={mark.x}
+              y1={model.plot.y}
+              y2={model.height - 24}
+              className="stroke-unresolved"
+              strokeWidth={1}
+              strokeDasharray="3 3"
+            />
+            <text
+              x={mark.x + 4}
+              y={model.plot.y + 24}
+              className="fill-unresolved text-[10px] control"
+            >
+              datum {mark.label}
+            </text>
+          </g>
+        ))}
+
         {/* Datums, labelled on the face — a real tide chart carries them. */}
         <g>
           {model.datumLines.map((datum) => (

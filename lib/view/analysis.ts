@@ -47,6 +47,7 @@ export function modelSeries(fit: HarmonicFit, timesSec: Float64Array): Float64Ar
     timesSec,
     constituents: fit.constants.map((c) => c.name),
     nodalEpochSec: fit.nodalEpochSec,
+    steps: fit.steps,
   })
   return evaluateDesign(design, coefficientsFrom(fit, design))
 }

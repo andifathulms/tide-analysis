@@ -6,6 +6,7 @@ import { STANDARD_SET } from '@/lib/tide/constituents'
 import { resolvableSubset } from '@/lib/tide/rayleigh'
 import { recordLengthDays, rootMeanSquare } from '@/lib/tide/record'
 import { formzahl } from '@/lib/tide/formzahl'
+import { detectSteps } from '@/lib/tide/steps'
 
 /**
  * The whole pipeline over every bundled record. A unit test cannot tell you
@@ -94,6 +95,47 @@ describe.each(list.map((station) => [station.stationName, station.stationId] as 
       expect(result.missing).toEqual([])
       expect(Number.isFinite(result.value)).toBe(true)
       expect(result.label.length).toBeGreaterThan(0)
+    })
+
+    it('carries no datum step — the gauge zero held for the whole record', async () => {
+      const record = await loadRecord(stationId)
+      expect(detectSteps(record.timesSec, record.heightsM, record.intervalSec)).toEqual([])
+    })
+
+    it('would show a half-metre step if the gauge zero had moved', async () => {
+      /**
+       * The detector must be shown to work on this record, not merely to stay
+       * silent on it. A step is injected at a point with a clean day either
+       * side, since detection across a gap is correctly blind.
+       */
+      const record = await loadRecord(stationId)
+      const window = Math.round(86400 / record.intervalSec)
+      let at = -1
+      for (let i = window; i < record.timesSec.length - window && at < 0; i += 1) {
+        let clean = true
+        for (let k = -window; k <= window && clean; k += 1) {
+          if (record.timesSec[i + k]! !== record.timesSec[i]! + k * record.intervalSec) clean = false
+        }
+        if (clean && i > record.timesSec.length / 3) at = i
+      }
+      expect(at).toBeGreaterThan(0)
+
+      const shifted = Float64Array.from(record.heightsM)
+      for (let i = at; i < shifted.length; i += 1) shifted[i] = shifted[i]! + 0.5
+
+      const found = detectSteps(record.timesSec, shifted, record.intervalSec)
+      expect(found.length).toBeGreaterThanOrEqual(1)
+      expect(Math.abs(found[0]!.shiftM)).toBeGreaterThan(0.25)
+    })
+
+    it('cannot see a step smaller than the weather, and does not pretend to', async () => {
+      // 0.2 m is inside the range these gauges wander on their own. Reporting
+      // one would be inventing a datum change out of a storm.
+      const record = await loadRecord(stationId)
+      const shifted = Float64Array.from(record.heightsM)
+      const at = Math.floor(shifted.length / 2)
+      for (let i = at; i < shifted.length; i += 1) shifted[i] = shifted[i]! + 0.2
+      expect(detectSteps(record.timesSec, shifted, record.intervalSec)).toEqual([])
     })
 
     it('is deterministic', async () => {

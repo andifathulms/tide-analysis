@@ -57,6 +57,7 @@ export default async function RecordPage({
           ],
           fitWindow: shown.fitWindow,
           heldOutWindow: shown.heldOutWindow,
+          datumSteps: shown.outcome.type === 'fit' ? shown.outcome.steps : [],
         })
 
   return (

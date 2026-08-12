@@ -36,6 +36,8 @@ export interface ChartInput {
   readonly datums: readonly DatumLine[]
   readonly fitWindow?: { readonly startSec: number; readonly endSec: number }
   readonly heldOutWindow?: { readonly startSec: number; readonly endSec: number } | null
+  /** Datum steps to mark on the face. The zero moved here. */
+  readonly datumSteps?: ReadonlyArray<{ readonly atSec: number; readonly shiftM: number }>
 }
 
 export interface ChartModel {
@@ -64,6 +66,7 @@ export interface ChartModel {
     readonly x: number
     readonly width: number
   } | null
+  readonly datumStepMarks: ReadonlyArray<{ readonly x: number; readonly label: string }>
   readonly xDomain: readonly [number, number]
 }
 
@@ -159,6 +162,10 @@ export function buildChartModel(input: ChartInput): ChartModel {
       y: y(datum.heightM),
       label: datum.label,
       emphasis: datum.emphasis ?? false,
+    })),
+    datumStepMarks: (input.datumSteps ?? []).map((step) => ({
+      x: x(step.atSec),
+      label: `${step.shiftM >= 0 ? '+' : ''}${step.shiftM.toFixed(2)} m`,
     })),
     heldOutRect:
       input.heldOutWindow == null
