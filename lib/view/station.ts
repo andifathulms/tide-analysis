@@ -48,7 +48,11 @@ export async function analyseStation(
 
   let fallback: StationAnalysis['fallback'] = null
   if (primary.outcome.type === 'refusal') {
-    const { kept, dropped } = resolvableSubset(requested, recordLengthHours(record))
+    // The subset has to be resolvable on the window that will actually be
+    // fitted, not on the whole record: with two thirds fitted and one third
+    // held out, those are different lengths and the difference is months.
+    const fittedHours = recordLengthHours(record) * (options.fitFraction ?? 1)
+    const { kept, dropped } = resolvableSubset(requested, fittedHours)
     if (kept.length > 0) {
       fallback = {
         analysis: analyse({ record, constituents: kept, fitFraction: options.fitFraction }),
