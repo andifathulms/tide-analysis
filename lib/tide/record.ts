@@ -40,6 +40,13 @@ export interface RecordMetadata {
   readonly latitude: number
   readonly longitude: number
   readonly datum: Datum
+  /**
+   * Offset of the station's civil time from UTC, hours. Display only — the
+   * numerical core never sees it (invariant 8).
+   */
+  readonly utcOffsetHours?: number
+  /** Label for that offset, e.g. 'WITA'. Display only. */
+  readonly timeZoneLabel?: string
   /** Nominal sampling interval in seconds. */
   readonly intervalSec: number
   readonly units: 'm'

@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    background-color: theme('colors.chart');
+    color: theme('colors.traceInk');
+  }
+
+  body {
+    font-family: theme('fontFamily.prose');
+    /* The paper of a marégraphe roll, not a white screen. */
+    background-color: theme('colors.chart');
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: theme('fontFamily.prose');
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  /* Columns of numbers must align and must not reflow as they update. */
+  .numeric {
+    font-family: theme('fontFamily.mono');
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  .control {
+    font-family: theme('fontFamily.ui');
+  }
+}
+
+@layer components {
+  .rule {
+    border-color: theme('colors.grid');
+  }
+
+  .card {
+    border: 1px solid theme('colors.grid');
+    background-color: rgb(255 255 255 / 0.35);
+  }
+}
+
+/* The Rayleigh slider redraws rather than transitions: the fit is
+   discontinuous, and animating it would imply otherwise (PRD §9). */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
