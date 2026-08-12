@@ -56,21 +56,33 @@ export interface TideRecord extends RecordMetadata {
   readonly heightsM: Float64Array
 }
 
-/** The serialised form bundled under data/records. */
+/**
+ * The serialised form bundled under data/records.
+ *
+ * Times are stored as slot indices on the record's own interval rather than as
+ * absolute seconds — the grid is regular by construction, so the absolute
+ * times are derivable and storing them would triple the bundle. A slot that is
+ * missing from `sampleIndices` is a gap, and the gap is declared as well.
+ */
 export interface SerialisedRecord extends RecordMetadata {
   readonly startSec: number
-  readonly timesSec: readonly number[]
+  /** Offsets from startSec in units of intervalSec, strictly increasing. */
+  readonly sampleIndices: readonly number[]
   readonly heightsM: readonly number[]
 }
 
 export function toTideRecord(serialised: SerialisedRecord): TideRecord {
-  const { timesSec, heightsM, ...metadata } = serialised
-  if (timesSec.length !== heightsM.length) {
-    throw new Error(`${metadata.stationId}: times and heights differ in length`)
+  const { sampleIndices, heightsM, startSec, ...metadata } = serialised
+  if (sampleIndices.length !== heightsM.length) {
+    throw new Error(`${metadata.stationId}: sample indices and heights differ in length`)
+  }
+  const timesSec = new Float64Array(sampleIndices.length)
+  for (let i = 0; i < sampleIndices.length; i += 1) {
+    timesSec[i] = startSec + (sampleIndices[i] as number) * metadata.intervalSec
   }
   return {
     ...metadata,
-    timesSec: Float64Array.from(timesSec),
+    timesSec,
     heightsM: Float64Array.from(heightsM),
   }
 }

@@ -1,0 +1,53 @@
+{
+  "sources": [
+    {
+      "id": "ioc",
+      "name": "IOC Sea Level Station Monitoring Facility (UNESCO/IOC & VLIZ)",
+      "homepage": "https://www.ioc-sealevelmonitoring.org",
+      "termsUrl": "https://www.ioc-sealevelmonitoring.org/disclaimer.php",
+      "status": "resolved",
+      "enabled": true,
+      "licence": "Akses terbuka dengan kewajiban sitasi (VLIZ/IOC, DOI 10.14284/482)",
+      "attribution": "Flanders Marine Institute (VLIZ); Intergovernmental Oceanographic Commission (IOC) (2026): Sea level station monitoring facility. https://www.ioc-sealevelmonitoring.org — DOI 10.14284/482",
+      "verifiedOn": "2026-08-12",
+      "note": "Data disajikan apa adanya tanpa kendali mutu, sesuai disclaimer resmi fasilitas; sitasi wajib dan sudah dicantumkan pada setiap tampilan."
+    },
+    {
+      "id": "uhslc",
+      "name": "University of Hawaii Sea Level Center",
+      "homepage": "https://uhslc.soest.hawaii.edu/data/",
+      "termsUrl": "https://uhslc.soest.hawaii.edu/data/",
+      "status": "unverified",
+      "enabled": false,
+      "licence": "",
+      "attribution": "Caldwell, P. C., M. A. Merrifield, P. R. Thompson (2015), Sea level measured by tide gauges from global oceans, NOAA NCEI, doi:10.7289/V5V40S7W",
+      "verifiedOn": "2026-08-12",
+      "note": "Portal UHSLC melampirkan syarat atribusi per negara yang ditetapkan operator pemilik alat; untuk stasiun Indonesia operator itu BIG, dan syaratnya belum diverifikasi. Adapter tersedia, gerbang lisensi menutupnya."
+    },
+    {
+      "id": "big",
+      "name": "Badan Informasi Geospasial",
+      "homepage": "https://tides.big.go.id",
+      "termsUrl": "https://tides.big.go.id",
+      "status": "unverified",
+      "enabled": false,
+      "licence": "",
+      "attribution": "",
+      "verifiedOn": "2026-08-12",
+      "note": "Syarat redistribusi rekaman stasiun maupun produk Model Pasut belum diverifikasi. Tidak ada data BIG dalam repositori ini."
+    },
+    {
+      "id": "synthetic",
+      "name": "Rekaman sintetik (dibangkitkan untuk pengujian)",
+      "homepage": "",
+      "termsUrl": "",
+      "status": "resolved",
+      "enabled": true,
+      "licence": "CC0-1.0",
+      "attribution": "Dibangkitkan dari konstanta yang diketahui oleh proyek ini",
+      "verifiedOn": "2026-08-12",
+      "note": "Bukan pengamatan. Dipakai hanya dalam pengujian ground-truth, tidak pernah ditampilkan sebagai rekaman stasiun."
+    }
+  ],
+  "records": []
+}
