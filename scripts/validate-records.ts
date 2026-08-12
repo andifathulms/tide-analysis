@@ -82,6 +82,21 @@ function main(): void {
       previous = index
     }
 
+    // A stuck gauge reports the same number for months. It passes every
+    // structural check above and carries no tide at all, so the variance is
+    // checked here rather than discovered in a fit that recovers 4 mm of M2.
+    if (record.heightsM.length > 0) {
+      const mean = record.heightsM.reduce((sum, h) => sum + h, 0) / record.heightsM.length
+      const sigma = Math.sqrt(
+        record.heightsM.reduce((sum, h) => sum + (h - mean) ** 2, 0) / record.heightsM.length,
+      )
+      if (sigma < 0.02) {
+        problems.push(
+          `${where}: readings barely vary (σ = ${sigma.toFixed(4)} m). This is a stuck gauge, not a tide record.`,
+        )
+      }
+    }
+
     const endSec = record.startSec + previous * record.intervalSec
     if (endSec !== declaration.endSec || record.startSec !== declaration.startSec) {
       problems.push(`${where}: the period in the manifest does not match the file.`)

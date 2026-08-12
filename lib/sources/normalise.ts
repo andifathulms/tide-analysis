@@ -56,7 +56,11 @@ export function normalise(samples: readonly RawSample[], options: NormaliseOptio
       outOfRange += 1
       continue
     }
-    byTime.set(Math.round(sample.timeSec), sample.heightM)
+    // First reading for an instant wins. Deterministic, and it matters: a
+    // later reading for the same instant is a different sensor or a
+    // retransmission, and quietly overwriting would mix them.
+    const key = Math.round(sample.timeSec)
+    if (!byTime.has(key)) byTime.set(key, sample.heightM)
   }
   const duplicates = samples.length - byTime.size - outOfRange
 

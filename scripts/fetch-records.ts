@@ -18,7 +18,14 @@ import {
   type RecordManifest,
 } from '../lib/sources/manifest'
 import { normalise, totalGapHours, type RawSample } from '../lib/sources/normalise'
-import { iocDataUrl, parseIocResponse, IOC_DATUM } from '../lib/sources/ioc'
+import {
+  iocDataUrl,
+  parseIocSamples,
+  chooseSensor,
+  describeSensors,
+  profileSensors,
+  IOC_DATUM,
+} from '../lib/sources/ioc'
 import type { SerialisedRecord, SourceId } from '../lib/tide/record'
 
 const RECORDS_DIR = join(process.cwd(), 'data', 'records')
@@ -145,8 +152,14 @@ async function fetchJsonWithRetry(url: string, stationId: string): Promise<unkno
   throw lastError ?? new Error(`${stationId}: request failed`)
 }
 
-async function fetchIoc(spec: StationSpec): Promise<RawSample[]> {
-  const samples: RawSample[] = []
+interface IocFetchResult {
+  readonly samples: readonly RawSample[]
+  readonly sensor: string
+  readonly sensorNote: string
+}
+
+async function fetchIoc(spec: StationSpec): Promise<IocFetchResult> {
+  const raw: Array<RawSample & { sensor: string }> = []
   const end = new Date(`${WINDOW_END}T00:00:00Z`)
   let cursor = new Date(`${WINDOW_START}T00:00:00Z`)
 
@@ -160,14 +173,33 @@ async function fetchIoc(spec: StationSpec): Promise<RawSample[]> {
       endIso: isoDay(chunkEnd),
     })
     const payload = await fetchJsonWithRetry(url, spec.stationId)
-    const chunk = parseIocResponse(payload, spec.sensor)
-    samples.push(...chunk)
+    const chunk = parseIocSamples(payload)
+    raw.push(...chunk)
     process.stdout.write(
-      `  ${spec.stationId} ${isoDay(cursor)} → ${isoDay(chunkEnd)}: ${chunk.length} sampel\n`,
+      `  ${spec.stationId} ${isoDay(cursor)} → ${isoDay(chunkEnd)}: ${chunk.length} bacaan\n`,
     )
     cursor = chunkEnd
   }
-  return samples
+
+  // One sensor, chosen deterministically. A station reports several against
+  // their own zeros, and merging them would mix datums (invariant 9). The one
+  // that actually varies is the one recording a tide; a stuck gauge is not a
+  // record, and a station where nothing varies is skipped rather than bundled.
+  const profiles = profileSensors(raw)
+  const chosen = spec.sensor === undefined ? chooseSensor(profiles) : { sensor: spec.sensor, reason: 'dipilih manual' }
+  process.stdout.write(`  ${spec.stationId} sensor: ${describeSensors(profiles)}\n`)
+  if (chosen.sensor === null) {
+    throw new Error(`${spec.stationId}: ${chosen.reason} — ${describeSensors(profiles)}`)
+  }
+  process.stdout.write(`  ${spec.stationId} → sensor ${chosen.sensor} (${chosen.reason})\n`)
+
+  return {
+    samples: raw
+      .filter((sample) => sample.sensor === chosen.sensor)
+      .map(({ timeSec, heightM }) => ({ timeSec, heightM })),
+    sensor: chosen.sensor,
+    sensorNote: `Sensor ${chosen.sensor} dipilih (${chosen.reason}) dari ${describeSensors(profiles)}; hanya satu sensor dipakai agar datum tidak tercampur.`,
+  }
 }
 
 async function fetchStation(
@@ -180,7 +212,7 @@ async function fetchStation(
   if (spec.source !== 'ioc') {
     throw new Error(`No fetcher wired for source '${spec.source}'`)
   }
-  const samples = await fetchIoc(spec)
+  const { samples, sensorNote } = await fetchIoc(spec)
 
   const { record, dropped } = normalise(samples, {
     targetIntervalSec: 3600,
@@ -195,7 +227,10 @@ async function fetchStation(
       datum: IOC_DATUM,
       utcOffsetHours: spec.utcOffsetHours,
       timeZoneLabel: spec.timeZoneLabel,
-      processing: `Diambil dari ${source.name} untuk ${WINDOW_START}…${WINDOW_END}; disampel ke grid jam dengan aturan sampel terdekat (toleransi 10 menit); tanpa interpolasi.`,
+      processing:
+        `Diambil dari ${source.name} untuk ${WINDOW_START}…${WINDOW_END}. ` +
+        `${sensorNote} ` +
+        `Disampel ke grid jam dengan aturan sampel terdekat (toleransi 10 menit); tanpa interpolasi.`,
     },
   })
 

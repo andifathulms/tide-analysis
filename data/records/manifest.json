@@ -49,5 +49,19 @@
       "note": "Bukan pengamatan. Dipakai hanya dalam pengujian ground-truth, tidak pernah ditampilkan sebagai rekaman stasiun."
     }
   ],
-  "records": []
+  "records": [
+    {
+      "stationId": "ioc-benoa",
+      "stationName": "Benoa, Bali",
+      "source": "ioc",
+      "file": "ioc-benoa.json",
+      "startSec": 1767229200,
+      "endSec": 1785542400,
+      "sampleCount": 5053,
+      "intervalSec": 3600,
+      "datumCode": "ioc-sensor-zero",
+      "gapCount": 16,
+      "fetchedOn": "2026-08-12"
+    }
+  ]
 }

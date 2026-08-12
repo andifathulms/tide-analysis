@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { normalise, totalGapHours, type RawSample } from '@/lib/sources/normalise'
 import { assertSourceUsable, validateManifest, LicenceGateError } from '@/lib/sources/manifest'
-import { parseIocResponse } from '@/lib/sources/ioc'
+import { parseIocResponse, chooseSensor, profileSensors } from '@/lib/sources/ioc'
 import { toTideRecord } from '@/lib/tide/record'
 import manifest from '@/data/records/manifest.json'
 import type { RecordManifest } from '@/lib/sources/manifest'
@@ -113,6 +113,62 @@ describe('the IOC parser', () => {
 
   it('rejects a response that is not an array rather than coercing it', () => {
     expect(() => parseIocResponse({ error: 'nope' })).toThrow()
+  })
+})
+
+describe('choosing one sensor per station', () => {
+  /**
+   * Benoa in 2026: the radar sat at −0.281 m for seven months while a second
+   * sensor recorded a 2.3 m tide beside it. Taking the sensor with the most
+   * readings picks the dead one, and the fit then recovers 4 mm of M2 from a
+   * station whose M2 is half a metre.
+   */
+  const benoaLike = [
+    ...Array.from({ length: 3711 }, (_, i) => ({ sensor: 'rad', heightM: -0.281, timeSec: i })),
+    ...Array.from({ length: 3711 }, (_, i) => ({
+      sensor: 'ras',
+      heightM: 6.8 + 0.65 * Math.sin(i / 12),
+      timeSec: i,
+    })),
+    ...Array.from({ length: 742 }, (_, i) => ({ sensor: 'bat', heightM: 0.135, timeSec: i })),
+    ...Array.from({ length: 81 }, (_, i) => ({ sensor: 'sw1', heightM: 0.06, timeSec: i })),
+  ]
+
+  it('profiles every sensor the station reported', () => {
+    const profiles = profileSensors(benoaLike)
+    expect(profiles.map((p) => p.sensor).sort()).toEqual(['bat', 'ras', 'rad', 'sw1'].sort())
+    expect(profiles.find((p) => p.sensor === 'rad')?.sigmaM).toBeCloseTo(0, 6)
+    expect(profiles.find((p) => p.sensor === 'ras')?.sigmaM).toBeGreaterThan(0.4)
+  })
+
+  it('takes the sensor that varies, not the one with the most readings', () => {
+    const chosen = chooseSensor(profileSensors(benoaLike))
+    expect(chosen.sensor).toBe('ras')
+  })
+
+  it('refuses when every sensor is stuck rather than bundling a flat line', () => {
+    const allStuck = benoaLike.filter((s) => s.sensor !== 'ras')
+    const chosen = chooseSensor(profileSensors(allStuck))
+    expect(chosen.sensor).toBeNull()
+    expect(chosen.reason).toContain('bervariasi')
+  })
+
+  it('rejects readings too wild to be a sea level record', () => {
+    const wild = Array.from({ length: 500 }, (_, i) => ({
+      sensor: 'junk',
+      heightM: i % 2 === 0 ? -400 : 400,
+      timeSec: i,
+    }))
+    expect(chooseSensor(profileSensors(wild)).sensor).toBeNull()
+  })
+
+  it('is deterministic when two sensors are equally lively', () => {
+    const twins = [
+      ...Array.from({ length: 100 }, (_, i) => ({ sensor: 'b', heightM: Math.sin(i), timeSec: i })),
+      ...Array.from({ length: 100 }, (_, i) => ({ sensor: 'a', heightM: Math.sin(i), timeSec: i })),
+    ]
+    expect(chooseSensor(profileSensors(twins)).sensor).toBe('a')
+    expect(chooseSensor(profileSensors([...twins].reverse())).sensor).toBe('a')
   })
 })
 
