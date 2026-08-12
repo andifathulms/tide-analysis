@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { StationHeader, StationNav } from '@/components/StationNav'
 import { RefusalNotice } from '@/components/Diagnostics'
+import { Card, Section, Stat } from '@/components/ui'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations } from '@/lib/records/registry'
 import { admiraltyFit, compareMethods } from '@/lib/tide/admiralty'
@@ -36,7 +37,7 @@ export default async function ComparisonPage({
       : []
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <StationNav dict={dict} locale={locale} stationId={station.stationId} active="banding" />
       <StationHeader
         dict={dict}
@@ -45,45 +46,44 @@ export default async function ComparisonPage({
         zone={zoneOf(record)}
         gapHours={summary.gapHours}
       />
-      <NavigationWarning dict={dict} />
+      <NavigationWarning dict={dict} compact />
 
-      <h1 className="text-2xl">{dict.banding.title}</h1>
-      <p className="max-w-3xl">{dict.banding.lead}</p>
+      <Section eyebrow="Metode" title={dict.banding.title} lead={dict.banding.lead} />
 
       {primary.outcome.type === 'refusal' && <RefusalNotice dict={dict} refusal={primary.outcome} />}
       {admiralty.type === 'refusal' && <RefusalNotice dict={dict} refusal={admiralty} />}
 
       {shown.outcome.type === 'fit' && admiralty.type === 'fit' && (
         <>
-          <dl className="grid gap-4 text-sm sm:grid-cols-3">
-            <div className="card p-4">
-              <dt className="control text-xs uppercase tracking-wide text-traceInk/60">
-                {dict.common.residualRms} — {dict.common.leastSquares}
-              </dt>
-              <dd className="numeric text-2xl text-residual">
-                {shown.outcome.residualRmsM.toFixed(4)} m
-              </dd>
-            </div>
-            <div className="card p-4">
-              <dt className="control text-xs uppercase tracking-wide text-traceInk/60">
-                {dict.common.residualRms} — {dict.common.admiralty}
-              </dt>
-              <dd className="numeric text-2xl text-residual">
-                {admiralty.residualRmsM.toFixed(4)} m
-              </dd>
-            </div>
-            <div className="card p-4">
-              <dt className="control text-xs uppercase tracking-wide text-traceInk/60">
-                {dict.common.conditionNumber} — {dict.common.leastSquares}
-              </dt>
-              <dd className="numeric text-2xl">{shown.outcome.conditionNumber.toFixed(2)}</dd>
-            </div>
-          </dl>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <Card>
+              <Stat
+                label={`${dict.common.residualRms} — ${dict.common.leastSquares}`}
+                value={shown.outcome.residualRmsM.toFixed(4)}
+                unit="m"
+                tone="residual"
+              />
+            </Card>
+            <Card>
+              <Stat
+                label={`${dict.common.residualRms} — ${dict.common.admiralty}`}
+                value={admiralty.residualRmsM.toFixed(4)}
+                unit="m"
+                tone="residual"
+              />
+            </Card>
+            <Card>
+              <Stat
+                label={`${dict.common.conditionNumber} — ${dict.common.leastSquares}`}
+                value={shown.outcome.conditionNumber.toFixed(2)}
+              />
+            </Card>
+          </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse text-sm">
+          <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
+            <table className="w-full min-w-[640px] border-collapse text-caption">
               <thead>
-                <tr className="control border-b border-grid text-left text-xs uppercase tracking-wide">
+                <tr className="border-b border-rule text-left">
                   <th className="py-2 pr-4">{dict.common.constituent}</th>
                   <th className="py-2 pr-4 text-right">H — {dict.common.leastSquares}</th>
                   <th className="py-2 pr-4 text-right">H — {dict.common.admiralty}</th>
@@ -96,7 +96,7 @@ export default async function ComparisonPage({
               </thead>
               <tbody className="numeric">
                 {rows.map((row) => (
-                  <tr key={row.name} className="border-b border-grid/50">
+                  <tr key={row.name} className="border-b border-rule/60">
                     <th scope="row" className="py-1.5 pr-4 text-left font-medium">
                       {row.name}
                     </th>
@@ -128,7 +128,7 @@ export default async function ComparisonPage({
                     >
                       {row.phaseDifferenceDeg === null ? '—' : row.phaseDifferenceDeg.toFixed(1)}
                     </td>
-                    <td className="control py-1.5 text-left text-xs">
+                    <td className="py-1.5 text-left text-caption">
                       {row.determination === 'disimpulkan' ? (
                         <span className="text-residual">{dict.common.inferred}</span>
                       ) : row.determination === 'langsung' ? (
@@ -143,7 +143,7 @@ export default async function ComparisonPage({
             </table>
           </div>
 
-          <section className="max-w-3xl space-y-2 text-sm text-traceInk/80">
+          <section className="max-w-reading space-y-2 text-caption text-inkMuted">
             <p>
               Admiralty menyimpulkan {admiralty.inferred.join(' dan ')} dari tetangganya melalui
               rasio baku, bukan menyelesaikannya. Kuadrat terkecil menyelesaikan semua komponen

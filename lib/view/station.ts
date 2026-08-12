@@ -11,6 +11,7 @@ import { resolvableSubset, type ConstituentResolution } from '@/lib/tide/rayleig
 import { recordLengthHours, type TideRecord } from '@/lib/tide/record'
 import { loadRecord, stationSummary, type StationSummary } from '@/lib/records/registry'
 import { analyse, describeRecord, type Analysis } from './analysis'
+import type { FormzahlResult } from '@/lib/tide/formzahl'
 
 export interface StationAnalysis {
   readonly station: StationSummary
@@ -28,6 +29,15 @@ export interface StationAnalysis {
     readonly dropped: readonly ConstituentResolution[]
   } | null
   readonly summary: ReturnType<typeof describeRecord>
+  /**
+   * The station's tidal character, always from the whole record.
+   *
+   * It is a property of the place, not of whichever window a page happens to
+   * fit, so every view must report the same one. Deriving it from the page's
+   * own window made the record page and the constituent page disagree about
+   * Jakarta — mixed on one tab, diurnal on the next.
+   */
+  readonly character: FormzahlResult | null
 }
 
 export interface StationAnalysisOptions {
@@ -62,6 +72,11 @@ export async function analyseStation(
     }
   }
 
+  const wholeRecord = analyse({
+    record,
+    constituents: resolvableSubset(requested, recordLengthHours(record)).kept,
+  })
+
   return {
     station,
     record,
@@ -69,5 +84,6 @@ export async function analyseStation(
     primary,
     fallback,
     summary: describeRecord(record),
+    character: wholeRecord.formzahl,
   }
 }

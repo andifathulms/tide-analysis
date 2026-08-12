@@ -67,9 +67,14 @@ export interface Dictionary {
     readonly direct: string
     readonly inferred: string
     readonly uncertainty: string
+    readonly provenance: string
   }
   readonly conditioning: Record<'baik' | 'wajar' | 'marginal' | 'buruk', string>
   readonly home: {
+    readonly heroTitle: string
+    readonly heroLead: string
+    readonly plainTitle: string
+    readonly plainSteps: readonly { readonly title: string; readonly body: string }[]
     readonly lead: string
     readonly whyTitle: string
     readonly why: readonly string[]
@@ -77,6 +82,18 @@ export interface Dictionary {
     readonly stationsLead: string
     readonly characterTitle: string
     readonly characterLead: string
+    readonly plainEyebrow: string
+    readonly characterEyebrow: string
+    readonly stationsEyebrow: string
+    readonly gateEyebrow: string
+    readonly gateTitle: string
+    readonly gateLead: string
+    readonly openFirstStation: string
+    readonly statStations: string
+    readonly statDays: string
+    readonly statSamples: string
+    readonly statConstants: string
+    readonly statConstantsNote: string
   }
   readonly catatan: {
     readonly title: string
@@ -88,8 +105,29 @@ export interface Dictionary {
     readonly splitHint: string
     readonly fitRms: string
     readonly heldOutRms: string
+    readonly eyebrow: string
+    readonly keyObserved: string
+    readonly keyPredicted: string
+    readonly keyResidual: string
+    readonly fitRmsNote: string
+    readonly heldOutRmsNote: string
+    readonly readingTitle: string
+    readonly readingBody: string
+    readonly fallbackNote: string
   }
   readonly komponen: {
+    readonly eyebrow: string
+    readonly tableCaption: string
+    readonly asymmetryTitle: string
+    readonly asymmetryLead: string
+    readonly asymmetryEyebrow: string
+    readonly asymmetryShallow: string
+    readonly asymmetryActual: string
+    readonly asymmetryDisagree: string
+    readonly asymmetryRatio: string
+    readonly asymmetryPhase: string
+    readonly rise: string
+    readonly fall: string
     readonly title: string
     readonly lead: string
     readonly explorerTitle: string
@@ -122,7 +160,7 @@ export interface Dictionary {
 }
 
 const id: Dictionary = {
-  siteName: 'Pasut',
+  siteName: 'Tide Analysis',
   tagline: 'Analisis harmonik pasang surut dari pengamatan nyata',
   nav: {
     beranda: 'Beranda',
@@ -178,6 +216,7 @@ const id: Dictionary = {
     direct: 'Langsung',
     inferred: 'Disimpulkan',
     uncertainty: 'Ketidakpastian 1σ',
+    provenance: 'Sumber, lisensi, dan catatan datum',
   },
   conditioning: {
     baik: 'baik',
@@ -186,6 +225,24 @@ const id: Dictionary = {
     buruk: 'buruk — angka di bawah ini tidak dapat dipercaya',
   },
   home: {
+    heroTitle: 'Pasang surut, dihitung dari air laut yang sebenarnya',
+    heroLead:
+      'Situs ini mengambil rekaman tinggi muka laut dari stasiun pengamatan di Indonesia, lalu menguraikannya menjadi gelombang-gelombang penyusunnya — dan memakai hasilnya untuk memperkirakan pasang surut ke depan. Semua angkanya dihitung di sini, bukan disalin dari tabel.',
+    plainTitle: 'Cara kerjanya, dalam tiga langkah',
+    plainSteps: [
+      {
+        title: 'Air laut direkam',
+        body: 'Alat di pelabuhan mencatat tinggi air setiap jam selama tujuh bulan. Itulah garis hitam pada grafik: apa adanya, termasuk cuaca dan gangguan alat.',
+      },
+      {
+        title: 'Rekaman diuraikan',
+        body: 'Pasang surut adalah jumlah dari gelombang-gelombang berirama tetap yang datang dari Bulan dan Matahari. Kami mencari seberapa besar dan seberapa telat tiap gelombang di tempat itu.',
+      },
+      {
+        title: 'Sisanya ditampilkan apa adanya',
+        body: 'Yang tidak bisa dijelaskan gelombang-gelombang tadi — cuaca, angin, gelombang badai — tidak disembunyikan. Ia digambar sebagai pita tersendiri di bawah grafik.',
+      },
+    ],
     lead:
       'Tinggi pasang surut adalah jumlah kosinus. Frekuensinya astronomis dan universal — M2 berperiode 12,42 jam di Balikpapan sama seperti di Bristol. Yang bersifat lokal hanya amplitudo dan fase, dan keduanya diperoleh dengan mencocokkan rekaman pengamatan, bukan dengan menyalin tabel.',
     whyTitle: 'Mengapa analisis, bukan pencarian tabel',
@@ -197,6 +254,19 @@ const id: Dictionary = {
     stationsTitle: 'Stasiun',
     stationsLead:
       'Setiap rekaman membawa sumber, lisensi, periode, dan datumnya. Tidak ada yang diasumsikan merujuk MSL.',
+    plainEyebrow: 'Cara kerja',
+    characterEyebrow: 'Watak pasang surut',
+    stationsEyebrow: 'Rekaman',
+    gateEyebrow: 'Lisensi',
+    gateTitle: 'Sumber yang belum dibuka',
+    gateLead:
+      'Adapter untuk sumber ini sudah ditulis dan diuji, tetapi gerbang lisensi menutupnya sampai syarat penggunaannya diverifikasi. Tidak ada datanya di situs ini.',
+    openFirstStation: 'Lihat satu rekaman',
+    statStations: 'Stasiun',
+    statDays: 'Rekaman',
+    statSamples: 'Bacaan jam-jaman',
+    statConstants: 'Konstanta yang dikirim',
+    statConstantsNote: 'Semuanya dihitung dari rekaman',
     characterTitle: 'Empat pelabuhan, empat watak, satu fisika',
     characterLead:
       'Bilangan Formzahl F = (K1 + O1) / (M2 + S2) menggolongkan watak pasang surut. Nusantara memuat keempat golongannya: Sabang dua kali sehari nyaris seimbang, Pelabuhan Jakarta sekali sehari, sisanya di antara keduanya. Setiap angka di bawah ini keluar dari pencocokan kuadrat terkecil atas rekaman stasiun itu sendiri — tidak ada yang dikutip dari tabel.',
@@ -211,10 +281,36 @@ const id: Dictionary = {
     splitLabel: 'Porsi rekaman yang dicocokkan',
     splitHint:
       'Sisanya ditahan dan diprediksi. Perpendek jendelanya dan komponen mulai berguguran — kriteria Rayleigh yang sama, digerakkan oleh jendela alih-alih oleh panjang rekaman.',
-    fitRms: 'RMS residu — jendela pencocokan',
-    heldOutRms: 'RMS residu — jendela validasi (tidak dilihat saat mencocokkan)',
+    fitRms: 'Sisa yang tak terjelaskan — bagian yang dicocokkan',
+    heldOutRms: 'Sisa yang tak terjelaskan — bagian yang ditahan',
+    eyebrow: 'Grafik',
+    keyObserved: 'tinggi air yang benar-benar terekam alat',
+    keyPredicted: 'hasil hitungan dari komponen pasang surut',
+    keyResidual: 'selisih keduanya — cuaca, angin, dan gangguan alat',
+    fitRmsNote: 'Rata-rata jarak antara garis hitam dan garis biru pada bagian yang dipakai menghitung.',
+    heldOutRmsNote: 'Pada bagian yang sengaja tidak dilihat saat menghitung. Inilah ujian yang sebenarnya.',
+    readingTitle: 'Cara membaca grafik ini',
+    readingBody:
+      'Bila garis biru menempel pada garis hitam, komponen pasang surut sudah menjelaskan hampir semua gerakan air. Bagian yang diarsir di sebelah kanan tidak pernah dilihat saat menghitung — di sana garis biru murni ramalan. Pita ochre di bawah adalah selisihnya; ia tidak pernah disembunyikan atau dihaluskan.',
+    fallbackNote:
+      'Yang ditampilkan di bawah adalah himpunan terbesar yang masih didukung jendela ini:',
   },
   komponen: {
+    eyebrow: 'Komponen',
+    tableCaption:
+      'H adalah setengah tinggi gelombang komponen itu; g adalah keterlambatannya terhadap posisi Bulan atau Matahari. f dan u adalah koreksi 18,6 tahunan yang sudah diterapkan dan tetap ditampilkan.',
+    asymmetryTitle: 'Naik dan turun tidak sama cepat',
+    asymmetryLead:
+      'Di perairan dangkal, gesekan dasar laut memindahkan sebagian energi M2 ke kelipatan frekuensinya, terutama M4. Akibatnya satu sisi gelombang menjadi curam dan sisi lainnya melandai: air naik lebih cepat daripada turunnya, atau sebaliknya.',
+    asymmetryEyebrow: 'Perairan dangkal',
+    asymmetryShallow: 'Dari M2 dan M4 saja',
+    asymmetryActual: 'Pasang surut sebenarnya',
+    asymmetryDisagree:
+      'Kedua ukuran ini menunjuk arah berbeda, dan itu wajar di sini: yang menentukan lama naik-turun bukan distorsi perairan dangkal, melainkan komponen harian K1 dan O1.',
+    asymmetryRatio: 'Rasio M4/M2',
+    asymmetryPhase: 'Fase relatif 2g(M2) − g(M4)',
+    rise: 'Lama naik',
+    fall: 'Lama turun',
     title: 'Komponen harmonik',
     lead:
       'Amplitudo, fase, dan frekuensi tiap komponen. Yang tidak dapat dipisahkan oleh rekaman ditandai, bukan dilaporkan.',
@@ -253,7 +349,7 @@ const id: Dictionary = {
 }
 
 const en: Dictionary = {
-  siteName: 'Pasut',
+  siteName: 'Tide Analysis',
   tagline: 'Tidal harmonic analysis from real observations',
   nav: {
     beranda: 'Home',
@@ -309,6 +405,7 @@ const en: Dictionary = {
     direct: 'Direct',
     inferred: 'Inferred',
     uncertainty: '1σ uncertainty',
+    provenance: 'Source, licence and datum notes',
   },
   conditioning: {
     baik: 'good',
@@ -317,6 +414,24 @@ const en: Dictionary = {
     buruk: 'poor — the numbers below cannot be trusted',
   },
   home: {
+    heroTitle: 'Tides, computed from the sea itself',
+    heroLead:
+      'This site takes sea level records from Indonesian tide gauges, breaks them into the waves they are made of, and uses the result to predict the tide forward. Every number is computed here rather than copied from a table.',
+    plainTitle: 'How it works, in three steps',
+    plainSteps: [
+      {
+        title: 'The sea is recorded',
+        body: 'A gauge in a harbour writes down the water level every hour for seven months. That is the black line on the chart: as it came, weather and instrument trouble included.',
+      },
+      {
+        title: 'The record is taken apart',
+        body: 'A tide is a sum of steady waves driven by the Moon and the Sun. We work out how large each one is at that place, and how late it arrives.',
+      },
+      {
+        title: 'What is left over is shown',
+        body: 'Whatever those waves cannot explain — weather, wind, surge — is not hidden. It is drawn as its own band beneath the chart.',
+      },
+    ],
     lead:
       'Tide height is a sum of cosines. The frequencies are astronomical and universal — M2 has the same 12.42-hour period in Balikpapan as in Bristol. Only amplitude and phase are local, and both come from fitting a record of observations rather than copying a table.',
     whyTitle: 'Why analysis, not lookup',
@@ -328,6 +443,19 @@ const en: Dictionary = {
     stationsTitle: 'Stations',
     stationsLead:
       'Every record carries its source, licence, period and datum. Nothing is assumed to be referenced to MSL.',
+    plainEyebrow: 'How it works',
+    characterEyebrow: 'Tidal character',
+    stationsEyebrow: 'Records',
+    gateEyebrow: 'Licensing',
+    gateTitle: 'Sources still behind the gate',
+    gateLead:
+      'The adapters for these are written and tested, but the licence gate keeps them shut until their terms are verified. None of their data is on this site.',
+    openFirstStation: 'Open a record',
+    statStations: 'Stations',
+    statDays: 'Of record',
+    statSamples: 'Hourly readings',
+    statConstants: 'Constants shipped',
+    statConstantsNote: 'Every one is computed from a record',
     characterTitle: 'Four ports, four characters, one physics',
     characterLead:
       'The Formzahl number F = (K1 + O1) / (M2 + S2) classifies tidal character, and the archipelago holds all four classes: Sabang has two nearly equal tides a day, Jakarta Port has one, and the rest sit between them. Every number below came out of a least-squares fit to that station\'s own record — none of it is quoted from a table.',
@@ -342,10 +470,35 @@ const en: Dictionary = {
     splitLabel: 'Share of the record fitted',
     splitHint:
       'The rest is held out and predicted. Shorten the window and constituents start dropping out — the same Rayleigh criterion, moved by the window rather than by the length of the record.',
-    fitRms: 'Residual RMS — fit window',
-    heldOutRms: 'Residual RMS — validation window (never seen while fitting)',
+    fitRms: 'Unexplained, over the fitted part',
+    heldOutRms: 'Unexplained, over the held-out part',
+    eyebrow: 'The chart',
+    keyObserved: 'the water level the gauge actually recorded',
+    keyPredicted: 'what the fitted constituents say it should be',
+    keyResidual: 'the difference — weather, wind and instrument trouble',
+    fitRmsNote: 'Mean distance between the black line and the blue one, over the part used to fit.',
+    heldOutRmsNote: 'Over the part deliberately not seen while fitting. This is the real test.',
+    readingTitle: 'How to read this chart',
+    readingBody:
+      'Where the blue line sits on the black one, the constituents have explained almost all of the water’s movement. The shaded part on the right was never seen while fitting — there the blue line is pure prediction. The ochre band beneath is the difference, and it is never hidden or smoothed.',
+    fallbackNote: 'What follows is the largest set this window can still support:',
   },
   komponen: {
+    eyebrow: 'Constituents',
+    tableCaption:
+      'H is half the height of that constituent’s wave; g is how late it arrives behind the Moon or Sun. f and u are the 18.6-year corrections, applied and still shown.',
+    asymmetryTitle: 'The rise and the fall are not the same length',
+    asymmetryLead:
+      'In shallow water, friction on the sea bed moves some of M2’s energy into multiples of its frequency, M4 above all. One half of the wave steepens and the other flattens: the water rises faster than it falls, or the reverse.',
+    asymmetryEyebrow: 'Shallow water',
+    asymmetryShallow: 'From M2 and M4 alone',
+    asymmetryActual: 'The tide as it runs',
+    asymmetryDisagree:
+      'These two point in different directions, and here that is expected: what sets the rise and fall times is not shallow-water distortion but the diurnal constituents K1 and O1.',
+    asymmetryRatio: 'M4/M2 ratio',
+    asymmetryPhase: 'Relative phase 2g(M2) − g(M4)',
+    rise: 'Time to rise',
+    fall: 'Time to fall',
     title: 'Harmonic constituents',
     lead:
       'Amplitude, phase and frequency per constituent. The ones the record cannot honestly resolve are marked, not reported.',

@@ -90,7 +90,7 @@ export function FitWindowControl({
   return (
     <div className="space-y-5">
       <div className="card p-4">
-        <label className="control block text-sm" htmlFor="fit-percent">
+        <label className="block text-caption font-medium" htmlFor="fit-percent">
           {dict.catatan.splitLabel}
         </label>
         <div className="mt-2 flex items-center gap-4">
@@ -105,24 +105,24 @@ export function FitWindowControl({
               setTouched(true)
               setPercent(Number(event.target.value))
             }}
-            className="h-1 w-full accent-[#2E7A85]"
+            className="h-1 w-full accent-prediction"
           />
-          <output className="numeric w-40 text-right text-lg">
+          <output className="numeric w-40 text-right text-title">
             {percent}%
             {lengthDays !== null && (
-              <span className="control ml-2 text-xs text-traceInk/60">
+              <span className="ml-2 text-caption text-inkFaint">
                 {lengthDays.toFixed(0)} {dict.common.days}
               </span>
             )}
           </output>
         </div>
-        <p className="control mt-2 text-xs text-traceInk/60">{dict.catatan.splitHint}</p>
+        <p className="mt-2 text-caption text-inkFaint">{dict.catatan.splitHint}</p>
       </div>
 
       {!touched ? (
         children
       ) : recomputed === null ? (
-        <p className="control text-sm text-traceInk/60">{dict.common.loading}</p>
+        <p className="text-caption text-inkFaint">{dict.common.loading}</p>
       ) : (
         <div className="space-y-5">
           {recomputed.analysis.outcome.type === 'refusal' && (
@@ -146,18 +146,18 @@ export function FitWindowControl({
               <FitDiagnostics dict={dict} fit={recomputed.analysis.outcome} />
               <section className="grid gap-4 sm:grid-cols-2">
                 <div className="card p-4">
-                  <h3 className="control text-xs uppercase tracking-wide text-traceInk/60">
+                  <h3 className="eyebrow">
                     {dict.catatan.fitRms}
                   </h3>
-                  <p className="numeric text-2xl text-residual">
+                  <p className="numeric text-headline text-residual">
                     {recomputed.analysis.fitResidualRmsM?.toFixed(4)} m
                   </p>
                 </div>
                 <div className="card p-4">
-                  <h3 className="control text-xs uppercase tracking-wide text-traceInk/60">
+                  <h3 className="eyebrow">
                     {dict.catatan.heldOutRms}
                   </h3>
-                  <p className="numeric text-2xl text-residual">
+                  <p className="numeric text-headline text-residual">
                     {recomputed.analysis.heldOutResidualRmsM === null
                       ? '—'
                       : `${recomputed.analysis.heldOutResidualRmsM.toFixed(4)} m`}

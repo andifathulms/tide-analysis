@@ -3,6 +3,7 @@ import { NavigationWarning } from '@/components/NavigationWarning'
 import { TideChart } from '@/components/chart/TideChart'
 import { StationHeader, StationNav } from '@/components/StationNav'
 import { RefusalNotice } from '@/components/Diagnostics'
+import { Section } from '@/components/ui'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations } from '@/lib/records/registry'
 import { buildChartModel } from '@/lib/chart/model'
@@ -76,7 +77,7 @@ export default async function PredictionPage({
   })
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <StationNav dict={dict} locale={locale} stationId={station.stationId} active="prediksi" />
       <StationHeader
         dict={dict}
@@ -88,28 +89,27 @@ export default async function PredictionPage({
       />
       <NavigationWarning dict={dict} />
 
-      <h1 className="text-2xl">{dict.prediksi.title}</h1>
-      <p className="max-w-3xl">{dict.prediksi.lead}</p>
-      <p className="numeric max-w-3xl text-sm text-traceInk/70">
+      <Section eyebrow="Ke depan" title={dict.prediksi.title} lead={dict.prediksi.lead} />
+      <p className="numeric max-w-reading text-caption text-inkMuted">
         {formatDate(startSec, zone)} — {formatDate(endSec, zone)} · {dict.common.datum}:{' '}
         {record.datum.code} · f dan u dihitung pada waktu prediksi
       </p>
 
-      <div className="card p-4">
+      <figure className="card p-4">
         <TideChart
           model={model}
           observedLabel={dict.common.predicted}
           predictedLabel={dict.common.predicted}
           residualLabel={dict.common.residual}
         />
-      </div>
+      </figure>
 
-      <section>
-        <h2 className="text-xl">{dict.prediksi.extremaTitle}</h2>
+      <section className="space-y-3">
+        <h2 className="text-headline">{dict.prediksi.extremaTitle}</h2>
         <div className="mt-3 overflow-x-auto">
-          <table className="w-full border-collapse text-sm">
+          <table className="w-full min-w-[640px] border-collapse text-caption">
             <thead>
-              <tr className="control border-b border-grid text-left text-xs uppercase tracking-wide">
+              <tr className="border-b border-rule text-left">
                 <th className="py-2 pr-4">{dict.common.time}</th>
                 <th className="py-2 pr-4">Jam ({zone.label})</th>
                 <th className="py-2 pr-4">Jenis</th>
@@ -118,10 +118,10 @@ export default async function PredictionPage({
             </thead>
             <tbody className="numeric">
               {extrema.map((extremum) => (
-                <tr key={extremum.timeSec} className="border-b border-grid/50">
+                <tr key={extremum.timeSec} className="border-b border-rule/60">
                   <td className="py-1.5 pr-4">{formatDate(extremum.timeSec, zone)}</td>
                   <td className="py-1.5 pr-4">{formatClock(extremum.timeSec, zone)}</td>
-                  <td className="control py-1.5 pr-4">
+                  <td className="py-1.5 pr-4">
                     {extremum.kind === 'pasang' ? dict.common.high : dict.common.low}
                   </td>
                   <td className="py-1.5 text-right">{extremum.heightM.toFixed(3)}</td>
@@ -130,7 +130,7 @@ export default async function PredictionPage({
             </tbody>
           </table>
         </div>
-        <p className="mt-3 max-w-3xl text-xs text-traceInk/60">
+        <p className="mt-3 max-w-reading text-caption text-inkFaint">
           Tinggi merujuk {record.datum.label}. Dihitung dari {fit.constants.length} komponen yang
           dicocokkan pada {formatDateTime(fit.windowStartSec, zone)} —{' '}
           {formatDateTime(fit.windowEndSec, zone)}; κ = {fit.conditionNumber.toFixed(2)}; RMS residu{' '}

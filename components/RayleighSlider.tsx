@@ -54,8 +54,8 @@ export function RayleighSlider({
 
   return (
     <div className="space-y-5">
-      <div className="card p-4">
-        <label className="control block text-sm" htmlFor="window-days">
+      <div className="card p-5">
+        <label className="block text-caption font-medium" htmlFor="window-days">
           {dict.resolusi.sliderLabel}
         </label>
         <div className="mt-2 flex items-center gap-4">
@@ -67,25 +67,25 @@ export function RayleighSlider({
             step={1}
             value={days}
             onChange={(event) => setDays(Number(event.target.value))}
-            className="h-1 w-full accent-[#2E7A85]"
+            className="h-1 w-full accent-prediction"
           />
-          <output className="numeric w-24 text-right text-lg">
+          <output className="numeric w-28 shrink-0 text-right text-title">
             {days} {dict.common.days}
           </output>
         </div>
       </div>
 
       {state === null ? (
-        <p className="control text-sm text-traceInk/60">{dict.common.loading}</p>
+        <p className="text-caption text-inkFaint">{dict.common.loading}</p>
       ) : (
         <>
           <div className="grid gap-4 sm:grid-cols-3">
-            <div className="card p-4">
-              <h3 className="control text-xs uppercase tracking-wide text-traceInk/60">
+            <div className="card p-5">
+              <h3 className="eyebrow">
                 {dict.resolusi.conditionTitle}
               </h3>
               <p
-                className={`numeric text-3xl ${
+                className={`numeric text-display ${
                   state.outcome !== null && state.outcome.type === 'fit'
                     ? conditioningOf(state.outcome.conditionNumber) === 'buruk'
                       ? 'text-unresolved'
@@ -100,41 +100,41 @@ export function RayleighSlider({
                   : '—'}
               </p>
               {state.outcome !== null && state.outcome.type === 'fit' && (
-                <p className="control mt-1 text-xs">
+                <p className="mt-1 text-caption text-inkFaint">
                   {dict.conditioning[state.outcome.conditioning]}
                 </p>
               )}
             </div>
 
-            <div className="card p-4">
-              <h3 className="control text-xs uppercase tracking-wide text-traceInk/60">
+            <div className="card p-5">
+              <h3 className="eyebrow">
                 {dict.resolusi.keptTitle}
               </h3>
-              <p className="numeric mt-1 text-sm leading-relaxed text-prediction">
+              <p className="numeric mt-1 text-caption leading-relaxed text-prediction">
                 {state.kept.join(' · ') || '—'}
               </p>
             </div>
 
-            <div className="card p-4">
-              <h3 className="control text-xs uppercase tracking-wide text-traceInk/60">
+            <div className="card p-5">
+              <h3 className="eyebrow">
                 {dict.resolusi.droppedTitle}
               </h3>
-              <p className="numeric mt-1 text-sm leading-relaxed text-unresolved">
+              <p className="numeric mt-1 text-caption leading-relaxed text-unresolved">
                 {state.dropped.map((d) => d.name).join(' · ') || '—'}
               </p>
             </div>
           </div>
 
           {state.requested.type === 'refusal' && (
-            <section className="border-l-4 border-unresolved bg-unresolved/5 px-4 py-3">
-              <h3 className="control text-sm font-semibold uppercase tracking-wide text-unresolved">
+            <section className="border-l-4 border-unresolved bg-unresolvedSoft/60 px-4 py-3">
+              <h3 className="eyebrow text-unresolved">
                 {dict.common.refusal}
               </h3>
-              <p className="mt-1 text-sm">
+              <p className="mt-1.5 text-body">
                 Himpunan baku diminta pada jendela {days} {dict.common.days}. Pasangan berikut tidak
                 dapat dipisahkan:
               </p>
-              <ul className="mt-2 space-y-1 text-sm text-traceInk/80">
+              <ul className="mt-2 space-y-1 text-caption text-inkMuted">
                 {state.requested.conflicts.slice(0, 5).map((conflict) => (
                   <li key={`${conflict.a}-${conflict.b}-${conflict.requiredHours}`}>
                     {describeConflict(conflict)}
@@ -152,7 +152,7 @@ export function RayleighSlider({
             />
           )}
 
-          <p className="control text-xs text-traceInk/60">
+          <p className="text-caption text-inkFaint">
             Rekaman penuh: {recordLengthDays(record as TideRecord).toFixed(1)} {dict.common.days}.
             Jendela diambil dari awal rekaman.
           </p>

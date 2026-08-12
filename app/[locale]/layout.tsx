@@ -19,36 +19,67 @@ export default function LocaleLayout({
   const other: Locale = locale === 'id' ? 'en' : 'id'
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-5 py-6">
-      <header className="mb-6 flex flex-wrap items-baseline justify-between gap-3 border-b border-grid pb-4">
-        <div>
-          <Link href={`/${locale}`} className="text-2xl font-medium tracking-tight">
-            {dict.siteName}
+    <div className="flex min-h-screen flex-col">
+      <header className="sticky top-0 z-20 border-b border-rule bg-paper/90 backdrop-blur">
+        <div className="mx-auto flex max-w-page items-center justify-between gap-4 px-5 py-3">
+          <Link href={`/${locale}`} className="group flex items-baseline gap-2.5">
+            {/* A tide mark: two crests and a trough, drawn once. */}
+            <svg
+              width="26"
+              height="16"
+              viewBox="0 0 26 16"
+              aria-hidden="true"
+              className="shrink-0 text-prediction"
+            >
+              <path
+                d="M1 11 C4 3, 8 3, 11 8 S18 13, 21 5 L25 5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+            <span className="prose-serif text-title text-ink group-hover:text-prediction">
+              {dict.siteName}
+            </span>
           </Link>
-          <p className="control mt-0.5 text-sm text-traceInk/70">{dict.tagline}</p>
+
+          <nav className="flex items-center gap-1 text-caption">
+            <Link
+              href={`/${locale}`}
+              className="rounded px-2.5 py-1.5 text-inkMuted hover:bg-sunken hover:text-ink"
+            >
+              {dict.nav.beranda}
+            </Link>
+            <Link
+              href={`/${locale}/metode`}
+              className="rounded px-2.5 py-1.5 text-inkMuted hover:bg-sunken hover:text-ink"
+            >
+              {dict.nav.metode}
+            </Link>
+            <Link
+              href={`/${other}`}
+              className="ml-1 rounded border border-rule px-2.5 py-1 text-micro font-medium uppercase tracking-wider text-inkFaint hover:border-prediction hover:text-prediction"
+            >
+              {other}
+            </Link>
+          </nav>
         </div>
-        <nav className="control flex items-center gap-4 text-sm">
-          <Link href={`/${locale}`} className="hover:text-prediction">
-            {dict.nav.beranda}
-          </Link>
-          <Link href={`/${locale}/metode`} className="hover:text-prediction">
-            {dict.nav.metode}
-          </Link>
-          <Link href={`/${other}`} className="text-traceInk/60 hover:text-prediction">
-            {other.toUpperCase()}
-          </Link>
-        </nav>
       </header>
 
-      <main className="flex-1">{children}</main>
+      <main className="mx-auto w-full max-w-page flex-1 px-5 py-8 sm:py-10">{children}</main>
 
-      <footer className="control mt-12 border-t border-grid pt-4 text-xs text-traceInk/60">
-        <p>
-          {dict.warning.title}. {dict.warning.official}
-        </p>
-        <p className="mt-1">
-          Pasut — {dict.tagline}. Sumber terbuka, tanpa server, tanpa jaringan saat dijalankan.
-        </p>
+      <footer className="mt-16 border-t border-rule bg-surface">
+        <div className="mx-auto max-w-page space-y-3 px-5 py-8 text-caption text-inkMuted">
+          <p className="max-w-reading">
+            <span className="font-medium text-unresolved">{dict.warning.title}.</span>{' '}
+            {dict.warning.official}
+          </p>
+          <p className="max-w-reading text-inkFaint">
+            {dict.siteName} — {dict.tagline}. Sumber terbuka, tanpa server, tanpa jaringan saat
+            dijalankan.
+          </p>
+        </div>
       </footer>
     </div>
   )

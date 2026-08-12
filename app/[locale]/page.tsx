@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { FormzahlComparison, type FormzahlRow } from '@/components/FormzahlComparison'
 import { NavigationWarning } from '@/components/NavigationWarning'
+import { Badge, Card, Section, Stat } from '@/components/ui'
 import { dictionary, isLocale, type Locale } from '@/lib/i18n/dictionary'
 import { MANIFEST, stations } from '@/lib/records/registry'
 import { formatDate, formatDays } from '@/lib/view/format'
@@ -43,83 +44,133 @@ export default async function HomePage({ params }: { params: { locale: string } 
   const formzahl = await formzahlRows()
   const blocked = MANIFEST.sources.filter((s) => !s.enabled && s.id !== 'synthetic')
 
+  const totalDays = list.reduce((sum, s) => sum + s.lengthDays, 0)
+  const totalSamples = list.reduce((sum, s) => sum + s.sampleCount, 0)
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-16">
+      {/* The hero says what this is in one breath, for a reader who has never
+          heard of a tidal constituent. */}
+      <section className="space-y-6 pt-2">
+        <div className="max-w-3xl space-y-4">
+          <Badge tone="prediction">{dict.tagline}</Badge>
+          <h1 className="text-display sm:text-hero">{dict.home.heroTitle}</h1>
+          <p className="max-w-reading text-lead text-inkMuted">{dict.home.heroLead}</p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3">
+          {list[0] !== undefined && (
+            <Link
+              href={`/${locale}/catatan/${list[0].stationId}`}
+              className="rounded-card bg-prediction px-5 py-2.5 text-caption font-medium text-surface shadow-card hover:bg-ink"
+            >
+              {dict.home.openFirstStation}
+            </Link>
+          )}
+          <Link
+            href={`/${locale}/metode`}
+            className="rounded-card border border-rule bg-surface px-5 py-2.5 text-caption font-medium text-ink hover:border-prediction hover:text-prediction"
+          >
+            {dict.metode.title}
+          </Link>
+        </div>
+
+        <dl className="grid max-w-2xl grid-cols-2 gap-6 border-t border-rule pt-5 sm:grid-cols-4">
+          <Stat label={dict.home.statStations} value={list.length} />
+          <Stat label={dict.home.statDays} value={Math.round(totalDays)} unit="hari" />
+          <Stat label={dict.home.statSamples} value={totalSamples.toLocaleString('id-ID')} />
+          <Stat label={dict.home.statConstants} value="0" note={dict.home.statConstantsNote} />
+        </dl>
+      </section>
+
       <NavigationWarning dict={dict} />
 
-      <section className="max-w-3xl">
-        <p className="text-lg leading-relaxed">{dict.home.lead}</p>
-      </section>
-
-      <section className="max-w-3xl">
-        <h2 className="text-xl">{dict.home.whyTitle}</h2>
-        <ul className="mt-3 space-y-3 border-l-2 border-grid pl-4">
-          {dict.home.why.map((line) => (
-            <li key={line.slice(0, 24)}>{line}</li>
+      {/* Three steps, in words a reader without oceanography can follow. */}
+      <Section eyebrow={dict.home.plainEyebrow} title={dict.home.plainTitle}>
+        <ol className="grid gap-4 md:grid-cols-3">
+          {dict.home.plainSteps.map((step, index) => (
+            <Card as="li" key={step.title}>
+              <span className="numeric text-caption text-prediction">0{index + 1}</span>
+              <h3 className="mt-2 text-title">{step.title}</h3>
+              <p className="mt-2 text-body text-inkMuted">{step.body}</p>
+            </Card>
           ))}
-        </ul>
-      </section>
+        </ol>
+      </Section>
 
       {formzahl.length > 0 && (
-        <section className="space-y-3">
-          <h2 className="text-xl">{dict.home.characterTitle}</h2>
-          <p className="max-w-3xl text-sm text-traceInk/80">{dict.home.characterLead}</p>
+        <Section
+          eyebrow={dict.home.characterEyebrow}
+          title={dict.home.characterTitle}
+          lead={dict.home.characterLead}
+        >
           <FormzahlComparison dict={dict} locale={locale} rows={formzahl} />
-        </section>
+        </Section>
       )}
 
-      <section>
-        <h2 className="text-xl">{dict.home.stationsTitle}</h2>
-        <p className="mt-1 max-w-3xl text-sm text-traceInk/70">{dict.home.stationsLead}</p>
-
+      <Section
+        eyebrow={dict.home.stationsEyebrow}
+        title={dict.home.stationsTitle}
+        lead={dict.home.stationsLead}
+      >
         {list.length === 0 ? (
-          <p className="mt-4 text-sm text-unresolved">
+          <p className="text-body text-unresolved">
             Belum ada rekaman yang lolos gerbang lisensi. Jalankan <code>pnpm records:fetch</code>.
           </p>
         ) : (
-          <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-            {list.map((station) => (
-              <li key={station.stationId} className="card p-4">
-                <Link
-                  href={`/${locale}/catatan/${station.stationId}`}
-                  className="text-lg font-medium hover:text-prediction"
-                >
-                  {station.stationName}
-                </Link>
-                <dl className="numeric mt-2 space-y-0.5 text-xs text-traceInk/70">
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {list.map((station) => {
+              const character = formzahl.find((row) => row.stationId === station.stationId)
+              return (
+                <Card as="li" key={station.stationId} className="flex flex-col justify-between">
                   <div>
-                    {formatDate(station.startSec)} — {formatDate(station.endSec)} ·{' '}
-                    {formatDays(station.lengthDays)} {dict.common.days}
+                    <Link
+                      href={`/${locale}/catatan/${station.stationId}`}
+                      className="prose-serif text-title text-ink hover:text-prediction"
+                    >
+                      {station.stationName}
+                    </Link>
+                    {character !== undefined && (
+                      <p className="mt-1 text-caption text-inkMuted">{character.label}</p>
+                    )}
                   </div>
-                  <div>
-                    {station.sampleCount} {dict.common.samples} · {station.gapCount}{' '}
-                    {dict.common.gaps}
-                  </div>
-                  <div>
-                    {dict.common.datum}: {station.datumCode}
-                  </div>
-                </dl>
-                <p className="control mt-2 text-xs text-traceInk/60">{station.sourceName}</p>
-              </li>
-            ))}
+                  <dl className="numeric mt-4 space-y-1 border-t border-rule pt-3 text-caption text-inkFaint">
+                    <div className="flex justify-between gap-3">
+                      <dt>{dict.common.period}</dt>
+                      <dd>
+                        {formatDate(station.startSec)} — {formatDate(station.endSec)}
+                      </dd>
+                    </div>
+                    <div className="flex justify-between gap-3">
+                      <dt>{dict.common.samples}</dt>
+                      <dd>
+                        {station.sampleCount} · {formatDays(station.lengthDays)} {dict.common.days}
+                      </dd>
+                    </div>
+                    <div className="flex justify-between gap-3">
+                      <dt>{dict.common.datum}</dt>
+                      <dd>{station.datumCode}</dd>
+                    </div>
+                  </dl>
+                </Card>
+              )
+            })}
           </ul>
         )}
-      </section>
+      </Section>
 
       {blocked.length > 0 && (
-        <section className="max-w-3xl border-t border-grid pt-4">
-          <h2 className="control text-sm uppercase tracking-wide text-traceInk/60">
-            Sumber di balik gerbang lisensi
-          </h2>
-          <ul className="mt-2 space-y-2 text-sm">
+        <Section eyebrow={dict.home.gateEyebrow} title={dict.home.gateTitle} lead={dict.home.gateLead}>
+          <ul className="space-y-3">
             {blocked.map((source) => (
-              <li key={source.id}>
-                <span className="font-medium">{source.name}</span>{' '}
-                <span className="text-unresolved">({source.status})</span> — {source.note}
+              <li key={source.id} className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <Badge tone="unresolved">{source.status}</Badge>
+                <span className="text-body font-medium">{source.name}</span>
+                <span className="max-w-reading text-caption text-inkMuted">{source.note}</span>
               </li>
             ))}
           </ul>
-        </section>
+        </Section>
       )}
     </div>
   )

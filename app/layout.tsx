@@ -22,7 +22,7 @@ const mono = Roboto_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Pasut — analisis harmonik pasang surut',
+  title: 'Tide Analysis — analisis harmonik pasang surut',
   description:
     'Mencocokkan komponen pasang surut dari pengamatan tinggi muka laut dengan kuadrat terkecil, melaporkan kondisi penyelesaiannya, dan menolak apa yang tidak didukung rekaman. Alat edukasi, bukan untuk navigasi.',
 }
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id" className={`${prose.variable} ${ui.variable} ${mono.variable}`}>
-      <body className="min-h-screen bg-chart text-traceInk antialiased">{children}</body>
+      <body className="min-h-screen bg-paper text-ink antialiased">{children}</body>
     </html>
   )
 }

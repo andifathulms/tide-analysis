@@ -134,7 +134,7 @@ export function ConstituentExplorer({
 
   return (
     <div className="space-y-4">
-      <div className="control flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2">
         {fit.constants.map((constant) => {
           const on = enabled.has(constant.name)
           return (
@@ -143,35 +143,35 @@ export function ConstituentExplorer({
               type="button"
               onClick={() => toggle(constant.name)}
               aria-pressed={on}
-              className={`numeric rounded-sm border px-2.5 py-1 text-sm ${
+              className={`numeric rounded-full border px-3 py-1.5 text-caption ${
                 on
-                  ? 'border-prediction bg-prediction/10 text-prediction'
-                  : 'border-grid text-traceInk/60 hover:border-prediction/60'
+                  ? 'border-prediction bg-predictionSoft text-prediction'
+                  : 'border-rule text-inkFaint hover:border-prediction/60'
               }`}
             >
               {constant.name}
-              <span className="ml-1.5 text-xs opacity-70">{constant.amplitudeM.toFixed(3)}</span>
+              <span className="ml-1.5 text-micro opacity-70">{constant.amplitudeM.toFixed(3)}</span>
             </button>
           )
         })}
         <button
           type="button"
           onClick={() => setEnabled(new Set(fit.constants.map((c) => c.name)))}
-          className="rounded-sm border border-grid px-2.5 py-1 text-sm text-traceInk/70 hover:border-prediction/60"
+          className="rounded-sm border border-rule px-2.5 py-1 text-caption text-inkMuted hover:border-prediction/60"
         >
           + semua
         </button>
         <button
           type="button"
           onClick={() => setEnabled(new Set(['M2']))}
-          className="rounded-sm border border-grid px-2.5 py-1 text-sm text-traceInk/70 hover:border-prediction/60"
+          className="rounded-sm border border-rule px-2.5 py-1 text-caption text-inkMuted hover:border-prediction/60"
         >
           M2 saja
         </button>
       </div>
 
       {model === null ? (
-        <p className="control text-sm text-traceInk/60">{dict.common.loading}</p>
+        <p className="text-caption text-inkFaint">{dict.common.loading}</p>
       ) : (
         <div className="card p-4">
           <TideChart

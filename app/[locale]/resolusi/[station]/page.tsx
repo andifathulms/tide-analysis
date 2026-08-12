@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { RayleighSlider } from '@/components/RayleighSlider'
 import { StationHeader, StationNav } from '@/components/StationNav'
+import { Section } from '@/components/ui'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations, stationSummary } from '@/lib/records/registry'
 import { STANDARD_SET } from '@/lib/tide/constituents'
@@ -43,7 +44,7 @@ export default async function ResolutionPage({
   if (analysis === null) notFound()
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <StationNav dict={dict} locale={locale} stationId={summary.stationId} active="resolusi" />
       <StationHeader
         dict={dict}
@@ -52,10 +53,9 @@ export default async function ResolutionPage({
         zone={zoneOf(analysis.record)}
         gapHours={analysis.summary.gapHours}
       />
-      <NavigationWarning dict={dict} />
+      <NavigationWarning dict={dict} compact />
 
-      <h1 className="text-2xl">{dict.resolusi.title}</h1>
-      <p className="max-w-3xl">{dict.resolusi.lead}</p>
+      <Section eyebrow="Batas" title={dict.resolusi.title} lead={dict.resolusi.lead} />
 
       <RayleighSlider
         dict={dict}
@@ -63,22 +63,22 @@ export default async function ResolutionPage({
         maxDays={Math.floor(summary.lengthDays)}
       />
 
-      <section className="max-w-3xl">
-        <h2 className="text-xl">Pasangan yang menentukan panjang rekaman</h2>
-        <p className="mt-1 text-sm text-traceInk/70">
+      <section className="max-w-reading">
+        <h2 className="text-headline">Pasangan yang menentukan panjang rekaman</h2>
+        <p className="mt-1 text-caption text-inkMuted">
           T = 360° / |σᵢ − σⱼ|. Semakin dekat dua kecepatan, semakin panjang rekaman yang
           dibutuhkan untuk memisahkannya.
         </p>
-        <table className="mt-3 w-full border-collapse text-sm">
+        <table className="mt-3 w-full border-collapse text-caption">
           <thead>
-            <tr className="control border-b border-grid text-left text-xs uppercase tracking-wide">
+            <tr className="border-b border-rule text-left">
               <th className="py-2">Pasangan</th>
               <th className="py-2 text-right">Panjang minimum (hari)</th>
             </tr>
           </thead>
           <tbody className="numeric">
             {tightestPairs(6).map((pair) => (
-              <tr key={`${pair.a}-${pair.b}`} className="border-b border-grid/50">
+              <tr key={`${pair.a}-${pair.b}`} className="border-b border-rule/60">
                 <td className="py-1.5">
                   {pair.a} / {pair.b}
                 </td>

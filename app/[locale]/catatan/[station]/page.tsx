@@ -6,6 +6,7 @@ import { ConstituentTable } from '@/components/table/ConstituentTable'
 import { FitDiagnostics, RefusalNotice } from '@/components/Diagnostics'
 import { FitWindowControl } from '@/components/FitWindowControl'
 import { StationHeader, StationNav } from '@/components/StationNav'
+import { Callout, Caption, Card, Section, Stat, TraceKey } from '@/components/ui'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations } from '@/lib/records/registry'
 import { buildChartModel } from '@/lib/chart/model'
@@ -62,7 +63,7 @@ export default async function RecordPage({
         })
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <StationNav dict={dict} locale={locale} stationId={station.stationId} active="catatan" />
       <StationHeader
         dict={dict}
@@ -71,82 +72,107 @@ export default async function RecordPage({
         datumNote={record.datum.note}
         zone={zone}
         gapHours={summary.gapHours}
+        character={analysis.character?.label}
       />
-      <NavigationWarning dict={dict} />
+      <NavigationWarning dict={dict} compact />
 
-      <p className="max-w-3xl">{dict.catatan.lead}</p>
-
-      <FitWindowControl
-        dict={dict}
-        stationId={station.stationId}
-        constituents={shown.outcome.type === 'fit' ? shown.outcome.constants.map((c) => c.name) : analysis.requested}
-        initialPercent={Math.round(FIT_FRACTION * 100)}
-      >
-      <div className="space-y-5">
-      {primary.outcome.type === 'refusal' && (
-        <>
-          <RefusalNotice dict={dict} refusal={primary.outcome} />
-          {fallback !== null && (
-            <p className="max-w-3xl text-sm text-traceInk/70">
-              Yang ditampilkan di bawah adalah himpunan terbesar yang masih didukung rekaman ini:{' '}
-              <span className="numeric">{fallback.constituents.join(', ')}</span>.
-            </p>
-          )}
-        </>
-      )}
-
-      {model !== null && (
-        <div className="card p-4">
-          <TideChart
-            model={model}
-            observedLabel={dict.common.observed}
-            predictedLabel={dict.common.predicted}
-            residualLabel={dict.common.residual}
-            heldOutLabel={dict.catatan.heldOut}
+      <Section eyebrow={dict.catatan.eyebrow} title={dict.catatan.title} lead={dict.catatan.lead}>
+        <Card>
+          <TraceKey
+            items={[
+              { colour: 'ink', label: dict.common.observed, meaning: dict.catatan.keyObserved },
+              {
+                colour: 'prediction',
+                label: dict.common.predicted,
+                meaning: dict.catatan.keyPredicted,
+              },
+              {
+                colour: 'residual',
+                label: dict.common.residual,
+                meaning: dict.catatan.keyResidual,
+              },
+            ]}
           />
-        </div>
-      )}
+        </Card>
 
-      {shown.outcome.type === 'fit' && (
-        <>
-          <FitDiagnostics dict={dict} fit={shown.outcome} />
+        <FitWindowControl
+          dict={dict}
+          stationId={station.stationId}
+          constituents={
+            shown.outcome.type === 'fit'
+              ? shown.outcome.constants.map((c) => c.name)
+              : analysis.requested
+          }
+          initialPercent={Math.round(FIT_FRACTION * 100)}
+        >
+          <div className="space-y-6">
+            {primary.outcome.type === 'refusal' && (
+              <>
+                <RefusalNotice dict={dict} refusal={primary.outcome} />
+                {fallback !== null && (
+                  <p className="max-w-reading text-caption text-inkMuted">
+                    {dict.catatan.fallbackNote}{' '}
+                    <span className="numeric">{fallback.constituents.join(', ')}</span>.
+                  </p>
+                )}
+              </>
+            )}
 
-          <section className="grid gap-4 sm:grid-cols-2">
-            <div className="card p-4">
-              <h2 className="control text-xs uppercase tracking-wide text-traceInk/60">
-                {dict.catatan.fitRms}
-              </h2>
-              <p className="numeric text-2xl text-residual">
-                {shown.fitResidualRmsM?.toFixed(4)} m
-              </p>
-            </div>
-            <div className="card p-4">
-              <h2 className="control text-xs uppercase tracking-wide text-traceInk/60">
-                {dict.catatan.heldOutRms}
-              </h2>
-              <p className="numeric text-2xl text-residual">
-                {shown.heldOutResidualRmsM === null
-                  ? '—'
-                  : `${shown.heldOutResidualRmsM.toFixed(4)} m`}
-              </p>
-            </div>
-          </section>
+            {model !== null && (
+              <figure className="card overflow-hidden p-4">
+                <TideChart
+                  model={model}
+                  observedLabel={dict.common.observed}
+                  predictedLabel={dict.common.predicted}
+                  residualLabel={dict.common.residual}
+                  heldOutLabel={dict.catatan.heldOut}
+                />
+              </figure>
+            )}
 
-          <section>
-            <h2 className="text-xl">{dict.komponen.title}</h2>
-            <div className="mt-3">
-              <ConstituentTable dict={dict} constants={shown.outcome.constants} />
-            </div>
-          </section>
-        </>
-      )}
-      </div>
-      </FitWindowControl>
+            {shown.outcome.type === 'fit' && (
+              <>
+                <FitDiagnostics dict={dict} fit={shown.outcome} />
 
-      <p className="text-sm">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Card>
+                    <Stat
+                      label={dict.catatan.fitRms}
+                      value={shown.fitResidualRmsM?.toFixed(4) ?? '—'}
+                      unit="m"
+                      tone="residual"
+                      note={dict.catatan.fitRmsNote}
+                    />
+                  </Card>
+                  <Card>
+                    <Stat
+                      label={dict.catatan.heldOutRms}
+                      value={shown.heldOutResidualRmsM?.toFixed(4) ?? '—'}
+                      unit="m"
+                      tone="residual"
+                      note={dict.catatan.heldOutRmsNote}
+                    />
+                  </Card>
+                </div>
+
+                <Callout tone="note" title={dict.catatan.readingTitle}>
+                  <p className="max-w-reading">{dict.catatan.readingBody}</p>
+                </Callout>
+
+                <Section eyebrow={dict.komponen.eyebrow} title={dict.komponen.title}>
+                  <ConstituentTable dict={dict} constants={shown.outcome.constants} />
+                  <Caption>{dict.komponen.tableCaption}</Caption>
+                </Section>
+              </>
+            )}
+          </div>
+        </FitWindowControl>
+      </Section>
+
+      <p className="text-caption">
         <Link
           href={`/${locale}/metode`}
-          className="control text-prediction underline underline-offset-2"
+          className="text-prediction underline underline-offset-4 hover:text-ink"
         >
           {dict.metode.title}
         </Link>

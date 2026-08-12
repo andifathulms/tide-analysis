@@ -24,44 +24,44 @@ export function ConstituentTable({
   const unresolvedRows = unresolved.filter((r) => r.type === 'unresolved')
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full border-collapse text-sm">
+    <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
+      <table className="w-full min-w-[640px] border-collapse text-caption">
         <thead>
-          <tr className="border-b border-grid text-left control text-xs uppercase tracking-wide">
-            <th scope="col" className="py-2 pr-4">
+          <tr className="border-b border-rule text-left">
+            <th scope="col" className="eyebrow py-2 pr-4 text-left">
               {dict.common.constituent}
             </th>
-            <th scope="col" className="py-2 pr-4 text-right">
+            <th scope="col" className="eyebrow py-2 pr-4 text-right">
               {dict.common.amplitude}
             </th>
-            <th scope="col" className="py-2 pr-4 text-right">
+            <th scope="col" className="eyebrow py-2 pr-4 text-right">
               {dict.common.phase}
             </th>
-            <th scope="col" className="py-2 pr-4 text-right">
+            <th scope="col" className="eyebrow py-2 pr-4 text-right">
               {dict.common.speed}
             </th>
-            <th scope="col" className="py-2 pr-4 text-right">
+            <th scope="col" className="eyebrow py-2 pr-4 text-right">
               {dict.common.period_h}
             </th>
-            <th scope="col" className="py-2 pr-4 text-right">
+            <th scope="col" className="eyebrow py-2 pr-4 text-right">
               {dict.common.nodalF}
             </th>
-            <th scope="col" className="py-2 text-right">
+            <th scope="col" className="eyebrow py-2 text-right">
               {dict.common.nodalU}
             </th>
           </tr>
         </thead>
         <tbody className="numeric">
           {constants.map((constant) => (
-            <tr key={constant.name} className="border-b border-grid/50">
+            <tr key={constant.name} className="border-b border-rule/60 hover:bg-sunken/50">
               <th scope="row" className="py-1.5 pr-4 text-left font-medium">
                 {constant.name}
-                <span className="ml-2 text-xs text-traceInk/50">{constant.doodsonNumber}</span>
+                <span className="ml-2 text-micro text-inkFaint">{constant.doodsonNumber}</span>
               </th>
               <td className="py-1.5 pr-4 text-right">
                 {constant.amplitudeM.toFixed(4)}
                 {showUncertainty && Number.isFinite(constant.amplitudeErrorM) && (
-                  <span className="ml-1 text-xs text-traceInk/50">
+                  <span className="ml-1 text-micro text-inkFaint">
                     ±{constant.amplitudeErrorM.toFixed(4)}
                   </span>
                 )}
@@ -69,7 +69,7 @@ export function ConstituentTable({
               <td className="py-1.5 pr-4 text-right">
                 {constant.phaseDeg.toFixed(1)}
                 {showUncertainty && Number.isFinite(constant.phaseErrorDeg) && (
-                  <span className="ml-1 text-xs text-traceInk/50">
+                  <span className="ml-1 text-micro text-inkFaint">
                     ±{constant.phaseErrorDeg.toFixed(1)}
                   </span>
                 )}
@@ -84,14 +84,14 @@ export function ConstituentTable({
           ))}
 
           {unresolvedRows.map((row) => (
-            <tr key={row.name} className="border-b border-grid/50 bg-unresolved/5">
+            <tr key={row.name} className="border-b border-rule/60 bg-unresolvedSoft/70">
               <th scope="row" className="py-1.5 pr-4 text-left font-medium text-unresolved">
                 {row.name}
               </th>
-              <td colSpan={6} className="py-1.5 text-left text-xs text-unresolved control">
+              <td colSpan={6} className="py-1.5 text-left text-caption text-unresolved">
                 {dict.common.unresolved}
                 {row.type === 'unresolved' && row.conflictsWith[0] !== undefined && (
-                  <span className="ml-2 text-traceInk/70">
+                  <span className="ml-2 text-inkMuted">
                     {row.conflictsWith[0].a === row.conflictsWith[0].b
                       ? `Z₀ · ${row.conflictsWith[0].requiredDays.toFixed(0)} ${dict.common.days}`
                       : `${row.conflictsWith[0].a}/${row.conflictsWith[0].b} · ${row.conflictsWith[0].requiredDays.toFixed(0)} ${dict.common.days}`}

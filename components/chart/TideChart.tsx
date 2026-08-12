@@ -30,7 +30,7 @@ export function TideChart({
         aria-label={`${observedLabel} · ${predictedLabel} · ${residualLabel}`}
         className="block"
       >
-        <rect x={0} y={0} width={model.width} height={model.height} className="fill-chart" />
+        <rect x={0} y={0} width={model.width} height={model.height} className="fill-surface" />
 
         {model.heldOutRect !== null && (
           <g>
@@ -39,13 +39,13 @@ export function TideChart({
               y={model.plot.y}
               width={model.heldOutRect.width}
               height={model.height - model.plot.y - 24}
-              className="fill-grid/25"
+              className="fill-sunken"
             />
             {heldOutLabel !== undefined && (
               <text
                 x={model.heldOutRect.x + 6}
                 y={model.plot.y + 12}
-                className="fill-traceInk/70 text-[10px] control"
+                className="fill-inkFaint text-[10px]"
               >
                 {heldOutLabel}
               </text>
@@ -101,7 +101,7 @@ export function TideChart({
             <text
               x={mark.x + 4}
               y={model.plot.y + 24}
-              className="fill-unresolved text-[10px] control"
+              className="fill-unresolved text-[10px] font-medium"
             >
               datum {mark.label}
             </text>
@@ -124,7 +124,7 @@ export function TideChart({
               <text
                 x={model.plot.x + model.plot.width + 6}
                 y={datum.y + 3}
-                className="fill-datum text-[10px] control"
+                className="fill-datum text-[10px]"
               >
                 {datum.label}
               </text>
@@ -139,7 +139,7 @@ export function TideChart({
               x={model.plot.x - 8}
               y={rule.y + 3}
               textAnchor="end"
-              className="fill-traceInk/70 text-[10px]"
+              className="fill-inkFaint text-[10px]"
             >
               {rule.label}
             </text>
@@ -150,7 +150,7 @@ export function TideChart({
               x={rule.x}
               y={model.height - 8}
               textAnchor="middle"
-              className="fill-traceInk/70 text-[10px]"
+              className="fill-inkFaint text-[10px]"
             >
               {rule.label}
             </text>
@@ -161,7 +161,7 @@ export function TideChart({
               x={model.plot.x - 8}
               y={rule.y + 3}
               textAnchor="end"
-              className="fill-residual/80 text-[10px]"
+              className="fill-residual text-[10px]"
             >
               {rule.label}
             </text>
@@ -169,14 +169,15 @@ export function TideChart({
         </g>
 
         {model.modelPath !== null && (
-          <path d={model.modelPath} fill="none" className="stroke-prediction" strokeWidth={1.4} />
+          <path d={model.modelPath} fill="none" className="stroke-prediction" strokeWidth={2} />
         )}
         <path
           d={model.observedPath}
           fill="none"
-          className="stroke-traceInk"
-          strokeWidth={0.9}
+          className="stroke-ink"
+          strokeWidth={1.1}
           strokeLinejoin="round"
+          strokeLinecap="round"
         />
 
         {model.residualPath !== null && model.residualZeroY !== null && (
@@ -189,11 +190,17 @@ export function TideChart({
               className="stroke-residual/50"
               strokeWidth={0.75}
             />
-            <path d={model.residualPath} fill="none" className="stroke-residual" strokeWidth={0.9} />
+            <path
+              d={model.residualPath}
+              fill="none"
+              className="stroke-residual"
+              strokeWidth={1.1}
+              strokeLinejoin="round"
+            />
             <text
               x={model.plot.x + model.plot.width + 6}
               y={model.residualZeroY + 3}
-              className="fill-residual text-[10px] control"
+              className="fill-residual text-[10px] font-medium"
             >
               {residualLabel}
             </text>
@@ -201,18 +208,20 @@ export function TideChart({
         )}
       </svg>
 
-      <figcaption className="control mt-2 flex flex-wrap gap-x-6 gap-y-1 text-xs">
+      {/* Identity is never colour alone: every trace is named here and the
+          chart is described in the table beside it. */}
+      <figcaption className="mt-3 flex flex-wrap gap-x-6 gap-y-1.5 text-caption">
         <span className="flex items-center gap-2">
-          <span className="inline-block h-[2px] w-6 bg-traceInk" />
+          <span className="inline-block h-[3px] w-7 rounded-full bg-ink" />
           {observedLabel}
         </span>
         <span className="flex items-center gap-2">
-          <span className="inline-block h-[2px] w-6 bg-prediction" />
+          <span className="inline-block h-[3px] w-7 rounded-full bg-prediction" />
           {predictedLabel}
         </span>
         {model.residualPath !== null && (
           <span className="flex items-center gap-2">
-            <span className="inline-block h-[2px] w-6 bg-residual" />
+            <span className="inline-block h-[3px] w-7 rounded-full bg-residual" />
             {residualLabel}
           </span>
         )}
