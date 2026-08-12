@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { TideChart } from '@/components/chart/TideChart'
 import { buildChartModel } from '@/lib/chart/model'
+import { blendSeries, REBUILD_MS } from '@/lib/chart/motion'
 import type { Dictionary } from '@/lib/i18n/dictionary'
 import { loadRecord } from '@/lib/records/registry'
 import type { ConstituentName } from '@/lib/tide/constituents'
@@ -17,8 +18,14 @@ const WINDOW_DAYS = 30
  * a clean twice-daily wave — then add S2 and the spring-neap beat appears from
  * two cosines. The one orchestrated moment in the app (PRD §9).
  *
- * The arithmetic is lib/tide's; this component holds the selection and renders
- * what those functions return.
+ * The curve tweens into its new shape over 420 ms rather than cutting to it,
+ * because the point is to see the beat arrive. Nothing else in the app moves,
+ * and this stops entirely under prefers-reduced-motion — the tween is how the
+ * curve is drawn, never how it is understood; the numbers are identical either
+ * way.
+ *
+ * The arithmetic is lib/tide's and lib/chart's; this component holds the
+ * selection, drives the frames, and renders what those functions return.
  */
 export function ConstituentExplorer({
   dict,
@@ -31,6 +38,15 @@ export function ConstituentExplorer({
 }) {
   const [record, setRecord] = useState<TideRecord | null>(null)
   const [enabled, setEnabled] = useState<ReadonlySet<ConstituentName>>(new Set(['M2']))
+  /** The curve as drawn this frame, which lags the target while it rebuilds. */
+  const [drawn, setDrawn] = useState<Float64Array | null>(null)
+  const drawnRef = useRef<Float64Array | null>(null)
+  const frameRef = useRef<number | null>(null)
+
+  /** Kept in a ref so the tween can read where the curve is without a stale closure. */
+  useEffect(() => {
+    drawnRef.current = drawn
+  }, [drawn])
 
   useEffect(() => {
     let cancelled = false
@@ -44,20 +60,55 @@ export function ConstituentExplorer({
     }
   }, [stationId])
 
-  const model = useMemo(() => {
+  /** The curve the current selection asks for. */
+  const target = useMemo(() => {
     if (record === null) return null
     const constants: PredictableConstant[] = fit.constants
       .filter((c) => enabled.has(c.name))
       .map((c) => ({ name: c.name, amplitudeM: c.amplitudeM, phaseDeg: c.phaseDeg }))
 
-    const predicted =
-      constants.length === 0
-        ? new Float64Array(record.timesSec.length).fill(fit.meanLevelM)
-        : predictHeights({
-            meanLevelM: fit.meanLevelM,
-            constants,
-            timesSec: record.timesSec,
-          })
+    return constants.length === 0
+      ? new Float64Array(record.timesSec.length).fill(fit.meanLevelM)
+      : predictHeights({
+          meanLevelM: fit.meanLevelM,
+          constants,
+          timesSec: record.timesSec,
+        })
+  }, [record, enabled, fit])
+
+  // Grow the new cosine into the curve rather than cutting to it.
+  useEffect(() => {
+    if (target === null) return undefined
+
+    const from = drawnRef.current
+    const reduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    // First draw, a changed window, or a reader who has asked for less motion:
+    // show the answer immediately. The tween is decoration on a value that is
+    // already correct.
+    if (from === null || from.length !== target.length || reduced) {
+      setDrawn(target)
+      return undefined
+    }
+
+    const started = performance.now()
+    const step = (now: number): void => {
+      const progress = Math.min((now - started) / REBUILD_MS, 1)
+      setDrawn(progress >= 1 ? target : blendSeries(from, target, progress))
+      if (progress < 1) frameRef.current = requestAnimationFrame(step)
+    }
+    frameRef.current = requestAnimationFrame(step)
+
+    return () => {
+      if (frameRef.current !== null) cancelAnimationFrame(frameRef.current)
+    }
+  }, [target])
+
+  const model = useMemo(() => {
+    if (record === null || drawn === null) return null
+    const predicted = drawn
 
     return buildChartModel({
       timesSec: record.timesSec,
@@ -70,7 +121,7 @@ export function ConstituentExplorer({
       residualHeight: 130,
       datums: [{ label: 'Z₀', heightM: fit.meanLevelM, emphasis: true }],
     })
-  }, [record, enabled, fit])
+  }, [record, drawn, fit])
 
   function toggle(name: ConstituentName): void {
     setEnabled((previous) => {
