@@ -84,6 +84,10 @@ export interface Dictionary {
     readonly fitWindow: string
     readonly validationWindow: string
     readonly heldOut: string
+    readonly splitLabel: string
+    readonly splitHint: string
+    readonly fitRms: string
+    readonly heldOutRms: string
   }
   readonly komponen: {
     readonly title: string
@@ -204,6 +208,11 @@ const id: Dictionary = {
     fitWindow: 'Jendela pencocokan',
     validationWindow: 'Jendela validasi',
     heldOut: 'Bagian ini tidak dilihat saat mencocokkan',
+    splitLabel: 'Porsi rekaman yang dicocokkan',
+    splitHint:
+      'Sisanya ditahan dan diprediksi. Perpendek jendelanya dan komponen mulai berguguran — kriteria Rayleigh yang sama, digerakkan oleh jendela alih-alih oleh panjang rekaman.',
+    fitRms: 'RMS residu — jendela pencocokan',
+    heldOutRms: 'RMS residu — jendela validasi (tidak dilihat saat mencocokkan)',
   },
   komponen: {
     title: 'Komponen harmonik',
@@ -330,6 +339,11 @@ const en: Dictionary = {
     fitWindow: 'Fit window',
     validationWindow: 'Validation window',
     heldOut: 'This part was not seen during fitting',
+    splitLabel: 'Share of the record fitted',
+    splitHint:
+      'The rest is held out and predicted. Shorten the window and constituents start dropping out — the same Rayleigh criterion, moved by the window rather than by the length of the record.',
+    fitRms: 'Residual RMS — fit window',
+    heldOutRms: 'Residual RMS — validation window (never seen while fitting)',
   },
   komponen: {
     title: 'Harmonic constituents',

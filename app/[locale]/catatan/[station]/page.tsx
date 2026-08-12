@@ -4,6 +4,7 @@ import { NavigationWarning } from '@/components/NavigationWarning'
 import { TideChart } from '@/components/chart/TideChart'
 import { ConstituentTable } from '@/components/table/ConstituentTable'
 import { FitDiagnostics, RefusalNotice } from '@/components/Diagnostics'
+import { FitWindowControl } from '@/components/FitWindowControl'
 import { StationHeader, StationNav } from '@/components/StationNav'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations } from '@/lib/records/registry'
@@ -75,6 +76,13 @@ export default async function RecordPage({
 
       <p className="max-w-3xl">{dict.catatan.lead}</p>
 
+      <FitWindowControl
+        dict={dict}
+        stationId={station.stationId}
+        constituents={shown.outcome.type === 'fit' ? shown.outcome.constants.map((c) => c.name) : analysis.requested}
+        initialPercent={Math.round(FIT_FRACTION * 100)}
+      >
+      <div className="space-y-5">
       {primary.outcome.type === 'refusal' && (
         <>
           <RefusalNotice dict={dict} refusal={primary.outcome} />
@@ -106,7 +114,7 @@ export default async function RecordPage({
           <section className="grid gap-4 sm:grid-cols-2">
             <div className="card p-4">
               <h2 className="control text-xs uppercase tracking-wide text-traceInk/60">
-                RMS residu — jendela pencocokan
+                {dict.catatan.fitRms}
               </h2>
               <p className="numeric text-2xl text-residual">
                 {shown.fitResidualRmsM?.toFixed(4)} m
@@ -114,7 +122,7 @@ export default async function RecordPage({
             </div>
             <div className="card p-4">
               <h2 className="control text-xs uppercase tracking-wide text-traceInk/60">
-                RMS residu — jendela validasi (tidak dilihat saat mencocokkan)
+                {dict.catatan.heldOutRms}
               </h2>
               <p className="numeric text-2xl text-residual">
                 {shown.heldOutResidualRmsM === null
@@ -129,17 +137,20 @@ export default async function RecordPage({
             <div className="mt-3">
               <ConstituentTable dict={dict} constants={shown.outcome.constants} />
             </div>
-            <p className="mt-3 text-sm">
-              <Link
-                href={`/${locale}/metode`}
-                className="control text-prediction underline underline-offset-2"
-              >
-                {dict.metode.title}
-              </Link>
-            </p>
           </section>
         </>
       )}
+      </div>
+      </FitWindowControl>
+
+      <p className="text-sm">
+        <Link
+          href={`/${locale}/metode`}
+          className="control text-prediction underline underline-offset-2"
+        >
+          {dict.metode.title}
+        </Link>
+      </p>
     </div>
   )
 }
