@@ -87,14 +87,27 @@ export function profileSensors(
 
   return [...grouped.entries()]
     .map(([sensor, values]) => {
-      const mean = values.reduce((sum, v) => sum + v, 0) / values.length
-      const variance = values.reduce((sum, v) => sum + (v - mean) ** 2, 0) / values.length
+      // Accumulated in one pass. A station reports hundreds of thousands of
+      // readings per sensor, and Math.min(...values) on that many arguments
+      // overflows the stack.
+      let sum = 0
+      let minM = Number.POSITIVE_INFINITY
+      let maxM = Number.NEGATIVE_INFINITY
+      for (const value of values) {
+        sum += value
+        if (value < minM) minM = value
+        if (value > maxM) maxM = value
+      }
+      const mean = sum / values.length
+      let squares = 0
+      for (const value of values) squares += (value - mean) ** 2
+
       return {
         sensor,
         count: values.length,
-        sigmaM: Math.sqrt(variance),
-        minM: Math.min(...values),
-        maxM: Math.max(...values),
+        sigmaM: Math.sqrt(squares / values.length),
+        minM,
+        maxM,
       }
     })
     .sort((a, b) => b.count - a.count || a.sensor.localeCompare(b.sensor))

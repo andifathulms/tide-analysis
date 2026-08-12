@@ -174,7 +174,8 @@ async function fetchIoc(spec: StationSpec): Promise<IocFetchResult> {
     })
     const payload = await fetchJsonWithRetry(url, spec.stationId)
     const chunk = parseIocSamples(payload)
-    raw.push(...chunk)
+    // Pushed one at a time: spreading a chunk of this size overflows the stack.
+    for (const sample of chunk) raw.push(sample)
     process.stdout.write(
       `  ${spec.stationId} ${isoDay(cursor)} → ${isoDay(chunkEnd)}: ${chunk.length} bacaan\n`,
     )
