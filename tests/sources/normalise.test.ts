@@ -116,6 +116,62 @@ describe('the IOC parser', () => {
   })
 })
 
+describe('spike rejection', () => {
+  /**
+   * Semarang's radar sat around 5 m and threw single-sample excursions to
+   * −4 m, returning to the tide on the next reading. Left in, they dominate
+   * the record: the fit explained none of it and left a 1.40 m residual
+   * against a 1.43 m signal.
+   */
+  function tideWithSpikes(hours: number, spikeAt: readonly number[]): RawSample[] {
+    return Array.from({ length: hours }, (_, h) => ({
+      timeSec: START + h * 3600,
+      heightM: spikeAt.includes(h) ? 5 + 9 : 5 + Math.sin(h / 2),
+    }))
+  }
+
+  it('rejects an isolated spike and declares its slot as a gap', () => {
+    const { record, dropped } = normalise(tideWithSpikes(200, [50]), {
+      metadata: METADATA,
+      targetIntervalSec: 3600,
+    })
+    expect(dropped.spikes).toBe(1)
+    expect(record.heightsM.length).toBe(199)
+    expect(Math.max(...record.heightsM)).toBeLessThan(7)
+    const gap = record.gaps.find((g) => g.reason.includes('lonjakan'))
+    expect(gap).toBeDefined()
+    expect(gap?.startSec).toBe(START + 50 * 3600)
+  })
+
+  it('never interpolates a value into the rejected slot', () => {
+    const { record } = normalise(tideWithSpikes(200, [50]), {
+      metadata: METADATA,
+      targetIntervalSec: 3600,
+    })
+    const tide = toTideRecord(record)
+    expect(Array.from(tide.timesSec)).not.toContain(START + 50 * 3600)
+  })
+
+  it('leaves an ordinary tide untouched', () => {
+    const { record, dropped } = normalise(tideWithSpikes(300, []), {
+      metadata: METADATA,
+      targetIntervalSec: 3600,
+    })
+    expect(dropped.spikes).toBe(0)
+    expect(record.heightsM.length).toBe(300)
+  })
+
+  it('can be turned off to see the record exactly as the source served it', () => {
+    const { record, dropped } = normalise(tideWithSpikes(200, [50, 120]), {
+      metadata: METADATA,
+      targetIntervalSec: 3600,
+      rejectSpikes: false,
+    })
+    expect(dropped.spikes).toBe(0)
+    expect(Math.max(...record.heightsM)).toBeGreaterThan(13)
+  })
+})
+
 describe('choosing one sensor per station', () => {
   /**
    * Benoa in 2026: the radar sat at −0.281 m for seven months while a second
@@ -139,6 +195,7 @@ describe('choosing one sensor per station', () => {
     expect(profiles.map((p) => p.sensor).sort()).toEqual(['bat', 'ras', 'rad', 'sw1'].sort())
     expect(profiles.find((p) => p.sensor === 'rad')?.sigmaM).toBeCloseTo(0, 6)
     expect(profiles.find((p) => p.sensor === 'ras')?.sigmaM).toBeGreaterThan(0.4)
+    expect(profiles.find((p) => p.sensor === 'ras')?.robustSigmaM).toBeGreaterThan(0.3)
   })
 
   it('takes the sensor that varies, not the one with the most readings', () => {
@@ -160,6 +217,27 @@ describe('choosing one sensor per station', () => {
       timeSec: i,
     }))
     expect(chooseSensor(profileSensors(wild)).sensor).toBeNull()
+  })
+
+  it('is not fooled by a flat sensor that throws spikes', () => {
+    // Semarang's radar: flat around 5 m, with excursions to −4 m. Its standard
+    // deviation beat every other sensor at the station; its robust scale does
+    // not, and the robust scale is what decides.
+    const spiky = Array.from({ length: 2000 }, (_, i) => ({
+      sensor: 'rad',
+      heightM: i % 40 === 0 ? -4.19 : 5 + 0.02 * Math.sin(i / 5),
+      timeSec: i,
+    }))
+    const clean = Array.from({ length: 2000 }, (_, i) => ({
+      sensor: 'prs',
+      heightM: 1.7 + 0.5 * Math.sin(i / 12),
+      timeSec: i,
+    }))
+    const profiles = profileSensors([...spiky, ...clean])
+    expect(profiles.find((p) => p.sensor === 'rad')!.sigmaM).toBeGreaterThan(
+      profiles.find((p) => p.sensor === 'prs')!.sigmaM,
+    )
+    expect(chooseSensor(profiles).sensor).toBe('prs')
   })
 
   it('is deterministic when two sensors are equally lively', () => {

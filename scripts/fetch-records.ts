@@ -215,7 +215,7 @@ async function fetchStation(
   }
   const { samples, sensorNote } = await fetchIoc(spec)
 
-  const { record, dropped } = normalise(samples, {
+  const { record: normalised, dropped } = normalise(samples, {
     targetIntervalSec: 3600,
     metadata: {
       stationId: spec.stationId,
@@ -228,12 +228,20 @@ async function fetchStation(
       datum: IOC_DATUM,
       utcOffsetHours: spec.utcOffsetHours,
       timeZoneLabel: spec.timeZoneLabel,
-      processing:
-        `Diambil dari ${source.name} untuk ${WINDOW_START}…${WINDOW_END}. ` +
-        `${sensorNote} ` +
-        `Disampel ke grid jam dengan aturan sampel terdekat (toleransi 10 menit); tanpa interpolasi.`,
+      processing: '',
     },
   })
+
+  // Written after normalisation, because it reports what normalisation did.
+  const record: SerialisedRecord = {
+    ...normalised,
+    processing:
+      `Diambil dari ${source.name} untuk ${WINDOW_START}…${WINDOW_END}. ` +
+      `${sensorNote} ` +
+      `Disampel ke grid jam dengan aturan sampel terdekat (toleransi 10 menit); tanpa interpolasi. ` +
+      `${dropped.spikes} bacaan lonjakan ditolak dan slotnya dinyatakan sebagai jeda; ` +
+      `${dropped.outOfRange} bacaan di luar rentang wajar dibuang.`,
+  }
 
   const lastIndex = record.sampleIndices[record.sampleIndices.length - 1] as number
   const endSec = record.startSec + lastIndex * record.intervalSec
@@ -255,7 +263,7 @@ async function fetchStation(
   console.log(
     `  → ${record.stationId}: ${days.toFixed(1)} hari, ${declaration.sampleCount} sampel, ` +
       `${record.gaps.length} jeda (${totalGapHours(record.gaps).toFixed(0)} jam), ` +
-      `${dropped.outOfRange} di luar rentang, ${dropped.missingSlots} slot kosong`,
+      `${dropped.outOfRange} di luar rentang, ${dropped.spikes} lonjakan ditolak, ${dropped.missingSlots} slot kosong`,
   )
   return { record, declaration }
 }

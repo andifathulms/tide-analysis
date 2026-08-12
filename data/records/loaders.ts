@@ -5,6 +5,16 @@
 import type { SerialisedRecord } from '@/lib/tide/record'
 
 export const RECORD_LOADERS: Record<string, () => Promise<SerialisedRecord>> = {
+  'ioc-ambon': () =>
+    import('./ioc-ambon.json').then((m) => m.default as unknown as SerialisedRecord),
   'ioc-benoa': () =>
     import('./ioc-benoa.json').then((m) => m.default as unknown as SerialisedRecord),
+  'ioc-bitung': () =>
+    import('./ioc-bitung.json').then((m) => m.default as unknown as SerialisedRecord),
+  'ioc-padang': () =>
+    import('./ioc-padang.json').then((m) => m.default as unknown as SerialisedRecord),
+  'ioc-semarang': () =>
+    import('./ioc-semarang.json').then((m) => m.default as unknown as SerialisedRecord),
+  'ioc-surabaya': () =>
+    import('./ioc-surabaya.json').then((m) => m.default as unknown as SerialisedRecord),
 }

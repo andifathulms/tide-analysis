@@ -51,6 +51,19 @@
   ],
   "records": [
     {
+      "stationId": "ioc-ambon",
+      "stationName": "Ambon, Maluku",
+      "source": "ioc",
+      "file": "ioc-ambon.json",
+      "startSec": 1767229200,
+      "endSec": 1785542400,
+      "sampleCount": 5050,
+      "intervalSec": 3600,
+      "datumCode": "ioc-sensor-zero",
+      "gapCount": 19,
+      "fetchedOn": "2026-08-12"
+    },
+    {
       "stationId": "ioc-benoa",
       "stationName": "Benoa, Bali",
       "source": "ioc",
@@ -61,6 +74,58 @@
       "intervalSec": 3600,
       "datumCode": "ioc-sensor-zero",
       "gapCount": 16,
+      "fetchedOn": "2026-08-12"
+    },
+    {
+      "stationId": "ioc-bitung",
+      "stationName": "Bitung, Sulawesi Utara",
+      "source": "ioc",
+      "file": "ioc-bitung.json",
+      "startSec": 1767229200,
+      "endSec": 1785542400,
+      "sampleCount": 4381,
+      "intervalSec": 3600,
+      "datumCode": "ioc-sensor-zero",
+      "gapCount": 27,
+      "fetchedOn": "2026-08-12"
+    },
+    {
+      "stationId": "ioc-padang",
+      "stationName": "Padang, Sumatera Barat",
+      "source": "ioc",
+      "file": "ioc-padang.json",
+      "startSec": 1767229200,
+      "endSec": 1785542400,
+      "sampleCount": 5055,
+      "intervalSec": 3600,
+      "datumCode": "ioc-sensor-zero",
+      "gapCount": 13,
+      "fetchedOn": "2026-08-12"
+    },
+    {
+      "stationId": "ioc-semarang",
+      "stationName": "Semarang, Jawa Tengah",
+      "source": "ioc",
+      "file": "ioc-semarang.json",
+      "startSec": 1767225600,
+      "endSec": 1785542400,
+      "sampleCount": 4363,
+      "intervalSec": 3600,
+      "datumCode": "ioc-sensor-zero",
+      "gapCount": 339,
+      "fetchedOn": "2026-08-12"
+    },
+    {
+      "stationId": "ioc-surabaya",
+      "stationName": "Surabaya, Jawa Timur",
+      "source": "ioc",
+      "file": "ioc-surabaya.json",
+      "startSec": 1767225600,
+      "endSec": 1785542400,
+      "sampleCount": 4998,
+      "intervalSec": 3600,
+      "datumCode": "ioc-sensor-zero",
+      "gapCount": 78,
       "fetchedOn": "2026-08-12"
     }
   ]

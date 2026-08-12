@@ -68,10 +68,32 @@ export function parseIocResponse(payload: unknown, sensor?: string): RawSample[]
 export interface SensorProfile {
   readonly sensor: string
   readonly count: number
-  /** Standard deviation of the readings, metres. */
+  /** Standard deviation of the readings, metres. Inflated by spikes. */
   readonly sigmaM: number
+  /**
+   * Robust scale: 1.4826 × median absolute deviation, metres. Equal to σ for
+   * clean data and unmoved by the occasional 9-metre instrument spike, which
+   * is what makes it the right basis for choosing between sensors.
+   */
+  readonly robustSigmaM: number
   readonly minM: number
   readonly maxM: number
+}
+
+function median(sorted: readonly number[]): number {
+  if (sorted.length === 0) return 0
+  const middle = Math.floor(sorted.length / 2)
+  return sorted.length % 2 === 0
+    ? ((sorted[middle - 1] as number) + (sorted[middle] as number)) / 2
+    : (sorted[middle] as number)
+}
+
+/** 1.4826 × MAD — the normal-consistent robust estimate of scale. */
+export function robustScale(values: readonly number[]): number {
+  if (values.length === 0) return 0
+  const centre = median([...values].sort((a, b) => a - b))
+  const deviations = values.map((v) => Math.abs(v - centre)).sort((a, b) => a - b)
+  return 1.4826 * median(deviations)
 }
 
 /** What each sensor at a station actually reported — the basis of the choice. */
@@ -106,6 +128,7 @@ export function profileSensors(
         sensor,
         count: values.length,
         sigmaM: Math.sqrt(squares / values.length),
+        robustSigmaM: robustScale(values),
         minM,
         maxM,
       }
@@ -119,7 +142,9 @@ export function profileSensors(
  * it, so "the sensor with the most readings" picks the dead one.
  *
  * Below this, a sensor is flat-lined rather than quiet: even the calmest
- * Indonesian station moves by more than 2 cm over a month.
+ * Indonesian station moves by more than 2 cm over a month. Measured on the
+ * robust scale, so a stuck gauge that throws the occasional spike still reads
+ * as stuck.
  */
 export const MINIMUM_SENSOR_SIGMA_M = 0.02
 
@@ -134,9 +159,12 @@ export const MAXIMUM_SENSOR_SIGMA_M = 5
  * silently mix datums — the risk PRD §13 names — so exactly one is chosen.
  *
  * The choice is the sensor that actually varies: among those with comparable
- * coverage, the one with the largest standard deviation inside a plausible
- * tidal band. Ties break by count and then by name, so it is deterministic,
- * and the full profile is recorded on the record rather than discarded.
+ * coverage, the one with the largest *robust* scale inside a plausible tidal
+ * band. Robust, not standard deviation: Semarang's radar sat around 5 m and
+ * threw single-sample excursions to −4 m, which gave it the largest σ at the
+ * station and would have won it the record on that basis. Ties break by count
+ * and then by name, so the choice is deterministic, and the full profile is
+ * recorded on the record rather than discarded.
  */
 export function chooseSensor(profiles: readonly SensorProfile[]):
   | { readonly sensor: string; readonly reason: string }
@@ -147,8 +175,8 @@ export function chooseSensor(profiles: readonly SensorProfile[]):
   const candidates = profiles.filter(
     (p) =>
       p.count >= bestCoverage * 0.5 &&
-      p.sigmaM >= MINIMUM_SENSOR_SIGMA_M &&
-      p.sigmaM <= MAXIMUM_SENSOR_SIGMA_M,
+      p.robustSigmaM >= MINIMUM_SENSOR_SIGMA_M &&
+      p.robustSigmaM <= MAXIMUM_SENSOR_SIGMA_M,
   )
 
   if (candidates.length === 0) {
@@ -159,12 +187,13 @@ export function chooseSensor(profiles: readonly SensorProfile[]):
   }
 
   const chosen = [...candidates].sort(
-    (a, b) => b.sigmaM - a.sigmaM || b.count - a.count || a.sensor.localeCompare(b.sensor),
+    (a, b) =>
+      b.robustSigmaM - a.robustSigmaM || b.count - a.count || a.sensor.localeCompare(b.sensor),
   )[0] as SensorProfile
 
   return {
     sensor: chosen.sensor,
-    reason: `σ = ${chosen.sigmaM.toFixed(3)} m atas ${chosen.count} bacaan`,
+    reason: `σ robust = ${chosen.robustSigmaM.toFixed(3)} m atas ${chosen.count} bacaan`,
   }
 }
 
@@ -173,7 +202,7 @@ export function describeSensors(profiles: readonly SensorProfile[]): string {
   return profiles
     .map(
       (p) =>
-        `${p.sensor} (n=${p.count}, σ=${p.sigmaM.toFixed(3)} m, ${p.minM.toFixed(3)}…${p.maxM.toFixed(3)} m)`,
+        `${p.sensor} (n=${p.count}, σ=${p.sigmaM.toFixed(3)} m, σ robust=${p.robustSigmaM.toFixed(3)} m, ${p.minM.toFixed(3)}…${p.maxM.toFixed(3)} m)`,
     )
     .join(', ')
 }
