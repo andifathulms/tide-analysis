@@ -162,4 +162,16 @@ The site states prominently and repeatedly that this is an educational tool, not
 
 ## Current state
 
-M0 — not yet scaffolded. Next: constituent definitions, Doodson arguments, and nodal corrections, verified against published values. **No solver work until `pnpm test:astro` passes.**
+M0–M6 implemented. 229 tests green, `pnpm build` exports 62 pages, `pnpm lint` and `pnpm typecheck` clean.
+
+Six IOC stations bundled — Benoa, Surabaya, Semarang, Bitung, Padang, Ambon — 212 days each, hourly, 1 January to 1 August 2026. Formzahl runs from 0.39 at Padang to 1.60 at Semarang, so two of the four regimes are represented; the diurnal end (Tanjung Priok) has no active open station, so the four-port contrast in PRD §3 is not yet complete.
+
+**UHSLC ships disabled, not enabled as PRD §4 assumed.** Its portal attaches per-country attribution conditions set by the operator that owns the gauge, and for Indonesian stations that operator is BIG — the same terms this project has not verified. The adapter is written and tested; enabling it is a manifest change once someone reads the terms. IOC carries the launch alone.
+
+Three things that bit, all recorded in tests so they cannot come back:
+
+1. **A station reports several sensors on the same timestamps**, each against its own zero. Merging them mixes datums. One sensor is chosen per station and the choice is recorded on the record.
+2. **The choice cannot be "most readings"** — Benoa's radar was stuck at −0.281 m for seven months while another gauge recorded a 2.3 m tide beside it.
+3. **Nor can it be "largest σ"** — Semarang's radar was flat with nine-metre spikes, which gave it the largest σ at the station. The rule is largest robust scale, and isolated spikes are rejected into declared gaps.
+
+Next, in rough order: a diurnal station if an open one appears; the fit window on the record page is currently fixed at two thirds, which could be a control; and `pnpm records:fetch` takes about fifteen minutes per station against a service that sometimes stalls.
