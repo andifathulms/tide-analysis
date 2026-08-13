@@ -19,11 +19,13 @@ export default function LocaleLayout({
   const locale = params.locale as Locale
   const dict = dictionary(locale)
   const other: Locale = locale === 'id' ? 'en' : 'id'
+  /** Each language names itself, in itself. */
+  const otherName = other === 'en' ? 'English' : 'Bahasa Indonesia'
 
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-20 border-b border-rule bg-paper/90 backdrop-blur">
-        <div className="mx-auto flex max-w-page items-center justify-between gap-4 px-5 py-3">
+        <div className="mx-auto flex max-w-page items-center justify-between gap-4 px-gutter py-3">
           {/* The lockup: the mark, then the wordmark in the site's own serif. */}
           <Link href={`/${locale}`} className="group flex items-center gap-2.5">
             <BrandMark className="h-7 w-7 shrink-0 rounded-[6px]" />
@@ -45,20 +47,31 @@ export default function LocaleLayout({
             >
               {dict.nav.metode}
             </Link>
+            {/*
+             * The toggle was an 11px box in the faint ink at the far right —
+             * effectively invisible to the reader who most needs it, since
+             * the page it sits on is entirely in the language they cannot
+             * read. It is now the same size as the links beside it and names
+             * the language rather than abbreviating it.
+             */}
             <Link
               href={`/${other}`}
-              className="ml-1 rounded border border-rule px-2.5 py-1 text-micro font-medium uppercase tracking-wider text-inkFaint hover:border-prediction hover:text-prediction"
+              lang={other}
+              hrefLang={other}
+              aria-label={otherName}
+              className="ml-1 rounded-card border border-rule px-2.5 py-1.5 text-caption font-medium text-inkMuted hover:border-prediction hover:text-prediction"
             >
-              {other}
+              <span className="sm:hidden">{other.toUpperCase()}</span>
+              <span className="hidden sm:inline">{otherName}</span>
             </Link>
           </nav>
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-page flex-1 px-5 py-8 sm:py-10">{children}</main>
+      <main className="mx-auto w-full max-w-page flex-1 px-gutter py-8 sm:py-10">{children}</main>
 
-      <footer className="mt-16 border-t border-rule bg-surface">
-        <div className="mx-auto max-w-page px-5 py-8 text-caption text-inkMuted">
+      <footer className="mt-section border-t border-rule bg-surface">
+        <div className="mx-auto max-w-page px-gutter py-8 text-caption text-inkMuted">
           {/* The notice a reader must not miss, and what the site is. */}
           <p className="max-w-reading">
             <span className="font-medium text-unresolved">{dict.warning.title}.</span>{' '}
