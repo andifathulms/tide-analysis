@@ -12,6 +12,8 @@ import { dictionary, fill, isLocale, LOCALES, type Locale } from '@/lib/i18n/dic
 import { stations } from '@/lib/records/registry'
 import { buildChartModel } from '@/lib/chart/model'
 import { DerivationPanel } from '@/components/DerivationPanel'
+import { StabilityPanel } from '@/components/StabilityPanel'
+import { windowStability } from '@/lib/tide/stability'
 import { deriveConstituent, largestConstituent } from '@/lib/view/derivation'
 import { analyseStation } from '@/lib/view/station'
 import { zoneOf } from '@/lib/view/format'
@@ -58,6 +60,18 @@ export default async function RecordPage({
                 meanLevelM: shown.outcome.meanLevelM,
               })
         })()
+      : null
+
+  /*
+   * Four independent stretches of the same record, so the page can say whether
+   * its own constants move when the window does.
+   */
+  const stability =
+    shown.outcome.type === 'fit'
+      ? windowStability({
+          record,
+          constituents: shown.outcome.constants.map((c) => c.name),
+        })
       : null
 
   const model =
@@ -225,6 +239,21 @@ export default async function RecordPage({
                    * — a reader should be able to look up from the worked H and
                    * g to the row they reproduce.
                    */}
+                  {/*
+                   * The claim the site never tested: whether these constants
+                   * belong to the harbour or to these particular months. It
+                   * goes under the table it questions.
+                   */}
+                  {stability !== null && (
+                    <Section
+                      level={3}
+                      eyebrow={dict.catatan.stabilityEyebrow}
+                      title={dict.catatan.stabilityTitle}
+                    >
+                      <StabilityPanel dict={dict} report={stability} />
+                    </Section>
+                  )}
+
                   {derivation !== null && (
                     <Section
                       level={3}

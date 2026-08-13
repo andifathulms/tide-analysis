@@ -226,6 +226,16 @@ export interface Dictionary {
     readonly derivationSin: string
     readonly derivationShare: string
     readonly derivationObserved: string
+    readonly stabilityEyebrow: string
+    readonly stabilityTitle: string
+    readonly stabilityLead: string
+    readonly stabilityWindow: string
+    readonly stabilityMean: string
+    readonly stabilityRange: string
+    readonly stabilitySpread: string
+    readonly stabilityPhase: string
+    readonly stabilityReading: string
+    readonly stabilityIncomparable: string
     readonly stepTitle: string
     readonly stepBody: string
     readonly noRecords: string
@@ -637,6 +647,19 @@ const id: Dictionary = {
     derivationSin: 'sin(V+u)',
     derivationShare: 'Sumbangan {name} (m)',
     derivationObserved: 'Terekam (m)',
+    stabilityEyebrow: 'Sifat tempat, atau sifat bulan-bulan ini?',
+    stabilityTitle: 'Angka yang sama, empat penggal rekaman yang berbeda',
+    stabilityLead:
+      'Seluruh situs ini bertumpu pada satu klaim: amplitudo dan fase adalah sifat tempatnya — apa yang dilakukan garis pantai terhadap gaya yang sama. Namun setiap angka di atas berasal dari satu penggal 2026 tertentu. Rekaman ini dipotong menjadi {count} bagian yang sama panjang dan tidak bertumpang tindih, masing-masing dicocokkan sendiri-sendiri. Bila amplitudo hampir tidak bergerak antar penggal, ia berperilaku seperti sifat pelabuhan itu. Bila ia berayun, yang bekerja adalah rekamannya, bukan tempatnya.',
+    stabilityWindow: 'Penggal',
+    stabilityMean: 'Rata-rata H (m)',
+    stabilityRange: 'Terendah — tertinggi',
+    stabilitySpread: 'Ayunan',
+    stabilityPhase: 'Ayunan fase',
+    stabilityReading:
+      'Dua hal membuat sebuah komponen berayun. Yang pertama, isyaratnya kecil dan dekat dengan derau — itu sebabnya komponen terkecil hampir selalu berayun paling jauh. Yang kedua lebih halus: komponen yang pasangannya tidak dapat dipisahkan pada penggal sepanjang ini akan menyerap sebagian energi pasangan itu, dan karena keduanya bergeser fase sepanjang tahun, jumlah yang terserap berubah dari penggal ke penggal. Itulah kebocoran yang sama dengan yang dilaporkan penolakan di atas, dilihat dari sisi lain. Perhatikan juga bahwa ayunan di sini biasanya jauh lebih besar daripada angka ± pada tabel — ± mengandaikan derau saling bebas antar jam, sedangkan penggal-penggal ini melihat cuaca yang benar-benar berbeda.',
+    stabilityIncomparable:
+      'Tidak dapat dibandingkan karena tidak semua penggal mampu memisahkannya:',
     leakageWarning:
       'Ini bukan konstanta harmonik dan tidak boleh diperlakukan sebagai amplitudo. Sebagian dari tiap angka di atas adalah milik komponen yang bercampur dengannya — semakin tinggi korelasi yang tertera, semakin besar bagian itu, dan pada 0,9 ke atas angkanya tidak lagi berarti apa pun sendirian. Berapa persisnya bagian itu tidak dapat diketahui; justru itulah sebabnya penyelesaian menolak. Fase sengaja tidak ditampilkan.',
   },
@@ -1109,6 +1132,19 @@ const en: Dictionary = {
     derivationSin: 'sin(V+u)',
     derivationShare: '{name}’s share (m)',
     derivationObserved: 'Recorded (m)',
+    stabilityEyebrow: 'A property of the place, or of these months?',
+    stabilityTitle: 'The same numbers, four different stretches of the record',
+    stabilityLead:
+      'This whole site rests on one claim: that amplitude and phase are properties of the place — what a coastline does to the same forcing. But every number above came from one particular stretch of 2026. Here the record is cut into {count} equal, non-overlapping pieces and each is fitted on its own. Where an amplitude barely moves between them it is behaving like a property of the harbour. Where it swings, the record is doing the work rather than the place.',
+    stabilityWindow: 'Stretch',
+    stabilityMean: 'Mean H (m)',
+    stabilityRange: 'Lowest — highest',
+    stabilitySpread: 'Swing',
+    stabilityPhase: 'Phase swing',
+    stabilityReading:
+      'Two things make a constituent swing. The first is that its signal is small and close to the noise, which is why the smallest almost always swing furthest. The second is subtler: a constituent whose partner cannot be separated on a stretch this short absorbs some of that partner’s energy, and since the two drift in and out of phase over the year, how much it absorbs changes from stretch to stretch. That is the same leakage the refusal above reported, seen from the other side. Note too that the swing here is usually far larger than the ± in the table — ± assumes the noise is independent from hour to hour, while these stretches saw genuinely different weather.',
+    stabilityIncomparable:
+      'Not comparable, because not every stretch could separate them:',
     leakageWarning:
       'This is not a harmonic constant and must not be read as an amplitude. Part of each number above belongs to whatever it is mixed in with — the higher the correlation shown, the larger that part, and above about 0.9 the number means nothing on its own at all. How much exactly cannot be known, which is why the solve refused in the first place. No phase is shown, deliberately.',
   },
