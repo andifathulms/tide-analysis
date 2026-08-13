@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { CoveragePanel } from '@/components/CoveragePanel'
+import { RayleighResults } from '@/components/RayleighResults'
 import { RayleighSlider } from '@/components/RayleighSlider'
 import { StationHeader, StationNav } from '@/components/StationNav'
 import { Section } from '@/components/ui'
@@ -11,6 +12,7 @@ import { STANDARD_SET } from '@/lib/tide/constituents'
 import { coverageSweep } from '@/lib/tide/coverage'
 import { separationLadder } from '@/lib/tide/rayleigh'
 import { analyseStation } from '@/lib/view/station'
+import { analyseWindow, DEFAULT_WINDOW_DAYS } from '@/lib/view/window'
 import { formatDays, zoneOf } from '@/lib/view/format'
 
 export function generateStaticParams() {
@@ -38,6 +40,9 @@ export default async function ResolutionPage({
   const worstPairs = separationLadder(STANDARD_SET)
     .filter((rung) => rung.b !== null)
     .slice(0, 6)
+
+  const defaultDays = Math.min(DEFAULT_WINDOW_DAYS, Math.round(summary.lengthDays))
+  const defaultWindow = analyseWindow(analysis.record, defaultDays)
 
   // The second axis. Only the constituents this record actually supports go
   // in, so the sweep measures coverage rather than re-measuring the refusal.
@@ -73,11 +78,19 @@ export default async function ResolutionPage({
 
       <Section eyebrow={dict.resolusi.eyebrow} title={dict.resolusi.title} lead={dict.resolusi.lead} />
 
+      {/*
+       * The default window is computed here, so the page states PRD §6.3's
+       * argument in the HTML rather than waiting for the record to download.
+       */}
       <RayleighSlider
         dict={dict}
         stationId={summary.stationId}
         maxDays={Math.floor(summary.lengthDays)}
-      />
+        initialDays={defaultDays}
+        fullLengthDays={summary.lengthDays}
+      >
+        <RayleighResults dict={dict} state={defaultWindow} />
+      </RayleighSlider>
 
       {coverage.length > 0 && (
         <Section title={dict.resolusi.coverageTitle} lead={dict.resolusi.coverageLead}>

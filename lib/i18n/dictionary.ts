@@ -280,6 +280,8 @@ export interface Dictionary {
     readonly title: string
     readonly lead: string
     readonly sliderLabel: string
+    readonly refusalIntro: string
+    readonly windowNote: string
     readonly keptTitle: string
     readonly droppedTitle: string
     readonly conditionTitle: string
@@ -704,6 +706,9 @@ const id: Dictionary = {
     lead:
       'Dua komponen hanya dapat dipisahkan bila rekaman cukup panjang untuk membuat keduanya bergeser satu siklus penuh. Perpendek jendelanya dan lihat komponen berguguran serta bilangan kondisi naik.',
     sliderLabel: 'Panjang jendela (hari)',
+    refusalIntro:
+      'Himpunan baku diminta pada jendela {days} hari. Pasangan berikut tidak dapat dipisahkan:',
+    windowNote: 'Rekaman penuh: {total} hari. Jendela diambil dari awal rekaman.',
     keptTitle: 'Masih dapat dipisahkan',
     droppedTitle: 'Tidak dapat dipisahkan pada jendela ini',
     conditionTitle: 'Bilangan kondisi',
@@ -1173,6 +1178,9 @@ const en: Dictionary = {
     lead:
       'Two constituents can only be separated if the record is long enough for them to drift a full cycle apart. Shorten the window and watch constituents drop out and the condition number rise.',
     sliderLabel: 'Window length (days)',
+    refusalIntro:
+      'The standard set was requested on a window of {days} days. These pairs cannot be separated:',
+    windowNote: 'The full record is {total} days. The window is taken from its start.',
     keptTitle: 'Still separable',
     droppedTitle: 'Not separable on this window',
     conditionTitle: 'Condition number',

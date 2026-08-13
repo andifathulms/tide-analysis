@@ -1,13 +1,12 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { ConstituentTable } from '@/components/table/ConstituentTable'
+import { RayleighResults } from '@/components/RayleighResults'
 import { fill, type Dictionary } from '@/lib/i18n/dictionary'
 import { loadRecord } from '@/lib/records/registry'
 import { STANDARD_SET } from '@/lib/tide/constituents'
-import { conditioningOf, fitHarmonics } from '@/lib/tide/fit'
-import { assessResolution, describeConflict, resolvableSubset } from '@/lib/tide/rayleigh'
-import { recordLengthDays, sliceRecord, type TideRecord } from '@/lib/tide/record'
+import type { TideRecord } from '@/lib/tide/record'
+import { analyseWindow } from '@/lib/view/window'
 
 /**
  * The reason the project exists (PRD §6.3): record length against resolvable
@@ -16,20 +15,35 @@ import { recordLengthDays, sliceRecord, type TideRecord } from '@/lib/tide/recor
  * It redraws rather than transitions. The fit is discontinuous — a constituent
  * either resolves or it does not — and animating the change would imply a
  * continuity that is not there.
+ *
+ * The default window is computed by the server and handed down as `children`,
+ * so the page makes its argument before any JavaScript runs and this component
+ * only takes over once someone moves the slider. It previously showed the word
+ * "Computing…" until the record downloaded, which left the app's centrepiece
+ * as a loading string for anyone with scripting off, slow or blocked.
  */
 export function RayleighSlider({
   dict,
   stationId,
   maxDays,
+  initialDays,
+  fullLengthDays,
+  children,
 }: {
   dict: Dictionary
   stationId: string
   maxDays: number
+  initialDays: number
+  fullLengthDays: number
+  /** The server-rendered default window, shown until the slider is touched. */
+  children: React.ReactNode
 }) {
   const [record, setRecord] = useState<TideRecord | null>(null)
-  const [days, setDays] = useState<number>(Math.min(30, Math.round(maxDays)))
+  const [days, setDays] = useState<number>(initialDays)
+  const [touched, setTouched] = useState(false)
 
   useEffect(() => {
+    if (!touched || record !== null) return
     let cancelled = false
     void loadRecord(stationId).then((loaded) => {
       if (!cancelled) setRecord(loaded)
@@ -37,24 +51,16 @@ export function RayleighSlider({
     return () => {
       cancelled = true
     }
-  }, [stationId])
+  }, [touched, record, stationId])
 
-  const state = useMemo(() => {
-    if (record === null) return null
-    const startSec = record.timesSec[0] as number
-    const window = sliceRecord(record, startSec, startSec + days * 86400)
-    const availableHours = days * 24
-
-    const requested = assessResolution(STANDARD_SET, availableHours)
-    const { kept, dropped } = resolvableSubset(STANDARD_SET, availableHours)
-    const outcome = kept.length > 0 ? fitHarmonics({ record: window, constituents: kept }) : null
-
-    return { window, requested, kept, dropped, outcome }
-  }, [record, days])
+  const state = useMemo(
+    () => (record === null ? null : analyseWindow(record, days)),
+    [record, days],
+  )
 
   return (
     <div className="space-y-5">
-      <div className="card p-5">
+      <div className="card p-card">
         <label className="block text-caption font-medium" htmlFor="window-days">
           {dict.resolusi.sliderLabel}
         </label>
@@ -66,118 +72,49 @@ export function RayleighSlider({
             max={Math.max(Math.floor(maxDays), 4)}
             step={1}
             value={days}
-            onChange={(event) => setDays(Number(event.target.value))}
+            onChange={(event) => {
+              setTouched(true)
+              setDays(Number(event.target.value))
+            }}
             className="w-full min-w-[10rem] flex-1 accent-prediction"
           />
           <output htmlFor="window-days" className="numeric min-w-[6rem] text-title">
             {days} {dict.common.days}
           </output>
         </div>
+        <p className="mt-2 text-caption text-inkFaint">
+          {fill(dict.resolusi.windowNote, { total: fullLengthDays.toFixed(1) })}
+        </p>
       </div>
 
       {/*
-       * What the slider just did, for a reader who cannot see the cards below
-       * it change (WCAG 4.1.3). <output> carries an implicit role="status", so
-       * this needs no ARIA of its own — and it announces the summary, not the
-       * table: reading ten rows on every tick of a slider is worse than
-       * silence.
+       * What the slider just did (WCAG 4.1.3). <output> carries an implicit
+       * role="status", so this needs no ARIA of its own — and it announces the
+       * summary, not the table: reading ten rows on every tick of a slider is
+       * worse than silence.
        */}
       <output className="sr-only">
-        {state === null
-          ? dict.common.loading
-          : state.outcome !== null && state.outcome.type === 'fit'
-            ? fill(dict.resolusi.status, {
-                days,
-                kappa: state.outcome.conditionNumber.toFixed(2),
-                conditioning: dict.conditioning[state.outcome.conditioning],
-                kept: state.kept.length,
-                total: STANDARD_SET.length,
-              })
-            : fill(dict.resolusi.statusNone, { days })}
+        {!touched
+          ? ''
+          : state === null
+            ? dict.common.loading
+            : state.outcome !== null && state.outcome.type === 'fit'
+              ? fill(dict.resolusi.status, {
+                  days: state.days,
+                  kappa: state.outcome.conditionNumber.toFixed(2),
+                  conditioning: dict.conditioning[state.outcome.conditioning],
+                  kept: state.kept.length,
+                  total: STANDARD_SET.length,
+                })
+              : fill(dict.resolusi.statusNone, { days: state.days })}
       </output>
 
-      {state === null ? (
+      {!touched ? (
+        children
+      ) : state === null ? (
         <p className="text-caption text-inkFaint">{dict.common.loading}</p>
       ) : (
-        <>
-          <div className="grid gap-4 sm:grid-cols-3">
-            <div className="card p-5">
-              <h3 className="eyebrow">
-                {dict.resolusi.conditionTitle}
-              </h3>
-              <p
-                className={`numeric text-display ${
-                  state.outcome !== null && state.outcome.type === 'fit'
-                    ? conditioningOf(state.outcome.conditionNumber) === 'buruk'
-                      ? 'text-unresolved'
-                      : conditioningOf(state.outcome.conditionNumber) === 'marginal'
-                        ? 'text-residualText'
-                        : 'text-prediction'
-                    : 'text-unresolved'
-                }`}
-              >
-                {state.outcome !== null && state.outcome.type === 'fit'
-                  ? state.outcome.conditionNumber.toFixed(2)
-                  : '—'}
-              </p>
-              {state.outcome !== null && state.outcome.type === 'fit' && (
-                <p className="mt-1 text-caption text-inkFaint">
-                  {dict.conditioning[state.outcome.conditioning]}
-                </p>
-              )}
-            </div>
-
-            <div className="card p-5">
-              <h3 className="eyebrow">
-                {dict.resolusi.keptTitle}
-              </h3>
-              <p className="numeric mt-1 text-caption leading-relaxed text-prediction">
-                {state.kept.join(' · ') || '—'}
-              </p>
-            </div>
-
-            <div className="card p-5">
-              <h3 className="eyebrow">
-                {dict.resolusi.droppedTitle}
-              </h3>
-              <p className="numeric mt-1 text-caption leading-relaxed text-unresolved">
-                {state.dropped.map((d) => d.name).join(' · ') || '—'}
-              </p>
-            </div>
-          </div>
-
-          {state.requested.type === 'refusal' && (
-            <section className="border-l-4 border-unresolved bg-unresolvedSoft/60 px-4 py-3">
-              <h3 className="eyebrow text-unresolved">
-                {dict.common.refusal}
-              </h3>
-              <p className="mt-1.5 text-body">
-                Himpunan baku diminta pada jendela {days} {dict.common.days}. Pasangan berikut tidak
-                dapat dipisahkan:
-              </p>
-              <ul className="mt-2 space-y-1 text-caption text-inkMuted">
-                {state.requested.conflicts.slice(0, 5).map((conflict) => (
-                  <li key={`${conflict.a}-${conflict.b}-${conflict.requiredHours}`}>
-                    {describeConflict(conflict)}
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {state.outcome !== null && state.outcome.type === 'fit' && (
-            <ConstituentTable
-              dict={dict}
-              constants={state.outcome.constants}
-              unresolved={state.dropped}
-            />
-          )}
-
-          <p className="text-caption text-inkFaint">
-            Rekaman penuh: {recordLengthDays(record as TideRecord).toFixed(1)} {dict.common.days}.
-            Jendela diambil dari awal rekaman.
-          </p>
-        </>
+        <RayleighResults dict={dict} state={state} />
       )}
     </div>
   )
