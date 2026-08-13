@@ -1,0 +1,16 @@
+{
+  "name": "Tide Analysis",
+  "short_name": "Tide Analysis",
+  "description": "Analisis harmonik pasang surut dari pengamatan nyata: komponen dicocokkan dengan kuadrat terkecil, kondisi penyelesaian dilaporkan, dan yang tidak didukung rekaman ditolak.",
+  "start_url": "./id/",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#16303D",
+  "theme_color": "#16303D",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
