@@ -6,3 +6,6 @@ out/
 .env*
 coverage/
 sweep-results.json
+
+# Brand source kit — the app ships only what it needs, copied into public/
+exports/
