@@ -85,6 +85,10 @@ export default async function MethodPage({ params }: { params: { locale: string 
             <span className="numeric">{STANDARD_SET.join(', ')}</span>,
           )}
         </p>
+        {/* The column is meaningless without this, and it is the evidence for
+            invariant 3: frequencies are computed, never tabulated. */}
+        <p className="max-w-reading text-caption text-inkMuted">{dict.metode.setDoodsonNote}</p>
+
         <Scroller labelledBy="definitions-caption">
           <table className="w-full min-w-[640px] border-collapse text-caption">
             <caption id="definitions-caption" className="sr-only">

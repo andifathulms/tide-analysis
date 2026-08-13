@@ -356,6 +356,7 @@ export interface Dictionary {
     readonly setTitle: string
     readonly setLead: string
     readonly setDoodson: string
+    readonly setDoodsonNote: string
     readonly setMeaning: string
     readonly recordsTitle: string
     readonly recordsNote: string
@@ -806,6 +807,8 @@ const id: Dictionary = {
     setLead:
       'Himpunan baku yang diminta pada setiap stasiun: {set}. Seluruh komponen yang didefinisikan proyek ini:',
     setDoodson: 'Doodson',
+    setDoodsonNote:
+      'Bilangan Doodson adalah enam angka yang menyatakan berapa kali tiap elemen astronomi masuk ke dalam sudut komponen: τ s h p N p′, masing-masing digeser +5 agar koefisien negatif tetap muat dalam satu digit. M2 = 255.555 berarti 2τ dan nol untuk yang lain — dua kali waktu bulan, itu saja. Dari keenam angka inilah kecepatan komponen diturunkan, bukan dari tabel frekuensi. Doodson 1921; bentuk cetaknya seperti pada Schureman 1958, SP 98.',
     setMeaning: 'Keterangan',
     recordsTitle: 'Rekaman dan hasilnya',
     recordsNote:
@@ -1273,6 +1276,8 @@ const en: Dictionary = {
     setLead:
       'The standard set requested at every station: {set}. Every constituent this project defines:',
     setDoodson: 'Doodson',
+    setDoodsonNote:
+      'A Doodson number is six digits saying how many times each astronomical element enters the constituent’s angle: τ s h p N p′, each offset by +5 so that negative coefficients still fit in one digit. M2 = 255.555 means 2τ and nothing else — twice mean lunar time, that is all it is. The constituent’s speed is derived from those six numbers rather than read from a frequency table. Doodson 1921; the printed form as in Schureman 1958, SP 98.',
     setMeaning: 'What it is',
     recordsTitle: 'The records, and what they produced',
     recordsNote:
