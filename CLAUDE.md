@@ -162,7 +162,7 @@ The site states prominently and repeatedly that this is an educational tool, not
 
 ## Current state
 
-M0–M6 implemented. 339 tests green, `pnpm build` exports 90 pages in about 35 seconds, `pnpm lint` and `pnpm typecheck` clean.
+M0–M6 implemented. 366 tests green, `pnpm build` exports 90 pages, `pnpm lint` and `pnpm typecheck` clean.
 
 Design tokens live in `:root` in `app/globals.css` — colours as RGB channels so Tailwind's alpha modifiers still resolve, one type scale at ratio 1.2 from a 16px body, spacing named by role. `tailwind.config.ts` maps token names to those variables and holds no literal values. Every colour used as text clears 4.5:1 on paper, surface, sunken and its own tint; `residual` is the chart stroke and `residualText` is its darker sibling for type. The only unavoidable literal is `themeColor` in `app/layout.tsx`, which is emitted before any stylesheet loads.
 
@@ -173,6 +173,17 @@ Four views were added after M6, all of them about what a record can support:
 - **Leakage** (`lib/tide/leakage.ts`, on `/catatan`) — the residual's magnitude at each refused frequency, so a refusal is an accounting rather than an absence. Never a constant: no phase is reported and the confounding constituents are part of the result type.
 - **Coverage** (`lib/tide/coverage.ts`, on `/resolusi/[station]`) — the same record refit under masks. Every row has identical span, and span is all the Rayleigh criterion reads.
 - **The node cycle** (`lib/tide/nodalcycle.ts`, on `/komponen`) — f swept across 18.61 years, so `f = 1.037` reads as scale rather than as rounding.
+
+A later pass asked whether a newcomer could follow the process, and found the inverse problem — the half PRD §2 calls the project — was never shown. What it added:
+
+- **The derivation** (`lib/view/derivation.ts`, on `/catatan`) — one constituent walked from timestamp to constant on the station's own record. Doodson coefficients to V(t), V and u to the two design columns, the fitted pair (a, b), and the trigonometry back to H and g. It lands on the row directly above it, and a test asserts that round trip: a worked example that stops matching the table is worse than none.
+- **The recovery sweep** (`lib/tide/recovery.ts`, on `/resolusi`) — invented constants in, noise added, the same solver, and what came back beside what went in. 15 cm of noise per reading still returns every amplitude within a centimetre. PRD §8's backbone, shown to a reader for the first time.
+- **Window stability** (`lib/tide/stability.ts`, on `/catatan`) — the record cut into four non-overlapping stretches, each fitted alone. Benoa: M2 moves 9%, S2 moves 56%, M4 moves 81%. Answers the question the app could not: whether a constant belongs to the harbour or to these months.
+- **The beat figure** (`lib/chart/beat.ts`, on `/resolusi`) — K1 and P1 drawn at four points across the 183 days they demand, so "drift a full cycle apart" is visible rather than stipulated.
+
+κ now carries its meaning where it is printed, the constituent table converts phase to hours, and the ± is stated as one standard error *with* the assumption it rests on — independent hourly noise, which tidal residuals violate. The stability panel puts a number on that: S2's ± is about 1% and its actual movement between stretches is 56%.
+
+**The constituent explorer demonstrates synthesis, not analysis**, and now says so. Toggling constituents re-sums constants that were fitted once; it does not refit. Refitting was considered and rejected — it would destroy PRD §6.6's lesson, since M2 alone would absorb its neighbours and the spring-neap beat would no longer be two true constants interfering.
 
 Two things learned building those, both now asserted in tests:
 
