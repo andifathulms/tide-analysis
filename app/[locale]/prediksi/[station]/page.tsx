@@ -120,14 +120,17 @@ export default async function PredictionPage({
         <h2 className="text-headline">{dict.prediksi.extremaTitle}</h2>
         <div className="mt-3 overflow-x-auto">
           <table className="w-full min-w-[640px] border-collapse text-caption">
+            <caption id="extrema-caption" className="sr-only">
+              {dict.tableName.extrema}
+            </caption>
             <thead>
               <tr className="border-b border-rule text-left">
-                <th className="py-2 pr-4">{dict.common.time}</th>
-                <th className="py-2 pr-4">
+                <th scope="col" className="py-2 pr-4">{dict.common.time}</th>
+                <th scope="col" className="py-2 pr-4">
                   {dict.prediksi.clock} ({zone.label})
                 </th>
-                <th className="py-2 pr-4">{dict.prediksi.kind}</th>
-                <th className="py-2 text-right">{dict.common.height} (m)</th>
+                <th scope="col" className="py-2 pr-4">{dict.prediksi.kind}</th>
+                <th scope="col" className="py-2 text-right">{dict.common.height} (m)</th>
               </tr>
             </thead>
             <tbody className="numeric">

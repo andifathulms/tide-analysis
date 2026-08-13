@@ -62,11 +62,14 @@ export default function LadderPage({ params }: { params: { locale: string } }) {
       <Section title={dict.resolusi.surveyTitle} lead={dict.resolusi.surveyLead}>
         <Scroller>
           <table className="w-full min-w-[520px] border-collapse text-caption">
+            <caption id="survey-caption" className="sr-only">
+              {dict.tableName.survey}
+            </caption>
             <thead>
               <tr className="border-b border-rule text-left">
-                <th className="eyebrow py-2 pr-4">{dict.resolusi.surveyLength}</th>
-                <th className="eyebrow py-2 pr-4">{dict.resolusi.surveyKept}</th>
-                <th className="eyebrow py-2">{dict.resolusi.surveyLost}</th>
+                <th scope="col" className="eyebrow py-2 pr-4">{dict.resolusi.surveyLength}</th>
+                <th scope="col" className="eyebrow py-2 pr-4">{dict.resolusi.surveyKept}</th>
+                <th scope="col" className="eyebrow py-2">{dict.resolusi.surveyLost}</th>
               </tr>
             </thead>
             <tbody>
@@ -98,13 +101,16 @@ export default function LadderPage({ params }: { params: { locale: string } }) {
       <Section title={dict.resolusi.ladderFullTitle} lead={dict.resolusi.ladderDeciding}>
         <Scroller>
           <table className="w-full min-w-[520px] border-collapse text-caption">
+            <caption id="ladder-caption" className="sr-only">
+              {dict.tableName.ladder}
+            </caption>
             <thead>
               <tr className="border-b border-rule text-left">
-                <th className="eyebrow py-2 pr-4">{dict.resolusi.ladderPair}</th>
-                <th className="eyebrow py-2 pr-4 text-right">
+                <th scope="col" className="eyebrow py-2 pr-4">{dict.resolusi.ladderPair}</th>
+                <th scope="col" className="eyebrow py-2 pr-4 text-right">
                   {dict.resolusi.ladderSeparation}
                 </th>
-                <th className="eyebrow py-2 text-right">{dict.resolusi.ladderRequired}</th>
+                <th scope="col" className="eyebrow py-2 text-right">{dict.resolusi.ladderRequired}</th>
               </tr>
             </thead>
             <tbody className="numeric">

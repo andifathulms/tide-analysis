@@ -94,8 +94,8 @@ export default async function ResolutionPage({
         <table className="mt-3 w-full border-collapse text-caption">
           <thead>
             <tr className="border-b border-rule text-left">
-              <th className="eyebrow py-2">{dict.resolusi.ladderPair}</th>
-              <th className="eyebrow py-2 text-right">{dict.resolusi.ladderRequired}</th>
+              <th scope="col" className="eyebrow py-2">{dict.resolusi.ladderPair}</th>
+              <th scope="col" className="eyebrow py-2 text-right">{dict.resolusi.ladderRequired}</th>
             </tr>
           </thead>
           <tbody className="numeric">

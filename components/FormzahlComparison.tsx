@@ -42,15 +42,18 @@ export function FormzahlComparison({
     <section className="space-y-4">
       <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
         <table className="w-full min-w-[560px] border-collapse text-caption">
+          <caption id="formzahl-caption" className="sr-only">
+            {dict.tableName.formzahl}
+          </caption>
           <thead>
             <tr className="border-b border-rule text-left">
-              <th className="eyebrow py-2 pr-4">{dict.common.station}</th>
-              <th className="eyebrow py-2 pr-4 text-right">F</th>
-              <th className="eyebrow py-2 pr-4">{dict.common.tideTypeColumn}</th>
-              <th className="eyebrow py-2 pr-4 text-right">M2</th>
-              <th className="eyebrow py-2 pr-4 text-right">S2</th>
-              <th className="eyebrow py-2 pr-4 text-right">K1</th>
-              <th className="eyebrow py-2 text-right">O1</th>
+              <th scope="col" className="eyebrow py-2 pr-4">{dict.common.station}</th>
+              <th scope="col" className="eyebrow py-2 pr-4 text-right">F</th>
+              <th scope="col" className="eyebrow py-2 pr-4">{dict.common.tideTypeColumn}</th>
+              <th scope="col" className="eyebrow py-2 pr-4 text-right">M2</th>
+              <th scope="col" className="eyebrow py-2 pr-4 text-right">S2</th>
+              <th scope="col" className="eyebrow py-2 pr-4 text-right">K1</th>
+              <th scope="col" className="eyebrow py-2 text-right">O1</th>
             </tr>
           </thead>
           <tbody className="numeric">

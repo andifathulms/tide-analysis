@@ -89,6 +89,26 @@ export interface Dictionary {
     readonly provenance: string
     readonly nodalAtPrediction: string
   }
+  /**
+   * Accessible names for the data tables.
+   *
+   * A screen reader lists tables by name, and a page with four unnamed ones
+   * announces "table, table, table, table". These go in a <caption>, which is
+   * the native element for it, hidden visually because every table here
+   * already sits under a heading that says the same thing to a sighted reader.
+   */
+  readonly tableName: {
+    readonly constituents: string
+    readonly correlation: string
+    readonly coverage: string
+    readonly formzahl: string
+    readonly ladder: string
+    readonly survey: string
+    readonly definitions: string
+    readonly records: string
+    readonly extrema: string
+    readonly methods: string
+  }
   readonly conditioning: Record<'baik' | 'wajar' | 'marginal' | 'buruk', string>
   /**
    * Copy for values that lib/tide reports as a discriminated `type`.
@@ -370,6 +390,18 @@ const id: Dictionary = {
     uncertainty: 'Ketidakpastian 1σ',
     provenance: 'Sumber, lisensi, dan catatan datum',
     nodalAtPrediction: 'f dan u dihitung pada waktu prediksi',
+  },
+  tableName: {
+    constituents: 'Konstanta harmonik per komponen',
+    correlation: 'Korelasi antar komponen pada rekaman ini',
+    coverage: 'Bilangan kondisi menurut bentuk kehilangan data',
+    formzahl: 'Bilangan Formzahl dan amplitudo per stasiun',
+    ladder: 'Panjang rekaman minimum untuk memisahkan tiap pasangan komponen',
+    survey: 'Komponen yang dapat dipisahkan menurut lama pengamatan',
+    definitions: 'Definisi seluruh komponen yang dikenali proyek ini',
+    records: 'Rekaman yang dipakai dan hasil pencocokannya',
+    extrema: 'Waktu dan tinggi pasang serta surut',
+    methods: 'Kuadrat terkecil dibandingkan dengan Admiralty',
   },
   conditioning: {
     baik: 'baik',
@@ -765,6 +797,18 @@ const en: Dictionary = {
     uncertainty: '1σ uncertainty',
     provenance: 'Source, licence and datum notes',
     nodalAtPrediction: 'f and u are computed at the prediction time',
+  },
+  tableName: {
+    constituents: 'Harmonic constants per constituent',
+    correlation: 'Correlation between constituents in this record',
+    coverage: 'Condition number by shape of data loss',
+    formzahl: 'Formzahl number and amplitudes per station',
+    ladder: 'Minimum record length to separate each pair of constituents',
+    survey: 'Constituents separable by length of observation',
+    definitions: 'Definitions of every constituent this project recognises',
+    records: 'The records used and what they produced',
+    extrema: 'Times and heights of high and low water',
+    methods: 'Least squares compared with Admiralty',
   },
   conditioning: {
     baik: 'good',

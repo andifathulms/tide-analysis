@@ -26,6 +26,9 @@ export function ConstituentTable({
   return (
     <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
       <table className="w-full min-w-[640px] border-collapse text-caption">
+        <caption id="constituents-caption" className="sr-only">
+          {dict.tableName.constituents}
+        </caption>
         <thead>
           <tr className="border-b border-rule text-left">
             <th scope="col" className="eyebrow py-2 pr-4 text-left">

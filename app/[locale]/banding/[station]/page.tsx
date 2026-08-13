@@ -90,16 +90,19 @@ export default async function ComparisonPage({
 
           <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
             <table className="w-full min-w-[640px] border-collapse text-caption">
+              <caption id="methods-caption" className="sr-only">
+                {dict.tableName.methods}
+              </caption>
               <thead>
                 <tr className="border-b border-rule text-left">
-                  <th className="py-2 pr-4">{dict.common.constituent}</th>
-                  <th className="py-2 pr-4 text-right">H — {dict.common.leastSquares}</th>
-                  <th className="py-2 pr-4 text-right">H — {dict.common.admiralty}</th>
-                  <th className="py-2 pr-4 text-right">{dict.banding.difference} H</th>
-                  <th className="py-2 pr-4 text-right">g — {dict.common.leastSquares}</th>
-                  <th className="py-2 pr-4 text-right">g — {dict.common.admiralty}</th>
-                  <th className="py-2 pr-4 text-right">{dict.banding.difference} g</th>
-                  <th className="py-2 text-left">{dict.common.determination}</th>
+                  <th scope="col" className="py-2 pr-4">{dict.common.constituent}</th>
+                  <th scope="col" className="py-2 pr-4 text-right">H — {dict.common.leastSquares}</th>
+                  <th scope="col" className="py-2 pr-4 text-right">H — {dict.common.admiralty}</th>
+                  <th scope="col" className="py-2 pr-4 text-right">{dict.banding.difference} H</th>
+                  <th scope="col" className="py-2 pr-4 text-right">g — {dict.common.leastSquares}</th>
+                  <th scope="col" className="py-2 pr-4 text-right">g — {dict.common.admiralty}</th>
+                  <th scope="col" className="py-2 pr-4 text-right">{dict.banding.difference} g</th>
+                  <th scope="col" className="py-2 text-left">{dict.common.determination}</th>
                 </tr>
               </thead>
               <tbody className="numeric">

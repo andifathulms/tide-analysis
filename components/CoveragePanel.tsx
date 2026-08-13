@@ -25,14 +25,17 @@ export function CoveragePanel({
     <div className="space-y-4">
       <Scroller>
         <table className="w-full min-w-[560px] border-collapse text-caption">
+          <caption id="coverage-caption" className="sr-only">
+            {dict.tableName.coverage}
+          </caption>
           <thead>
             <tr className="border-b border-rule text-left">
-              <th className="eyebrow py-2 pr-4">{dict.resolusi.coverageMask}</th>
-              <th className="eyebrow py-2 pr-4 text-right">{dict.resolusi.coverageRemoved}</th>
-              <th className="eyebrow py-2 pr-4 text-right">{dict.resolusi.coverageSamples}</th>
-              <th className="eyebrow py-2 pr-4 text-right">{dict.resolusi.coverageSpan}</th>
-              <th className="eyebrow py-2 pr-4 text-right">{dict.common.conditionNumber}</th>
-              <th className="eyebrow py-2 text-right">{dict.resolusi.coverageWorst}</th>
+              <th scope="col" className="eyebrow py-2 pr-4">{dict.resolusi.coverageMask}</th>
+              <th scope="col" className="eyebrow py-2 pr-4 text-right">{dict.resolusi.coverageRemoved}</th>
+              <th scope="col" className="eyebrow py-2 pr-4 text-right">{dict.resolusi.coverageSamples}</th>
+              <th scope="col" className="eyebrow py-2 pr-4 text-right">{dict.resolusi.coverageSpan}</th>
+              <th scope="col" className="eyebrow py-2 pr-4 text-right">{dict.common.conditionNumber}</th>
+              <th scope="col" className="eyebrow py-2 text-right">{dict.resolusi.coverageWorst}</th>
             </tr>
           </thead>
           <tbody className="numeric">
@@ -43,7 +46,9 @@ export function CoveragePanel({
                   point.kind === 'actual' ? 'bg-sunken/50 font-medium' : ''
                 }`}
               >
-                <td className="py-1.5 pr-4">{dict.resolusi.coverageKind[point.kind]}</td>
+                <th scope="row" className="py-1.5 pr-4 text-left font-normal">
+                  {dict.resolusi.coverageKind[point.kind]}
+                </th>
                 <td className="py-1.5 pr-4 text-right text-inkMuted">
                   {point.removedFraction === 0
                     ? '—'

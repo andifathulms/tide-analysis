@@ -66,10 +66,13 @@ export function CorrelationPanel({
 
       <Scroller>
         <table className="border-collapse text-micro">
-          <caption className="sr-only">{dict.komponen.correlationTitle}</caption>
+          <caption id="correlation-caption" className="sr-only">
+            {dict.tableName.correlation}
+          </caption>
           <thead>
             <tr>
-              <th className="p-1" />
+              {/* The matrix corner heads nothing, so it is a cell, not a header. */}
+              <td className="p-1" />
               {names.map((name) => (
                 <th key={name} scope="col" className="numeric p-1 text-inkFaint font-medium">
                   {name}

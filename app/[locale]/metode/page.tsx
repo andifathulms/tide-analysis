@@ -86,13 +86,16 @@ export default async function MethodPage({ params }: { params: { locale: string 
         </p>
         <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
           <table className="w-full min-w-[640px] border-collapse text-caption">
+            <caption id="definitions-caption" className="sr-only">
+              {dict.tableName.definitions}
+            </caption>
             <thead>
               <tr className="border-b border-rule text-left">
-                <th className="py-2 pr-4">{dict.common.constituent}</th>
-                <th className="py-2 pr-4">{dict.metode.setDoodson}</th>
-                <th className="py-2 pr-4 text-right">{dict.common.speed}</th>
-                <th className="py-2 pr-4 text-right">{dict.common.period_h}</th>
-                <th className="py-2">{dict.metode.setMeaning}</th>
+                <th scope="col" className="py-2 pr-4">{dict.common.constituent}</th>
+                <th scope="col" className="py-2 pr-4">{dict.metode.setDoodson}</th>
+                <th scope="col" className="py-2 pr-4 text-right">{dict.common.speed}</th>
+                <th scope="col" className="py-2 pr-4 text-right">{dict.common.period_h}</th>
+                <th scope="col" className="py-2">{dict.metode.setMeaning}</th>
               </tr>
             </thead>
             <tbody className="numeric">
@@ -122,15 +125,18 @@ export default async function MethodPage({ params }: { params: { locale: string 
         <h2 className="text-headline">{dict.metode.recordsTitle}</h2>
         <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
           <table className="w-full min-w-[640px] border-collapse text-caption">
+            <caption id="records-caption" className="sr-only">
+              {dict.tableName.records}
+            </caption>
             <thead>
               <tr className="border-b border-rule text-left">
-                <th className="py-2 pr-4">{dict.common.station}</th>
-                <th className="py-2 pr-4">{dict.common.period}</th>
-                <th className="py-2 pr-4 text-right">{dict.common.days}</th>
-                <th className="py-2 pr-4 text-right">{dict.common.gaps}</th>
-                <th className="py-2 pr-4">{dict.common.datum}</th>
-                <th className="py-2 pr-4 text-right">κ</th>
-                <th className="py-2 text-right">{dict.common.residualRms}</th>
+                <th scope="col" className="py-2 pr-4">{dict.common.station}</th>
+                <th scope="col" className="py-2 pr-4">{dict.common.period}</th>
+                <th scope="col" className="py-2 pr-4 text-right">{dict.common.days}</th>
+                <th scope="col" className="py-2 pr-4 text-right">{dict.common.gaps}</th>
+                <th scope="col" className="py-2 pr-4">{dict.common.datum}</th>
+                <th scope="col" className="py-2 pr-4 text-right">κ</th>
+                <th scope="col" className="py-2 text-right">{dict.common.residualRms}</th>
               </tr>
             </thead>
             <tbody className="numeric">
