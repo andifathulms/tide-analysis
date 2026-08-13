@@ -95,7 +95,14 @@ export function FitWindowControl({
         <label className="block text-caption font-medium" htmlFor="fit-percent">
           {dict.catatan.splitLabel}
         </label>
-        <div className="mt-2 flex items-center gap-4">
+        {/*
+         * The readout was a fixed 10rem beside a full-width range. At 320px
+         * that left the slider about 100px, and at 200% zoom it collapsed
+         * toward nothing — a control that cannot be dragged (WCAG 1.4.10).
+         * The row wraps now, and the readout claims a minimum rather than a
+         * fixed width.
+         */}
+        <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
           <input
             id="fit-percent"
             type="range"
@@ -107,9 +114,9 @@ export function FitWindowControl({
               setTouched(true)
               setPercent(Number(event.target.value))
             }}
-            className="w-full accent-prediction"
+            className="w-full min-w-[10rem] flex-1 accent-prediction"
           />
-          <output className="numeric w-40 text-right text-title">
+          <output className="numeric min-w-[9rem] text-title">
             {percent}%
             {lengthDays !== null && (
               <span className="ml-2 text-caption text-inkFaint">

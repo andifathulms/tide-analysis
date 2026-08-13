@@ -58,7 +58,7 @@ export function RayleighSlider({
         <label className="block text-caption font-medium" htmlFor="window-days">
           {dict.resolusi.sliderLabel}
         </label>
-        <div className="mt-2 flex items-center gap-4">
+        <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
           <input
             id="window-days"
             type="range"
@@ -67,9 +67,9 @@ export function RayleighSlider({
             step={1}
             value={days}
             onChange={(event) => setDays(Number(event.target.value))}
-            className="w-full accent-prediction"
+            className="w-full min-w-[10rem] flex-1 accent-prediction"
           />
-          <output className="numeric w-28 shrink-0 text-right text-title">
+          <output className="numeric min-w-[6rem] text-title">
             {days} {dict.common.days}
           </output>
         </div>
