@@ -67,7 +67,7 @@ export function RayleighSlider({
             step={1}
             value={days}
             onChange={(event) => setDays(Number(event.target.value))}
-            className="h-1 w-full accent-prediction"
+            className="w-full accent-prediction"
           />
           <output className="numeric w-28 shrink-0 text-right text-title">
             {days} {dict.common.days}

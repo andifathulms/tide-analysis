@@ -107,6 +107,14 @@
    */
   --text-chart-label: 10px;
 
+  /* --- Control geometry ------------------------------------------------ */
+  /**
+   * The box a range input occupies — which is its pointer and touch target,
+   * not the thumb drawn inside it. WCAG 2.5.8 wants at least 24px; this is
+   * comfortably over, and the native track still renders centred within it.
+   */
+  --control-hit: 2.75rem;
+
   /* --- Spacing rhythm -------------------------------------------------- */
   /** Named by role, so a card's padding changes in one place. */
   --space-card: 1.25rem;
@@ -164,8 +172,23 @@
     border-radius: 2px;
   }
 
+  /*
+   * A range input tall enough to hit.
+   *
+   * The two sliders were `h-1`, a four-pixel-tall element — and the element's
+   * box is the pointer and touch target, not the thumb the engine draws inside
+   * it. Four pixels against the 24px floor of WCAG 2.5.8.
+   *
+   * Only the height changes. Every engine centres the native track and thumb
+   * within the box, so the control looks as it did and is eleven times easier
+   * to hit. Restyling the track and thumb through the vendor pseudo-elements
+   * would mean -webkit-appearance: none on the input, which throws away the
+   * native rendering — including how it behaves under forced colours.
+   */
   input[type='range'] {
     accent-color: rgb(var(--colour-prediction));
+    height: var(--control-hit);
+    cursor: pointer;
   }
 }
 
