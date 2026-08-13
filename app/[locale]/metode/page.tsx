@@ -22,7 +22,7 @@ export default async function MethodPage({ params }: { params: { locale: string 
   const analyses = await Promise.all(stations().map((s) => analyseStation(s.stationId)))
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-section">
       <NavigationWarning dict={dict} />
 
       <header className="max-w-reading space-y-3">

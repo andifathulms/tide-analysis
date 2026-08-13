@@ -51,18 +51,26 @@ export default async function ConstituentsPage({
       : null
 
   return (
-    <div className="space-y-8">
-      <StationNav dict={dict} locale={locale} stationId={station.stationId} active="komponen" />
-      <StationHeader
-        dict={dict}
-        station={station}
-        datumLabel={record.datum.label}
-        datumNote={record.datum.note}
-        zone={zoneOf(record)}
-        gapHours={summary.gapHours}
-        character={analysis.character?.label}
-      />
-      <NavigationWarning dict={dict} compact />
+    <div className="space-y-section">
+      {/*
+       * The page's masthead: which station, which view, and the warning that
+       * invariant 15 requires wherever a predicted height appears. One cluster
+       * at a tight rhythm, so the section rhythm below can be generous without
+       * pulling these three apart.
+       */}
+      <div className="space-y-4">
+        <StationNav dict={dict} locale={locale} stationId={station.stationId} active="komponen" />
+        <StationHeader
+          dict={dict}
+          station={station}
+          datumLabel={record.datum.label}
+          datumNote={record.datum.note}
+          zone={zoneOf(record)}
+          gapHours={summary.gapHours}
+          character={analysis.character?.label}
+        />
+        <NavigationWarning dict={dict} compact />
+      </div>
 
       {primary.outcome.type === 'refusal' && <RefusalNotice dict={dict} refusal={primary.outcome} />}
 

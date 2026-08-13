@@ -37,16 +37,24 @@ export default async function ComparisonPage({
       : []
 
   return (
-    <div className="space-y-8">
-      <StationNav dict={dict} locale={locale} stationId={station.stationId} active="banding" />
-      <StationHeader
-        dict={dict}
-        station={station}
-        datumLabel={record.datum.label}
-        zone={zoneOf(record)}
-        gapHours={summary.gapHours}
-      />
-      <NavigationWarning dict={dict} compact />
+    <div className="space-y-section">
+      {/*
+       * The page's masthead: which station, which view, and the warning that
+       * invariant 15 requires wherever a predicted height appears. One cluster
+       * at a tight rhythm, so the section rhythm below can be generous without
+       * pulling these three apart.
+       */}
+      <div className="space-y-4">
+        <StationNav dict={dict} locale={locale} stationId={station.stationId} active="banding" />
+        <StationHeader
+          dict={dict}
+          station={station}
+          datumLabel={record.datum.label}
+          zone={zoneOf(record)}
+          gapHours={summary.gapHours}
+        />
+        <NavigationWarning dict={dict} compact />
+      </div>
 
       <Section eyebrow="Metode" title={dict.banding.title} lead={dict.banding.lead} />
 

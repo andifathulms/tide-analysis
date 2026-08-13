@@ -38,8 +38,16 @@ export default async function PredictionPage({
   if (shown.outcome.type !== 'fit') {
     return (
       <div className="space-y-6">
+        {/*
+       * The page's masthead: which station, which view, and the warning that
+       * invariant 15 requires wherever a predicted height appears. One cluster
+       * at a tight rhythm, so the section rhythm below can be generous without
+       * pulling these three apart.
+       */}
+      <div className="space-y-4">
         <StationNav dict={dict} locale={locale} stationId={station.stationId} active="prediksi" />
-        <NavigationWarning dict={dict} />
+          <NavigationWarning dict={dict} />
+      </div>
         <RefusalNotice dict={dict} refusal={shown.outcome} />
       </div>
     )
@@ -77,7 +85,7 @@ export default async function PredictionPage({
   })
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-section">
       <StationNav dict={dict} locale={locale} stationId={station.stationId} active="prediksi" />
       <StationHeader
         dict={dict}
