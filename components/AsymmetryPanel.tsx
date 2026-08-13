@@ -54,7 +54,7 @@ export function AsymmetryPanel({
             {/* A 2px gap so the two blocks never read as one. */}
             <div className="w-[2px] shrink-0 bg-surface" />
             <div
-              className="flex items-center justify-center bg-residualSoft text-micro font-medium text-residual"
+              className="flex items-center justify-center bg-residualSoft text-micro font-medium text-residualText"
               style={{ width: `${actual.fallPercent}%` }}
             >
               {dict.komponen.fall}

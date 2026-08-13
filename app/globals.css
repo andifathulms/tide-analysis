@@ -2,17 +2,116 @@
 @tailwind components;
 @tailwind utilities;
 
+/**
+ * The tokens. One home for every value the interface uses.
+ *
+ * Colours are stored as RGB channels rather than hex so Tailwind can still
+ * apply an alpha modifier (`bg-paper/90`) through the `<alpha-value>`
+ * placeholder in tailwind.config.ts. Nothing below is consumed directly by a
+ * component — components name a token, the token names a value, and the value
+ * lives here.
+ *
+ * Contrast was measured on the surfaces each token actually appears on, not
+ * assumed. Every colour used as text clears 4.5:1 on paper, surface, sunken and
+ * its own soft tint; graphical-only strokes clear 3:1.
+ */
+:root {
+  /* --- Surfaces ------------------------------------------------------ */
+  /** The chart roll itself — every page sits on it. */
+  --colour-paper: 247 243 233;
+  /** Raised surfaces: cards, tables, controls. */
+  --colour-surface: 255 253 247;
+  /** A recessed band, for asides and secondary panels. */
+  --colour-sunken: 240 235 221;
+
+  /* --- Ink ----------------------------------------------------------- */
+  /** Primary ink — text, and the observed trace.   12.5:1 on paper */
+  --colour-ink: 20 48 58;
+  /** Secondary prose.                               6.4:1 on paper */
+  --colour-ink-muted: 74 91 98;
+  /**
+   * Labels, eyebrows, captions.                     5.7:1 on paper
+   *
+   * Was #5D6B71, which measured 4.63:1 on sunken — over the bar, but with no
+   * margin, and it carries the eyebrow that labels every section on the site.
+   */
+  --colour-ink-faint: 85 98 105;
+
+  /* --- Rules --------------------------------------------------------- */
+  /** The printed ruling, and the hairlines that echo it. Never text. */
+  --colour-grid: 216 210 194;
+  --colour-rule: 230 224 208;
+
+  /* --- The three series ---------------------------------------------- */
+  /**
+   * Validated together against lightness band, chroma floor, CVD separation
+   * across all pairs, the normal-vision floor, and contrast. Do not retune one
+   * without re-running the trio: they have to stay apart from each other as
+   * well as from the paper.
+   */
+  /** Prediction.                                     4.9:1 on paper */
+  --colour-prediction: 0 113 158;
+  /** Residual, as a chart stroke.                    3.1:1 — graphical only */
+  --colour-residual: 192 122 22;
+  /**
+   * Residual, as text.                               5.4:1 on paper
+   *
+   * The stroke ochre is tuned to sit apart from the other two traces on the
+   * chart face, which puts it under the text floor. The residual is the honest
+   * measure of the fit (invariant 10) and was being set in the least legible
+   * colour on the site; it now has a darker sibling for type. Same hue, so the
+   * RMS readout still reads as belonging to the ochre band.
+   */
+  --colour-residual-text: 143 87 17;
+  /** Unresolved. Reserved — refusals and ill-conditioning, never decoration. */
+  --colour-unresolved: 176 57 43;
+  /** Datum lines on the chart face, and their labels. 5.3:1 on paper */
+  --colour-datum: 90 102 112;
+
+  /* --- Tints, for fills that must stay behind the marks --------------- */
+  --colour-prediction-soft: 228 240 246;
+  --colour-residual-soft: 248 238 220;
+  --colour-unresolved-soft: 247 231 228;
+
+  /* --- Type scale ----------------------------------------------------- */
+  /**
+   * One scale, ratio 1.2 from a 16px body. Consecutive steps for text sizes;
+   * display and hero skip a step, because a headline that merely continues the
+   * run of body sizes does not read as a headline.
+   *
+   *   12 · 13 · 16 · 19 · 23 · 28 · (33) · 40 · 48
+   *
+   * Body was 15px. Micro was 11px. Both sat under the legibility floor for the
+   * long Indonesian prose this site is mostly made of.
+   */
+  --text-micro: 0.75rem;
+  --text-caption: 0.8125rem;
+  --text-body: 1rem;
+  --text-lead: 1.1875rem;
+  --text-title: 1.4375rem;
+  --text-headline: 1.75rem;
+  --text-display: 2.5rem;
+  --text-hero: 3rem;
+
+  /* --- Spacing rhythm -------------------------------------------------- */
+  /** Named by role, so a card's padding changes in one place. */
+  --space-card: 1.25rem;
+  --space-gutter: 1.25rem;
+  --space-block: 1.5rem;
+  --space-section: 4rem;
+}
+
 @layer base {
   html {
-    background-color: theme('colors.paper');
-    color: theme('colors.ink');
+    background-color: rgb(var(--colour-paper));
+    color: rgb(var(--colour-ink));
     -webkit-text-size-adjust: 100%;
   }
 
   body {
     font-family: theme('fontFamily.ui');
-    font-size: theme('fontSize.body[0]');
-    line-height: 1.6;
+    font-size: var(--text-body);
+    line-height: 1.65;
     /*
      * Warm paper, and nothing printed on it.
      *
@@ -23,7 +122,7 @@
      * chart, not the page). Depth comes from the paper sitting a shade darker
      * than the card surface instead.
      */
-    background-color: theme('colors.paper');
+    background-color: rgb(var(--colour-paper));
   }
 
   /* Prose and headings wear the serif; controls and labels wear the sans. */
@@ -33,7 +132,7 @@
   h4 {
     font-family: theme('fontFamily.prose');
     font-weight: 500;
-    color: theme('colors.ink');
+    color: rgb(var(--colour-ink));
     text-wrap: balance;
   }
 
@@ -42,17 +141,17 @@
   }
 
   ::selection {
-    background-color: theme('colors.predictionSoft');
+    background-color: rgb(var(--colour-prediction-soft));
   }
 
   :focus-visible {
-    outline: 2px solid theme('colors.prediction');
+    outline: 2px solid rgb(var(--colour-prediction));
     outline-offset: 2px;
     border-radius: 2px;
   }
 
   input[type='range'] {
-    accent-color: theme('colors.prediction');
+    accent-color: rgb(var(--colour-prediction));
   }
 }
 
@@ -70,24 +169,24 @@
 
   /* A raised sheet on the ruled paper. */
   .card {
-    background-color: theme('colors.surface');
-    border: 1px solid theme('colors.rule');
+    background-color: rgb(var(--colour-surface));
+    border: 1px solid rgb(var(--colour-rule));
     border-radius: theme('borderRadius.card');
     box-shadow: theme('boxShadow.card');
   }
 
   /* The eyebrow above a section title: small, spaced, quiet. */
   .eyebrow {
-    font-size: theme('fontSize.micro[0]');
+    font-size: var(--text-micro);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: theme('colors.inkFaint');
+    color: rgb(var(--colour-ink-faint));
     font-weight: 500;
   }
 
   /* A term with a plain-language explanation attached. */
   .term {
-    border-bottom: 1px dotted theme('colors.inkFaint');
+    border-bottom: 1px dotted rgb(var(--colour-ink-faint));
     cursor: help;
   }
 }

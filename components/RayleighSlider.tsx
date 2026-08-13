@@ -90,7 +90,7 @@ export function RayleighSlider({
                     ? conditioningOf(state.outcome.conditionNumber) === 'buruk'
                       ? 'text-unresolved'
                       : conditioningOf(state.outcome.conditionNumber) === 'marginal'
-                        ? 'text-residual'
+                        ? 'text-residualText'
                         : 'text-prediction'
                     : 'text-unresolved'
                 }`}

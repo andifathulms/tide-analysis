@@ -158,7 +158,7 @@ export default async function MethodPage({ params }: { params: { locale: string 
                         ? outcome.conditionNumber.toFixed(2)
                         : '—'}
                     </td>
-                    <td className="py-1.5 text-right text-residual">
+                    <td className="py-1.5 text-right text-residualText">
                       {outcome !== null && outcome.type === 'fit'
                         ? `${outcome.residualRmsM.toFixed(4)} m`
                         : '—'}

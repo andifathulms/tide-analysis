@@ -130,7 +130,7 @@ export default async function ComparisonPage({
                     </td>
                     <td className="py-1.5 text-left text-caption">
                       {row.determination === 'disimpulkan' ? (
-                        <span className="text-residual">{dict.common.inferred}</span>
+                        <span className="text-residualText">{dict.common.inferred}</span>
                       ) : row.determination === 'langsung' ? (
                         dict.common.direct
                       ) : (

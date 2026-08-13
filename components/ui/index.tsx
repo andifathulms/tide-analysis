@@ -46,7 +46,7 @@ export function Card({
   className?: string
   as?: 'div' | 'article' | 'li'
 }) {
-  return <Tag className={`card p-5 ${className}`}>{children}</Tag>
+  return <Tag className={`card p-card ${className}`}>{children}</Tag>
 }
 
 /**
@@ -71,7 +71,7 @@ export function Stat({
   const toneClass = {
     ink: 'text-ink',
     prediction: 'text-prediction',
-    residual: 'text-residual',
+    residual: 'text-residualText',
     unresolved: 'text-unresolved',
   }[tone]
 
@@ -93,7 +93,7 @@ export function Stat({
 
 export function StatRow({ children }: { children: ReactNode }) {
   return (
-    <div className="card grid gap-6 p-5 sm:grid-cols-2 lg:grid-cols-4">{children}</div>
+    <div className="card grid gap-block p-card sm:grid-cols-2 lg:grid-cols-4">{children}</div>
   )
 }
 
@@ -120,7 +120,7 @@ export function Callout({
     },
     warning: {
       wrap: 'border-l-4 border-residual bg-residualSoft/60',
-      heading: 'text-residual',
+      heading: 'text-residualText',
     },
     refusal: {
       wrap: 'border-l-4 border-unresolved bg-unresolvedSoft/60',
@@ -129,7 +129,7 @@ export function Callout({
   }[tone]
 
   return (
-    <aside className={`rounded-r-card px-5 py-4 ${styles.wrap}`}>
+    <aside className={`rounded-r-card px-card py-4 ${styles.wrap}`}>
       {title !== undefined && (
         <p className={`eyebrow ${styles.heading}`}>{title}</p>
       )}
@@ -148,7 +148,7 @@ export function Badge({
   const toneClass = {
     neutral: 'border-rule bg-sunken text-inkMuted',
     prediction: 'border-prediction/30 bg-predictionSoft text-prediction',
-    residual: 'border-residual/30 bg-residualSoft text-residual',
+    residual: 'border-residual/30 bg-residualSoft text-residualText',
     unresolved: 'border-unresolved/30 bg-unresolvedSoft text-unresolved',
   }[tone]
 
@@ -205,5 +205,7 @@ export function TraceKey({
 
 /** Wide content — tables, charts — scrolls inside its own box, never the page. */
 export function Scroller({ children }: { children: ReactNode }) {
-  return <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">{children}</div>
+  return (
+    <div className="-mx-gutter overflow-x-auto px-gutter sm:mx-0 sm:px-0">{children}</div>
+  )
 }

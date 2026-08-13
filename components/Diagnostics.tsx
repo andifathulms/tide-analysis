@@ -6,7 +6,7 @@ import { describeConflict } from '@/lib/tide/rayleigh'
 const CONDITIONING_CLASS: Record<Conditioning, string> = {
   baik: 'text-prediction',
   wajar: 'text-ink',
-  marginal: 'text-residual',
+  marginal: 'text-residualText',
   buruk: 'text-unresolved',
 }
 
@@ -32,7 +32,7 @@ export function FitDiagnostics({ dict, fit }: { dict: Dictionary; fit: HarmonicF
         <dt className="eyebrow">
           {dict.common.residualRms}
         </dt>
-        <dd className="numeric text-title leading-none text-residual">{fit.residualRmsM.toFixed(4)} m</dd>
+        <dd className="numeric text-title leading-none text-residualText">{fit.residualRmsM.toFixed(4)} m</dd>
       </div>
       <div>
         <dt className="eyebrow">

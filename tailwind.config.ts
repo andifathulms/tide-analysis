@@ -1,56 +1,48 @@
 import type { Config } from 'tailwindcss'
 
 /**
- * Semantic tokens only — components never carry a raw hex.
+ * Semantic tokens only — components never carry a raw hex, and this file
+ * carries none either. Every value lives in `:root` in app/globals.css; this
+ * is the mapping from a token name to the variable that holds it.
  *
  * The palette keeps the marégraphe chart of PRD §9 as its subject: warm paper,
- * printed ruling, one continuous ink line. The values have moved, because the
- * originals did not survive being measured. Prediction was #2E7A85, a teal
- * whose chroma sits below the floor at which a colourblind reader can hold it
- * apart from the ochre residual; it is now a deeper sea blue that passes.
+ * printed ruling, one continuous ink line. Prediction was #2E7A85, a teal whose
+ * chroma sits below the floor at which a colourblind reader can hold it apart
+ * from the ochre residual; it is now a deeper sea blue that passes. See the
+ * contrast notes beside each variable.
  *
- * The three chart series were validated together, on this surface, against
- * lightness band, chroma floor, CVD separation across all pairs, the
- * normal-vision floor, and contrast:
- *
- *   #00719E prediction · #C07A16 residual · #B0392B unresolved   all PASS
- *
- * Observation ink is not in that set on purpose: it is the page's ink, checked
- * as text (12.5:1 on paper), not as a category competing for a hue.
+ * Colours resolve through `<alpha-value>` so the opacity modifiers the
+ * components rely on (`bg-paper/90`, `border-prediction/30`) keep working.
  */
+const channel = (name: string) => `rgb(var(--colour-${name}) / <alpha-value>)`
+
 const config: Config = {
   content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        /** The chart roll itself — every page sits on it. */
-        paper: '#F7F3E9',
-        /** Raised surfaces: cards, tables, controls. */
-        surface: '#FFFDF7',
-        /** A recessed band, for asides and secondary panels. */
-        sunken: '#F0EBDD',
+        paper: channel('paper'),
+        surface: channel('surface'),
+        sunken: channel('sunken'),
 
-        /** Primary ink — text, and the observed trace. */
-        ink: '#14303A',
-        inkMuted: '#4A5B62',
-        inkFaint: '#5D6B71',
+        ink: channel('ink'),
+        inkMuted: channel('ink-muted'),
+        inkFaint: channel('ink-faint'),
 
-        /** The printed ruling, and the hairlines that echo it. */
-        grid: '#D8D2C2',
-        rule: '#E6E0D0',
+        grid: channel('grid'),
+        rule: channel('rule'),
 
-        /** The three series. Validated together; see the note above. */
-        prediction: '#00719E',
-        residual: '#C07A16',
-        unresolved: '#B0392B',
+        prediction: channel('prediction'),
+        /** The chart stroke. For type, reach for `residualText`. */
+        residual: channel('residual'),
+        residualText: channel('residual-text'),
+        unresolved: channel('unresolved'),
 
-        /** Datum lines on the chart face. */
-        datum: '#64707A',
+        datum: channel('datum'),
 
-        /** Tints, for fills that must stay behind the marks. */
-        predictionSoft: '#E4F0F6',
-        residualSoft: '#F8EEDC',
-        unresolvedSoft: '#F7E7E4',
+        predictionSoft: channel('prediction-soft'),
+        residualSoft: channel('residual-soft'),
+        unresolvedSoft: channel('unresolved-soft'),
       },
       fontFamily: {
         prose: ['var(--font-prose)', 'Georgia', 'serif'],
@@ -58,15 +50,21 @@ const config: Config = {
         mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
       },
       fontSize: {
-        // A scale with a real ratio, so headings relate rather than drift.
-        micro: ['0.6875rem', { lineHeight: '1rem', letterSpacing: '0.06em' }],
-        caption: ['0.8125rem', { lineHeight: '1.25rem' }],
-        body: ['0.9375rem', { lineHeight: '1.6rem' }],
-        lead: ['1.125rem', { lineHeight: '1.8rem' }],
-        title: ['1.375rem', { lineHeight: '1.9rem', letterSpacing: '-0.01em' }],
-        headline: ['1.75rem', { lineHeight: '2.2rem', letterSpacing: '-0.015em' }],
-        display: ['2.5rem', { lineHeight: '2.9rem', letterSpacing: '-0.02em' }],
-        hero: ['3.25rem', { lineHeight: '3.5rem', letterSpacing: '-0.03em' }],
+        micro: ['var(--text-micro)', { lineHeight: '1.0625rem', letterSpacing: '0.06em' }],
+        caption: ['var(--text-caption)', { lineHeight: '1.25rem' }],
+        body: ['var(--text-body)', { lineHeight: '1.65rem' }],
+        lead: ['var(--text-lead)', { lineHeight: '1.85rem' }],
+        title: ['var(--text-title)', { lineHeight: '1.95rem', letterSpacing: '-0.01em' }],
+        headline: ['var(--text-headline)', { lineHeight: '2.25rem', letterSpacing: '-0.015em' }],
+        display: ['var(--text-display)', { lineHeight: '2.9rem', letterSpacing: '-0.02em' }],
+        hero: ['var(--text-hero)', { lineHeight: '3.25rem', letterSpacing: '-0.03em' }],
+      },
+      spacing: {
+        /** Named by role, so the page rhythm changes in one place. */
+        card: 'var(--space-card)',
+        gutter: 'var(--space-gutter)',
+        block: 'var(--space-block)',
+        section: 'var(--space-section)',
       },
       maxWidth: {
         reading: '38rem',
@@ -76,8 +74,8 @@ const config: Config = {
         card: '0.5rem',
       },
       boxShadow: {
-        card: '0 1px 2px rgb(20 48 58 / 0.05), 0 1px 8px rgb(20 48 58 / 0.04)',
-        raised: '0 2px 4px rgb(20 48 58 / 0.06), 0 8px 24px rgb(20 48 58 / 0.06)',
+        card: '0 1px 2px rgb(var(--colour-ink) / 0.05), 0 1px 8px rgb(var(--colour-ink) / 0.04)',
+        raised: '0 2px 4px rgb(var(--colour-ink) / 0.06), 0 8px 24px rgb(var(--colour-ink) / 0.06)',
       },
     },
   },

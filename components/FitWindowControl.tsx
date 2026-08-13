@@ -149,7 +149,7 @@ export function FitWindowControl({
                   <h3 className="eyebrow">
                     {dict.catatan.fitRms}
                   </h3>
-                  <p className="numeric text-headline text-residual">
+                  <p className="numeric text-headline text-residualText">
                     {recomputed.analysis.fitResidualRmsM?.toFixed(4)} m
                   </p>
                 </div>
@@ -157,7 +157,7 @@ export function FitWindowControl({
                   <h3 className="eyebrow">
                     {dict.catatan.heldOutRms}
                   </h3>
-                  <p className="numeric text-headline text-residual">
+                  <p className="numeric text-headline text-residualText">
                     {recomputed.analysis.heldOutResidualRmsM === null
                       ? '—'
                       : `${recomputed.analysis.heldOutResidualRmsM.toFixed(4)} m`}
