@@ -1,12 +1,14 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { NavigationWarning } from '@/components/NavigationWarning'
+import { CoveragePanel } from '@/components/CoveragePanel'
 import { RayleighSlider } from '@/components/RayleighSlider'
 import { StationHeader, StationNav } from '@/components/StationNav'
 import { Section } from '@/components/ui'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations, stationSummary } from '@/lib/records/registry'
 import { STANDARD_SET } from '@/lib/tide/constituents'
+import { coverageSweep } from '@/lib/tide/coverage'
 import { separationLadder } from '@/lib/tide/rayleigh'
 import { analyseStation } from '@/lib/view/station'
 import { formatDays, zoneOf } from '@/lib/view/format'
@@ -37,6 +39,18 @@ export default async function ResolutionPage({
     .filter((rung) => rung.b !== null)
     .slice(0, 6)
 
+  // The second axis. Only the constituents this record actually supports go
+  // in, so the sweep measures coverage rather than re-measuring the refusal.
+  const fit = analysis.primary.outcome.type === 'fit' ? analysis.primary.outcome : null
+  const coverage =
+    fit === null
+      ? []
+      : coverageSweep({
+          timesSec: analysis.record.timesSec,
+          constituents: fit.constants.map((c) => c.name),
+          nodalEpochSec: fit.nodalEpochSec,
+        })
+
   return (
     <div className="space-y-8">
       <StationNav dict={dict} locale={locale} stationId={summary.stationId} active="resolusi" />
@@ -56,6 +70,12 @@ export default async function ResolutionPage({
         stationId={summary.stationId}
         maxDays={Math.floor(summary.lengthDays)}
       />
+
+      {coverage.length > 0 && (
+        <Section title={dict.resolusi.coverageTitle} lead={dict.resolusi.coverageLead}>
+          <CoveragePanel dict={dict} points={coverage} />
+        </Section>
+      )}
 
       {/* The worst rungs of the universal ladder, against this record's own
           length. The full ladder, and the survey lengths that clear it, live

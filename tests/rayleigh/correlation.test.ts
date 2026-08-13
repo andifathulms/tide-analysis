@@ -100,11 +100,13 @@ describe('constituent correlation', () => {
     // the naive version of that claim — gaps are bad — is false, and this
     // asserts both halves so nobody has to rediscover it from a station page.
     //
-    // A contiguous outage removes span: what is left is effectively a shorter
-    // record, and the pair that needed half a year collapses back together.
-    // The same number of hours removed at scattered times leaves the span
-    // intact and costs almost nothing. Kolinamil is the second case — 740
-    // hours missing and a well-conditioned fit.
+    // Both masks keep the first and last sample, so the span — the only thing
+    // the Rayleigh criterion reads — is identical. A contiguous outage still
+    // wrecks the fit: it leaves two clusters with nothing joining them, and
+    // the phase difference across the hole is ambiguous, so the pair that
+    // needed half a year collapses back together. The same hours removed at
+    // scattered times leave the record joined up and cost almost nothing.
+    // Kolinamil is the second case — 740 hours missing, well conditioned.
     const span = 200
     const set: ConstituentName[] = ['K1', 'P1']
 

@@ -185,6 +185,14 @@ export interface Dictionary {
     readonly surveyNone: string
     readonly perStationTitle: string
     readonly perStationLead: string
+    readonly coverageTitle: string
+    readonly coverageLead: string
+    readonly coverageKind: Record<'actual' | 'contiguous' | 'scattered', string>
+    readonly coverageRemoved: string
+    readonly coverageSamples: string
+    readonly coverageSpan: string
+    readonly coverageWorst: string
+    readonly coverageNote: string
   }
   readonly banding: {
     readonly title: string
@@ -427,6 +435,20 @@ const id: Dictionary = {
     perStationTitle: 'Rekaman yang ada di situs ini',
     perStationLead:
       'Tangga di atas berlaku universal. Untuk melihat tangga itu berhadapan dengan rekaman sungguhan — komponen berguguran dan bilangan kondisi naik saat jendela diperpendek — pilih satu stasiun.',
+    coverageTitle: 'Sumbu kedua: bukan berapa lama, melainkan seberapa utuh',
+    coverageLead:
+      'Kriteria Rayleigh hanya melihat rentang — sampel pertama sampai sampel terakhir. Jam-jam di antaranya tidak dihitung sama sekali, jadi menurut ukuran itu rekaman yang separuhnya hilang sama baiknya dengan rekaman utuh. Tabel di bawah mencocokkan ulang rekaman ini di bawah dua macam kehilangan dengan jumlah jam yang sama dan rentang yang persis sama, dan hasilnya jauh berbeda.',
+    coverageKind: {
+      actual: 'Rekaman apa adanya',
+      contiguous: 'Satu jeda panjang di tengah',
+      scattered: 'Hilang tersebar',
+    },
+    coverageRemoved: 'Dihilangkan',
+    coverageSamples: 'Sampel',
+    coverageSpan: 'Rentang (hari)',
+    coverageWorst: 'Pasangan paling mirip',
+    coverageNote:
+      'Perhatikan kolom rentang: angkanya sama di setiap baris. Jeda diambil dari tengah, jadi sampel pertama dan terakhir tidak pernah bergeser — dan rentang adalah satu-satunya hal yang dibaca kriteria Rayleigh. Menurut ukuran itu, semua baris di atas adalah rekaman yang sama. Nyatanya tidak: satu jeda panjang meninggalkan dua gerombolan sampel tanpa apa pun yang menghubungkannya, sehingga beda fase antar keduanya menjadi ambigu dan pasangan yang berdekatan menyatu kembali. Jumlah jam yang sama, tetapi tersebar, membiarkan rekaman tetap menyambung dan nyaris tidak berbiaya. Topeng dibentuk oleh aturan tetap, bukan diundi, jadi tabel ini sama di setiap pembangunan situs.',
   },
   banding: {
     title: 'Banding metode',
@@ -671,6 +693,20 @@ const en: Dictionary = {
     perStationTitle: 'The records on this site',
     perStationLead:
       'The ladder above is universal. To watch it meet a real record — constituents dropping out and the condition number climbing as the window shortens — pick a station.',
+    coverageTitle: 'The second axis: not how long, but how complete',
+    coverageLead:
+      'The Rayleigh criterion sees only span — first sample to last. The hours in between do not enter it at all, so by that measure a record missing half its readings is exactly as good as a complete one. The table below refits this record under two kinds of loss of the same size and of identical span, and they come out nothing alike.',
+    coverageKind: {
+      actual: 'The record as it stands',
+      contiguous: 'One long outage in the middle',
+      scattered: 'Scattered losses',
+    },
+    coverageRemoved: 'Removed',
+    coverageSamples: 'Samples',
+    coverageSpan: 'Span (days)',
+    coverageWorst: 'Most parallel pair',
+    coverageNote:
+      'Look at the span column: it is the same on every row. The outage is taken from the middle, so the first and last samples never move — and span is the only thing the Rayleigh criterion reads. By that measure every row above is the same record. They are not: a single long outage leaves two clusters of samples with nothing joining them, so the phase difference across the hole becomes ambiguous and close pairs collapse back together. The same hours removed at scattered times leave the record joined up and cost almost nothing. The masks are constructed by a fixed rule rather than sampled, so this table is the same on every build.',
   },
   banding: {
     title: 'Method comparison',
