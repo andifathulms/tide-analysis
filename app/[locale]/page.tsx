@@ -125,6 +125,17 @@ export default async function HomePage({ params }: { params: { locale: string } 
               observedLabel={dict.common.observed}
               predictedLabel={dict.common.predicted}
               residualLabel={dict.common.residual}
+              titleId="hero-chart-title"
+              description={
+                fill(dict.common.chartAlt, {
+                  station: hero.stationName,
+                  days: heroWindowDays,
+                  count: hero.constituentCount,
+                }) +
+                (hero.residualRmsM === null
+                  ? ''
+                  : fill(dict.common.chartAltRms, { rms: hero.residualRmsM.toFixed(3) }))
+              }
             />
             <figcaption className="text-caption text-inkFaint">
               {dict.home.heroChartNote}{' '}

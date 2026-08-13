@@ -8,7 +8,7 @@ import { FitWindowControl } from '@/components/FitWindowControl'
 import { LeakagePanel } from '@/components/LeakagePanel'
 import { StationHeader, StationNav } from '@/components/StationNav'
 import { Callout, Caption, Card, Section, Stat, TraceKey } from '@/components/ui'
-import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
+import { dictionary, fill, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations } from '@/lib/records/registry'
 import { buildChartModel } from '@/lib/chart/model'
 import { analyseStation } from '@/lib/view/station'
@@ -111,6 +111,7 @@ export default async function RecordPage({
         <FitWindowControl
           dict={dict}
           stationId={station.stationId}
+          stationName={station.stationName}
           constituents={
             shown.outcome.type === 'fit'
               ? shown.outcome.constants.map((c) => c.name)
@@ -141,6 +142,20 @@ export default async function RecordPage({
                   predictedLabel={dict.common.predicted}
                   residualLabel={dict.common.residual}
                   heldOutLabel={dict.catatan.heldOut}
+                  titleId="record-chart-title"
+                  description={
+                    fill(dict.common.chartAlt, {
+                      station: station.stationName,
+                      days: Math.round(station.lengthDays),
+                      count:
+                        shown.outcome.type === 'fit' ? shown.outcome.constants.length : 0,
+                    }) +
+                    (shown.fitResidualRmsM === null
+                      ? ''
+                      : fill(dict.common.chartAltRms, {
+                          rms: shown.fitResidualRmsM.toFixed(4),
+                        }))
+                  }
                 />
               </figure>
             )}

@@ -184,7 +184,12 @@ export default async function ConstituentsPage({
             title={dict.komponen.explorerTitle}
             lead={dict.komponen.explorerLead}
           >
-            <ConstituentExplorer dict={dict} stationId={station.stationId} fit={shown.outcome} />
+            <ConstituentExplorer
+              dict={dict}
+              stationId={station.stationId}
+              stationName={station.stationName}
+              fit={shown.outcome}
+            />
           </Section>
         </>
       )}

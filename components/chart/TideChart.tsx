@@ -13,23 +13,41 @@ export function TideChart({
   predictedLabel,
   residualLabel,
   heldOutLabel,
+  description,
+  titleId = 'chart-title',
 }: {
   model: ChartModel
   observedLabel: string
   predictedLabel: string
   residualLabel: string
   heldOutLabel?: string
+  /**
+   * What this chart shows, in a sentence, for a reader who cannot see it. The
+   * caller knows the station, the window and the residual; the chart does not.
+   */
+  description?: string
+  /** Unique when a page draws more than one chart. */
+  titleId?: string
 }) {
   return (
     <figure className="w-full overflow-x-auto">
+      {/*
+       * <title> is the native accessible name for an SVG and is where the
+       * description belongs. role="img" stays on top of it because without a
+       * role several screen readers walk into the shapes and read the axis
+       * labels one at a time instead of the name.
+       */}
       <svg
         viewBox={`0 0 ${model.width} ${model.height}`}
         width="100%"
         height={model.height}
         role="img"
-        aria-label={`${observedLabel} · ${predictedLabel} · ${residualLabel}`}
+        aria-labelledby={titleId}
         className="block"
       >
+        <title id={titleId}>
+          {description ?? `${observedLabel} · ${predictedLabel} · ${residualLabel}`}
+        </title>
         <rect x={0} y={0} width={model.width} height={model.height} className="fill-surface" />
 
         {model.heldOutRect !== null && (

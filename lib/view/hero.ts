@@ -44,6 +44,8 @@ export interface HeroChart {
   readonly endSec: number
   /** RMS over the window shown, in metres — the fit's own report on itself. */
   readonly residualRmsM: number | null
+  /** How many constituents the shown prediction was built from. */
+  readonly constituentCount: number
 }
 
 /** Index of the first sample at or after `atSec`. */
@@ -101,5 +103,7 @@ export async function heroChart(): Promise<HeroChart | null> {
     startSec: timesSec[0] as number,
     endSec: timesSec[timesSec.length - 1] as number,
     residualRmsM: shown.fitResidualRmsM,
+    constituentCount:
+      shown.outcome.type === 'fit' ? shown.outcome.constants.length : 0,
   }
 }

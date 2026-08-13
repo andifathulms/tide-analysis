@@ -26,12 +26,14 @@ import type { TideRecord } from '@/lib/tide/record'
 export function FitWindowControl({
   dict,
   stationId,
+  stationName,
   constituents,
   initialPercent,
   children,
 }: {
   dict: Dictionary
   stationId: string
+  stationName: string
   constituents: readonly ConstituentName[]
   initialPercent: number
   /** The server-rendered view, shown until the control is touched. */
@@ -162,6 +164,19 @@ export function FitWindowControl({
                 predictedLabel={dict.common.predicted}
                 residualLabel={dict.common.residual}
                 heldOutLabel={dict.catatan.heldOut}
+                titleId="fit-window-chart-title"
+                description={
+                  fill(dict.common.chartAlt, {
+                    station: stationName,
+                    days: lengthDays === null ? '—' : lengthDays.toFixed(0),
+                    count: constituents.length,
+                  }) +
+                  (recomputed.analysis.fitResidualRmsM === null
+                    ? ''
+                    : fill(dict.common.chartAltRms, {
+                        rms: recomputed.analysis.fitResidualRmsM.toFixed(4),
+                      }))
+                }
               />
             </div>
           )}

@@ -89,6 +89,9 @@ export interface Dictionary {
     readonly uncertainty: string
     readonly provenance: string
     readonly nodalAtPrediction: string
+    /** What the chart shows, for a reader who cannot see it. */
+    readonly chartAlt: string
+    readonly chartAltRms: string
   }
   /**
    * Accessible names for the data tables.
@@ -397,6 +400,9 @@ const id: Dictionary = {
     uncertainty: 'Ketidakpastian 1σ',
     provenance: 'Sumber, lisensi, dan catatan datum',
     nodalAtPrediction: 'f dan u dihitung pada waktu prediksi',
+    chartAlt:
+      'Grafik pasang surut {station} sepanjang {days} hari: garis hitam tinggi air terekam, garis biru hasil hitungan {count} komponen di atasnya, pita ochre selisih keduanya pada sumbu waktu yang sama.',
+    chartAltRms: ' RMS residu {rms} m.',
   },
   tableName: {
     constituents: 'Konstanta harmonik per komponen',
@@ -813,6 +819,9 @@ const en: Dictionary = {
     uncertainty: '1σ uncertainty',
     provenance: 'Source, licence and datum notes',
     nodalAtPrediction: 'f and u are computed at the prediction time',
+    chartAlt:
+      'Tide chart for {station} over {days} days: a black line for the recorded water level, a blue line over it computed from {count} constituents, and an ochre band beneath for the difference, on the same time axis.',
+    chartAltRms: ' Residual RMS {rms} m.',
   },
   tableName: {
     constituents: 'Harmonic constants per constituent',

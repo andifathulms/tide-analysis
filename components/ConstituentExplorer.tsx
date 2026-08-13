@@ -30,10 +30,12 @@ const WINDOW_DAYS = 30
 export function ConstituentExplorer({
   dict,
   stationId,
+  stationName,
   fit,
 }: {
   dict: Dictionary
   stationId: string
+  stationName: string
   fit: HarmonicFit
 }) {
   const [record, setRecord] = useState<TideRecord | null>(null)
@@ -189,8 +191,14 @@ export function ConstituentExplorer({
           <TideChart
             model={model}
             observedLabel={dict.common.observed}
-            predictedLabel={`${dict.common.predicted} (${enabled.size} komponen)`}
+            predictedLabel={dict.common.predicted}
             residualLabel={dict.common.residual}
+            titleId="explorer-chart-title"
+            description={fill(dict.common.chartAlt, {
+              station: stationName,
+              days: WINDOW_DAYS,
+              count: enabled.size,
+            })}
           />
         </div>
       )}
