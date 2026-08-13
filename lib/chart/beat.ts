@@ -74,7 +74,8 @@ export function beatFigure(
       const hours = fromHours + (i / SAMPLES) * spanDays * 24
       const x = (i / SAMPLES) * width
       const y = mid - amplitude * Math.cos(speed * hours * DEG_TO_RAD)
-      path += `${i === 0 ? 'M' : 'L'}${x.toFixed(2)} ${y.toFixed(2)}`
+      // One decimal, as in lib/chart/geometry — see the note there.
+      path += `${i === 0 ? 'M' : 'L'}${x.toFixed(1)} ${y.toFixed(1)}`
     }
     return path
   }

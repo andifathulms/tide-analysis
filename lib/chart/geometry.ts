@@ -114,8 +114,17 @@ export function seriesPath(
     }
     const previous = i > 0 ? (timesSec[i - 1] as number) : null
     const broken = previous !== null && t - previous > gapThresholdSec
-    const cx = x(t).toFixed(2)
-    const cy = y(v).toFixed(2)
+    /*
+     * One decimal place. The viewBox is 1100 units wide and the chart renders
+     * at no more than about that many CSS pixels, so a unit is a pixel and a
+     * tenth of one is a fifth of a device pixel on a 2× display — below
+     * anything an eye or a rasteriser can resolve. Two places cost 18% of the
+     * path length for a shift of at most 0.15 device pixels at 3×, and every
+     * trace is emitted twice on a record page: once in the DOM and once in the
+     * flight payload that hydrates it.
+     */
+    const cx = x(t).toFixed(1)
+    const cy = y(v).toFixed(1)
     if (!penDown || broken) {
       path += `M${cx} ${cy}`
       penDown = true
