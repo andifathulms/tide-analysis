@@ -214,9 +214,41 @@ export function TraceKey({
   )
 }
 
-/** Wide content — tables, charts — scrolls inside its own box, never the page. */
-export function Scroller({ children }: { children: ReactNode }) {
+/**
+ * Wide content — tables, charts — scrolls inside its own box, never the page.
+ *
+ * The box has to be focusable. A container that scrolls horizontally and holds
+ * nothing focusable cannot be scrolled by keyboard at all: there is no tab
+ * stop inside it and the container itself will not take focus, so the columns
+ * past the fold are simply unreachable (WCAG 2.1.1). On the constituent table
+ * that was amplitude, phase and the nodal factors.
+ *
+ * `role="region"` is the one ARIA role in this codebase and it earns its place:
+ * a focusable div with no role is announced as nothing, so a reader tabs into
+ * an unnamed stop with no idea what they have landed in. The name comes from
+ * `labelledBy` — the id of the table's own <caption> — rather than from a
+ * duplicate aria-label, so the region and the table share one name.
+ *
+ * It is a tab stop even where the content currently fits, because whether it
+ * fits depends on the viewport and on the reader's zoom, neither of which the
+ * server knows.
+ */
+export function Scroller({
+  children,
+  labelledBy,
+}: {
+  children: ReactNode
+  /** id of the caption or heading that names this content. */
+  labelledBy: string
+}) {
   return (
-    <div className="-mx-gutter overflow-x-auto px-gutter sm:mx-0 sm:px-0">{children}</div>
+    <div
+      role="region"
+      aria-labelledby={labelledBy}
+      tabIndex={0}
+      className="-mx-gutter overflow-x-auto px-gutter sm:mx-0 sm:px-0"
+    >
+      {children}
+    </div>
   )
 }

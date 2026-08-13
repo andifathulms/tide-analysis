@@ -3,7 +3,7 @@ import { NavigationWarning } from '@/components/NavigationWarning'
 import { TideChart } from '@/components/chart/TideChart'
 import { StationHeader, StationNav } from '@/components/StationNav'
 import { RefusalNotice } from '@/components/Diagnostics'
-import { Section } from '@/components/ui'
+import { Scroller, Section } from '@/components/ui'
 import { dictionary, fill, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations } from '@/lib/records/registry'
 import { buildChartModel } from '@/lib/chart/model'
@@ -118,7 +118,7 @@ export default async function PredictionPage({
 
       <section className="space-y-3">
         <h2 className="text-headline">{dict.prediksi.extremaTitle}</h2>
-        <div className="mt-3 overflow-x-auto">
+        <Scroller labelledBy="extrema-caption">
           <table className="w-full min-w-[640px] border-collapse text-caption">
             <caption id="extrema-caption" className="sr-only">
               {dict.tableName.extrema}
@@ -146,8 +146,8 @@ export default async function PredictionPage({
               ))}
             </tbody>
           </table>
-        </div>
-        <p className="mt-3 max-w-reading text-caption text-inkFaint">
+        </Scroller>
+        <p className="max-w-reading text-caption text-inkFaint">
           {fill(dict.prediksi.provenance, {
             datum: record.datum.label,
             count: fit.constants.length,

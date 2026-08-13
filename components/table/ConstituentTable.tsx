@@ -1,6 +1,7 @@
 import type { Dictionary } from '@/lib/i18n/dictionary'
 import type { ConstituentConstant } from '@/lib/tide/fit'
 import type { ConstituentResolution } from '@/lib/tide/rayleigh'
+import { Scroller } from '@/components/ui'
 
 /**
  * The constituent table as a printed column: tabular numerals throughout, so
@@ -24,7 +25,7 @@ export function ConstituentTable({
   const unresolvedRows = unresolved.filter((r) => r.type === 'unresolved')
 
   return (
-    <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
+    <Scroller labelledBy="constituents-caption">
       <table className="w-full min-w-[640px] border-collapse text-caption">
         <caption id="constituents-caption" className="sr-only">
           {dict.tableName.constituents}
@@ -105,6 +106,6 @@ export function ConstituentTable({
           ))}
         </tbody>
       </table>
-    </div>
+    </Scroller>
   )
 }

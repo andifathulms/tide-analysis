@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { NavigationWarning } from '@/components/NavigationWarning'
+import { Scroller } from '@/components/ui'
 import type { ReactNode } from 'react'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { MANIFEST, stations } from '@/lib/records/registry'
@@ -84,7 +85,7 @@ export default async function MethodPage({ params }: { params: { locale: string 
             <span className="numeric">{STANDARD_SET.join(', ')}</span>,
           )}
         </p>
-        <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
+        <Scroller labelledBy="definitions-caption">
           <table className="w-full min-w-[640px] border-collapse text-caption">
             <caption id="definitions-caption" className="sr-only">
               {dict.tableName.definitions}
@@ -118,12 +119,12 @@ export default async function MethodPage({ params }: { params: { locale: string 
               ))}
             </tbody>
           </table>
-        </div>
+        </Scroller>
       </section>
 
       <section className="space-y-3">
         <h2 className="text-headline">{dict.metode.recordsTitle}</h2>
-        <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
+        <Scroller labelledBy="records-caption">
           <table className="w-full min-w-[640px] border-collapse text-caption">
             <caption id="records-caption" className="sr-only">
               {dict.tableName.records}
@@ -183,7 +184,7 @@ export default async function MethodPage({ params }: { params: { locale: string 
               })}
             </tbody>
           </table>
-        </div>
+        </Scroller>
         <p className="max-w-reading text-caption text-inkMuted">{dict.metode.recordsNote}</p>
       </section>
 

@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { StationHeader, StationNav } from '@/components/StationNav'
 import { RefusalNotice } from '@/components/Diagnostics'
-import { Card, Section, Stat } from '@/components/ui'
+import { Card, Scroller, Section, Stat } from '@/components/ui'
 import { dictionary, fill, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations } from '@/lib/records/registry'
 import { admiraltyFit, compareMethods } from '@/lib/tide/admiralty'
@@ -88,7 +88,7 @@ export default async function ComparisonPage({
             </Card>
           </div>
 
-          <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
+          <Scroller labelledBy="methods-caption">
             <table className="w-full min-w-[640px] border-collapse text-caption">
               <caption id="methods-caption" className="sr-only">
                 {dict.tableName.methods}
@@ -152,7 +152,7 @@ export default async function ComparisonPage({
                 ))}
               </tbody>
             </table>
-          </div>
+          </Scroller>
 
           <section className="max-w-reading space-y-2 text-caption text-inkMuted">
             <p>

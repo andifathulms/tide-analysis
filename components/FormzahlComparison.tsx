@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Dictionary, Locale } from '@/lib/i18n/dictionary'
 import type { TideType } from '@/lib/tide/formzahl'
+import { Scroller } from '@/components/ui'
 
 export interface FormzahlRow {
   readonly stationId: string
@@ -40,7 +41,7 @@ export function FormzahlComparison({
 
   return (
     <section className="space-y-4">
-      <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
+      <Scroller labelledBy="formzahl-caption">
         <table className="w-full min-w-[560px] border-collapse text-caption">
           <caption id="formzahl-caption" className="sr-only">
             {dict.tableName.formzahl}
@@ -79,7 +80,7 @@ export function FormzahlComparison({
             ))}
           </tbody>
         </table>
-      </div>
+      </Scroller>
 
       {/* The scale itself, ruled like the chart, with each station on it. */}
       <div className="card px-5 pb-9 pt-6">

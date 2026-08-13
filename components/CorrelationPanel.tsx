@@ -64,7 +64,7 @@ export function CorrelationPanel({
         </p>
       )}
 
-      <Scroller>
+      <Scroller labelledBy="correlation-caption">
         <table className="border-collapse text-micro">
           <caption id="correlation-caption" className="sr-only">
             {dict.tableName.correlation}

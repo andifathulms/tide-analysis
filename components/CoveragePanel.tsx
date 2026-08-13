@@ -23,7 +23,7 @@ export function CoveragePanel({
 
   return (
     <div className="space-y-4">
-      <Scroller>
+      <Scroller labelledBy="coverage-caption">
         <table className="w-full min-w-[560px] border-collapse text-caption">
           <caption id="coverage-caption" className="sr-only">
             {dict.tableName.coverage}

@@ -60,7 +60,7 @@ export default function LadderPage({ params }: { params: { locale: string } }) {
       </Callout>
 
       <Section title={dict.resolusi.surveyTitle} lead={dict.resolusi.surveyLead}>
-        <Scroller>
+        <Scroller labelledBy="survey-caption">
           <table className="w-full min-w-[520px] border-collapse text-caption">
             <caption id="survey-caption" className="sr-only">
               {dict.tableName.survey}
@@ -99,7 +99,7 @@ export default function LadderPage({ params }: { params: { locale: string } }) {
       </Section>
 
       <Section title={dict.resolusi.ladderFullTitle} lead={dict.resolusi.ladderDeciding}>
-        <Scroller>
+        <Scroller labelledBy="ladder-caption">
           <table className="w-full min-w-[520px] border-collapse text-caption">
             <caption id="ladder-caption" className="sr-only">
               {dict.tableName.ladder}
