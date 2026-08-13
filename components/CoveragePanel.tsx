@@ -27,7 +27,7 @@ export function CoveragePanel({
         <table className="w-full min-w-[560px] border-collapse text-caption">
           <thead>
             <tr className="border-b border-rule text-left">
-              <th className="eyebrow py-2 pr-4">{dict.resolusi.coverageKind.actual}</th>
+              <th className="eyebrow py-2 pr-4">{dict.resolusi.coverageMask}</th>
               <th className="eyebrow py-2 pr-4 text-right">{dict.resolusi.coverageRemoved}</th>
               <th className="eyebrow py-2 pr-4 text-right">{dict.resolusi.coverageSamples}</th>
               <th className="eyebrow py-2 pr-4 text-right">{dict.resolusi.coverageSpan}</th>

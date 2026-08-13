@@ -196,6 +196,7 @@ export interface Dictionary {
     readonly coverageTitle: string
     readonly coverageLead: string
     readonly coverageKind: Record<'actual' | 'contiguous' | 'scattered', string>
+    readonly coverageMask: string
     readonly coverageRemoved: string
     readonly coverageSamples: string
     readonly coverageSpan: string
@@ -461,6 +462,7 @@ const id: Dictionary = {
       contiguous: 'Satu jeda panjang di tengah',
       scattered: 'Hilang tersebar',
     },
+    coverageMask: 'Bentuk kehilangan',
     coverageRemoved: 'Dihilangkan',
     coverageSamples: 'Sampel',
     coverageSpan: 'Rentang (hari)',
@@ -729,6 +731,7 @@ const en: Dictionary = {
       contiguous: 'One long outage in the middle',
       scattered: 'Scattered losses',
     },
+    coverageMask: 'Shape of the loss',
     coverageRemoved: 'Removed',
     coverageSamples: 'Samples',
     coverageSpan: 'Span (days)',
