@@ -88,12 +88,21 @@ export interface Dictionary {
     readonly gateEyebrow: string
     readonly gateTitle: string
     readonly gateLead: string
-    readonly openFirstStation: string
+    readonly openStation: string
+    readonly readMethod: string
+    readonly heroChartNote: string
+    readonly heroChartWindow: string
     readonly statStations: string
     readonly statDays: string
     readonly statSamples: string
-    readonly statConstants: string
-    readonly statConstantsNote: string
+    readonly computedClaim: string
+    readonly toolsEyebrow: string
+    readonly toolsTitle: string
+    /** One line per view, keyed by its route segment. */
+    readonly tools: Record<
+      'catatan' | 'komponen' | 'resolusi' | 'banding' | 'prediksi',
+      string
+    >
   }
   readonly catatan: {
     readonly title: string
@@ -227,7 +236,7 @@ const id: Dictionary = {
   home: {
     heroTitle: 'Pasang surut, dihitung dari air laut yang sebenarnya',
     heroLead:
-      'Situs ini mengambil rekaman tinggi muka laut dari stasiun pengamatan di Indonesia, lalu menguraikannya menjadi gelombang-gelombang penyusunnya — dan memakai hasilnya untuk memperkirakan pasang surut ke depan. Semua angkanya dihitung di sini, bukan disalin dari tabel.',
+      'Lihat pasang surut pelabuhan-pelabuhan Indonesia diurai menjadi gelombang penyusunnya, lalu diramalkan ke depan. Semua angkanya dihitung di sini, bukan disalin dari tabel.',
     plainTitle: 'Cara kerjanya, dalam tiga langkah',
     plainSteps: [
       {
@@ -261,12 +270,24 @@ const id: Dictionary = {
     gateTitle: 'Sumber yang belum dibuka',
     gateLead:
       'Adapter untuk sumber ini sudah ditulis dan diuji, tetapi gerbang lisensi menutupnya sampai syarat penggunaannya diverifikasi. Tidak ada datanya di situs ini.',
-    openFirstStation: 'Lihat satu rekaman',
+    openStation: 'Buka rekaman',
+    readMethod: 'Bagaimana ini dihitung',
+    heroChartNote: 'Dihitung saat situs ini dibangun, dari rekaman stasiun',
+    heroChartWindow: 'hari terakhir dari bagian yang dicocokkan',
     statStations: 'Stasiun',
-    statDays: 'Rekaman',
+    statDays: 'Hari rekaman',
     statSamples: 'Bacaan jam-jaman',
-    statConstants: 'Konstanta yang dikirim',
-    statConstantsNote: 'Semuanya dihitung dari rekaman',
+    computedClaim:
+      'Tidak ada satu pun tabel konstanta harmonik yang dikirim sebagai data. Setiap amplitudo dan fase di situs ini keluar dari pencocokan atas rekaman yang ditampilkan bersamanya.',
+    toolsEyebrow: 'Yang bisa dilakukan',
+    toolsTitle: 'Lima cara memeriksa satu rekaman',
+    tools: {
+      catatan: 'Rekaman, hasil pencocokan di atasnya, dan sisa yang tak terjelaskan.',
+      komponen: 'Amplitudo dan fase tiap gelombang penyusun, beserta koreksi nodalnya.',
+      resolusi: 'Perpendek jendelanya dan lihat komponen mana yang berhenti bisa dipisahkan.',
+      banding: 'Kuadrat terkecil berhadapan dengan metode Admiralty pada rekaman yang sama.',
+      prediksi: 'Konstanta hasil pencocokan diteruskan ke depan, lengkap dengan pasang dan surutnya.',
+    },
     characterTitle: 'Empat pelabuhan, empat watak, satu fisika',
     characterLead:
       'Bilangan Formzahl F = (K1 + O1) / (M2 + S2) menggolongkan watak pasang surut. Nusantara memuat keempat golongannya: Sabang dua kali sehari nyaris seimbang, Pelabuhan Jakarta sekali sehari, sisanya di antara keduanya. Setiap angka di bawah ini keluar dari pencocokan kuadrat terkecil atas rekaman stasiun itu sendiri — tidak ada yang dikutip dari tabel.',
@@ -416,7 +437,7 @@ const en: Dictionary = {
   home: {
     heroTitle: 'Tides, computed from the sea itself',
     heroLead:
-      'This site takes sea level records from Indonesian tide gauges, breaks them into the waves they are made of, and uses the result to predict the tide forward. Every number is computed here rather than copied from a table.',
+      'Watch the tide at Indonesian ports taken apart into the waves it is made of, then predicted forward. Every number is computed here rather than copied from a table.',
     plainTitle: 'How it works, in three steps',
     plainSteps: [
       {
@@ -450,12 +471,24 @@ const en: Dictionary = {
     gateTitle: 'Sources still behind the gate',
     gateLead:
       'The adapters for these are written and tested, but the licence gate keeps them shut until their terms are verified. None of their data is on this site.',
-    openFirstStation: 'Open a record',
+    openStation: 'Open the record for',
+    readMethod: 'How this is computed',
+    heroChartNote: 'Computed when this site was built, from the record at',
+    heroChartWindow: 'days from the end of the fitted part',
     statStations: 'Stations',
-    statDays: 'Of record',
+    statDays: 'Days of record',
     statSamples: 'Hourly readings',
-    statConstants: 'Constants shipped',
-    statConstantsNote: 'Every one is computed from a record',
+    computedClaim:
+      'No harmonic constant table ships as data. Every amplitude and phase on this site came out of a fit to the record displayed beside it.',
+    toolsEyebrow: 'What you can do',
+    toolsTitle: 'Five ways to interrogate one record',
+    tools: {
+      catatan: 'The record, the fit laid over it, and what the fit could not explain.',
+      komponen: 'Amplitude and phase per constituent wave, with the nodal corrections applied.',
+      resolusi: 'Shorten the window and watch which constituents stop being separable.',
+      banding: 'Least squares against the Admiralty method on the same record.',
+      prediksi: 'The fitted constants carried forward, with the high and low waters they imply.',
+    },
     characterTitle: 'Four ports, four characters, one physics',
     characterLead:
       'The Formzahl number F = (K1 + O1) / (M2 + S2) classifies tidal character, and the archipelago holds all four classes: Sabang has two nearly equal tides a day, Jakarta Port has one, and the rest sit between them. Every number below came out of a least-squares fit to that station\'s own record — none of it is quoted from a table.',
