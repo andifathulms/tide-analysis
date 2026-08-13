@@ -237,11 +237,6 @@
     font-weight: 500;
   }
 
-  /* A term with a plain-language explanation attached. */
-  .term {
-    border-bottom: 1px dotted rgb(var(--colour-ink-faint));
-    cursor: help;
-  }
 }
 
 /**

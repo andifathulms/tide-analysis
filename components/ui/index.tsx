@@ -172,21 +172,6 @@ export function Badge({
   )
 }
 
-/**
- * A technical term with its plain meaning attached.
- *
- * The vocabulary is the point of the project, so the words stay — but a reader
- * meeting "Formzahl" or "κ" for the first time should not have to leave to
- * find out what it means.
- */
-export function Term({ children, meaning }: { children: ReactNode; meaning: string }) {
-  return (
-    <span className="term" title={meaning}>
-      {children}
-    </span>
-  )
-}
-
 /** A caption under a figure or table: what the reader is looking at. */
 export function Caption({ children }: { children: ReactNode }) {
   return <p className="mt-3 max-w-reading text-caption text-inkFaint">{children}</p>

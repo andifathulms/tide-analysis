@@ -116,7 +116,7 @@ export function FitWindowControl({
             }}
             className="w-full min-w-[10rem] flex-1 accent-prediction"
           />
-          <output className="numeric min-w-[9rem] text-title">
+          <output htmlFor="fit-percent" className="numeric min-w-[9rem] text-title">
             {percent}%
             {lengthDays !== null && (
               <span className="ml-2 text-caption text-inkFaint">

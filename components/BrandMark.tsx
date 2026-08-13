@@ -1,4 +1,8 @@
 /**
+ * Decorative. Every place the mark appears it sits beside the wordmark inside
+ * one link, so naming it made a screen reader announce "Tide Analysis Tide
+ * Analysis" — over-labelling, not labelling.
+ *
  * The mark, inline so it costs no request and stays crisp at any size.
  *
  * It is the app's own argument drawn small: observed dots, a solid curve
@@ -15,8 +19,7 @@ export function BrandMark({ className = '' }: { className?: string }) {
     <svg
       viewBox="0 0 100 100"
       className={className}
-      role="img"
-      aria-label="Tide Analysis"
+      aria-hidden="true"
       focusable="false"
     >
       <rect x="0" y="0" width="100" height="100" rx="22" fill="#16303D" />
