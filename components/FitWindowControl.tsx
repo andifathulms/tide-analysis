@@ -5,7 +5,7 @@ import { TideChart } from '@/components/chart/TideChart'
 import { ConstituentTable } from '@/components/table/ConstituentTable'
 import { FitDiagnostics, RefusalNotice } from '@/components/Diagnostics'
 import { buildChartModel, type ChartModel } from '@/lib/chart/model'
-import type { Dictionary } from '@/lib/i18n/dictionary'
+import { fill, type Dictionary } from '@/lib/i18n/dictionary'
 import { loadRecord } from '@/lib/records/registry'
 import type { ConstituentName } from '@/lib/tide/constituents'
 import { analyse, type Analysis } from '@/lib/view/analysis'
@@ -118,6 +118,31 @@ export function FitWindowControl({
         </div>
         <p className="mt-2 text-caption text-inkFaint">{dict.catatan.splitHint}</p>
       </div>
+
+      {/*
+       * What moving the split just did (WCAG 4.1.3). <output> has an implicit
+       * role="status", so no ARIA here. It reports κ and the two residual RMS
+       * figures — the numbers this control exists to move — not the table.
+       */}
+      <output className="sr-only">
+        {!touched
+          ? ''
+          : recomputed === null
+            ? dict.common.loading
+            : recomputed.analysis.outcome.type === 'fit'
+              ? fill(dict.catatan.status, {
+                  percent,
+                  days: lengthDays === null ? '—' : lengthDays.toFixed(0),
+                  kappa: recomputed.analysis.outcome.conditionNumber.toFixed(2),
+                  fitRms: recomputed.analysis.fitResidualRmsM?.toFixed(4) ?? '—',
+                  heldRms: recomputed.analysis.heldOutResidualRmsM?.toFixed(4) ?? '—',
+                })
+              : fill(dict.catatan.statusRefused, {
+                  percent,
+                  days: lengthDays === null ? '—' : lengthDays.toFixed(0),
+                  reason: recomputed.analysis.outcome.message,
+                })}
+      </output>
 
       {!touched ? (
         children

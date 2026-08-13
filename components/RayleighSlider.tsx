@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { ConstituentTable } from '@/components/table/ConstituentTable'
-import type { Dictionary } from '@/lib/i18n/dictionary'
+import { fill, type Dictionary } from '@/lib/i18n/dictionary'
 import { loadRecord } from '@/lib/records/registry'
 import { STANDARD_SET } from '@/lib/tide/constituents'
 import { conditioningOf, fitHarmonics } from '@/lib/tide/fit'
@@ -74,6 +74,27 @@ export function RayleighSlider({
           </output>
         </div>
       </div>
+
+      {/*
+       * What the slider just did, for a reader who cannot see the cards below
+       * it change (WCAG 4.1.3). <output> carries an implicit role="status", so
+       * this needs no ARIA of its own — and it announces the summary, not the
+       * table: reading ten rows on every tick of a slider is worse than
+       * silence.
+       */}
+      <output className="sr-only">
+        {state === null
+          ? dict.common.loading
+          : state.outcome !== null && state.outcome.type === 'fit'
+            ? fill(dict.resolusi.status, {
+                days,
+                kappa: state.outcome.conditionNumber.toFixed(2),
+                conditioning: dict.conditioning[state.outcome.conditioning],
+                kept: state.kept.length,
+                total: STANDARD_SET.length,
+              })
+            : fill(dict.resolusi.statusNone, { days })}
+      </output>
 
       {state === null ? (
         <p className="text-caption text-inkFaint">{dict.common.loading}</p>

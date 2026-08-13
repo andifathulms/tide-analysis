@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { TideChart } from '@/components/chart/TideChart'
 import { buildChartModel } from '@/lib/chart/model'
 import { blendSeries, REBUILD_MS } from '@/lib/chart/motion'
-import type { Dictionary } from '@/lib/i18n/dictionary'
+import { fill, type Dictionary } from '@/lib/i18n/dictionary'
 import { loadRecord } from '@/lib/records/registry'
 import type { ConstituentName } from '@/lib/tide/constituents'
 import type { HarmonicFit } from '@/lib/tide/fit'
@@ -169,6 +169,18 @@ export function ConstituentExplorer({
           M2 saja
         </button>
       </div>
+
+      {/* Which constituents are on now — the chart change is invisible to a
+          screen reader, and aria-label on the SVG does not announce (4.1.3). */}
+      <output className="sr-only">
+        {fill(dict.komponen.status, {
+          count: enabled.size,
+          names: fit.constants
+            .filter((c) => enabled.has(c.name))
+            .map((c) => c.name)
+            .join(', '),
+        })}
+      </output>
 
       {model === null ? (
         <p className="text-caption text-inkFaint">{dict.common.loading}</p>

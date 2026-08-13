@@ -196,6 +196,8 @@ export interface Dictionary {
     readonly leakageLead: string
     readonly leakageIsolated: string
     readonly leakageConfounded: string
+    readonly status: string
+    readonly statusRefused: string
     readonly leakageWarning: string
     readonly stepTitle: string
     readonly stepBody: string
@@ -216,6 +218,7 @@ export interface Dictionary {
     readonly fall: string
     readonly title: string
     readonly lead: string
+    readonly status: string
     readonly explorerEyebrow: string
     readonly explorerTitle: string
     readonly explorerLead: string
@@ -267,6 +270,8 @@ export interface Dictionary {
     readonly surveyKept: string
     readonly surveyLost: string
     readonly surveyNone: string
+    readonly status: string
+    readonly statusNone: string
     readonly perStationTitle: string
     readonly perStationLead: string
     readonly coverageTitle: string
@@ -550,6 +555,10 @@ const id: Dictionary = {
     stepBody:
       'Nol alat berubah {times} selama rekaman. Tinggi sebelum dan sesudahnya tidak merujuk nol yang sama, jadi setiap penggal diberi muka air rata-ratanya sendiri dan pergeserannya dilaporkan di bawah — bukan dibiarkan terserap ke dalam residu.',
     noRecords: 'Belum ada rekaman yang lolos gerbang lisensi. Jalankan {command}.',
+    status:
+      'Dicocokkan pada {percent} persen rekaman, {days} hari. Bilangan kondisi {kappa}. RMS residu {fitRms} m pada bagian yang dicocokkan, {heldRms} m pada bagian yang ditahan.',
+    statusRefused:
+      'Dicocokkan pada {percent} persen rekaman, {days} hari. Permintaan ditolak: {reason}',
     leakageWarning:
       'Ini bukan konstanta harmonik dan tidak boleh diperlakukan sebagai amplitudo. Sebagian dari tiap angka di atas adalah milik komponen yang bercampur dengannya — semakin tinggi korelasi yang tertera, semakin besar bagian itu, dan pada 0,9 ke atas angkanya tidak lagi berarti apa pun sendirian. Berapa persisnya bagian itu tidak dapat diketahui; justru itulah sebabnya penyelesaian menolak. Fase sengaja tidak ditampilkan.',
   },
@@ -572,6 +581,7 @@ const id: Dictionary = {
     title: 'Komponen harmonik',
     lead:
       'Amplitudo, fase, dan frekuensi tiap komponen. Yang tidak dapat dipisahkan oleh rekaman ditandai, bukan dilaporkan.',
+    status: '{count} komponen aktif: {names}.',
     explorerEyebrow: 'Interaktif',
     explorerTitle: 'Penjelajah komponen',
     explorerLead:
@@ -637,6 +647,9 @@ const id: Dictionary = {
     surveyKept: 'Dapat dipisahkan',
     surveyLost: 'Berguguran',
     surveyNone: 'tidak ada',
+    status:
+      'Jendela {days} hari. Bilangan kondisi {kappa}, {conditioning}. {kept} dari {total} komponen dapat dipisahkan.',
+    statusNone: 'Jendela {days} hari. Tidak ada komponen yang dapat dipisahkan pada jendela ini.',
     perStationTitle: 'Rekaman yang ada di situs ini',
     perStationLead:
       'Tangga di atas berlaku universal. Untuk melihat tangga itu berhadapan dengan rekaman sungguhan — komponen berguguran dan bilangan kondisi naik saat jendela diperpendek — pilih satu stasiun.',
@@ -957,6 +970,10 @@ const en: Dictionary = {
     stepBody:
       'The gauge’s zero changed {times} during the record. Heights either side of it are not referenced to the same zero, so each segment is given its own mean level and the shift is reported below rather than being left to soak into the residual.',
     noRecords: 'No record has passed the licence gate yet. Run {command}.',
+    status:
+      'Fitted over {percent} per cent of the record, {days} days. Condition number {kappa}. Residual RMS {fitRms} m over the fitted part, {heldRms} m over the held-out part.',
+    statusRefused:
+      'Fitted over {percent} per cent of the record, {days} days. Request refused: {reason}',
     leakageWarning:
       'This is not a harmonic constant and must not be read as an amplitude. Part of each number above belongs to whatever it is mixed in with — the higher the correlation shown, the larger that part, and above about 0.9 the number means nothing on its own at all. How much exactly cannot be known, which is why the solve refused in the first place. No phase is shown, deliberately.',
   },
@@ -979,6 +996,7 @@ const en: Dictionary = {
     title: 'Harmonic constituents',
     lead:
       'Amplitude, phase and frequency per constituent. The ones the record cannot honestly resolve are marked, not reported.',
+    status: '{count} constituents on: {names}.',
     explorerEyebrow: 'Interactive',
     explorerTitle: 'Constituent explorer',
     explorerLead:
@@ -1044,6 +1062,9 @@ const en: Dictionary = {
     surveyKept: 'Separable',
     surveyLost: 'Dropped',
     surveyNone: 'none',
+    status:
+      'Window of {days} days. Condition number {kappa}, {conditioning}. {kept} of {total} constituents separable.',
+    statusNone: 'Window of {days} days. No constituent is separable on this window.',
     perStationTitle: 'The records on this site',
     perStationLead:
       'The ladder above is universal. To watch it meet a real record — constituents dropping out and the condition number climbing as the window shortens — pick a station.',
