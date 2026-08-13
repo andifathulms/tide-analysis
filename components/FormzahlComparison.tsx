@@ -46,7 +46,7 @@ export function FormzahlComparison({
             <tr className="border-b border-rule text-left">
               <th className="eyebrow py-2 pr-4">{dict.common.station}</th>
               <th className="eyebrow py-2 pr-4 text-right">F</th>
-              <th className="eyebrow py-2 pr-4">Tipe</th>
+              <th className="eyebrow py-2 pr-4">{dict.common.tideTypeColumn}</th>
               <th className="eyebrow py-2 pr-4 text-right">M2</th>
               <th className="eyebrow py-2 pr-4 text-right">S2</th>
               <th className="eyebrow py-2 pr-4 text-right">K1</th>
@@ -102,10 +102,10 @@ export function FormzahlComparison({
           ))}
         </div>
         <div className="mt-9 flex justify-between text-micro uppercase tracking-wider text-inkFaint">
-          <span>harian ganda</span>
-          <span>campuran → ganda</span>
-          <span>campuran → tunggal</span>
-          <span>harian tunggal</span>
+          <span>{dict.tideType['harian-ganda'].short}</span>
+          <span>{dict.tideType['campuran-condong-ganda'].short}</span>
+          <span>{dict.tideType['campuran-condong-tunggal'].short}</span>
+          <span>{dict.tideType['harian-tunggal'].short}</span>
         </div>
       </div>
     </section>

@@ -59,14 +59,11 @@ export function FitDiagnostics({ dict, fit }: { dict: Dictionary; fit: HarmonicF
          * which put the loudest fact about the record in the quietest type on
          * the page.
          */}
-        <h3 className="text-title text-unresolved">
-          Datum bergeser di tengah rekaman
-        </h3>
+        <h3 className="text-title text-unresolved">{dict.catatan.stepTitle}</h3>
         <p className="mt-1.5 max-w-reading text-body">
-          Nol alat berubah {fit.steps.length === 1 ? 'satu kali' : `${fit.steps.length} kali`}{' '}
-          selama rekaman. Tinggi sebelum dan sesudahnya tidak merujuk nol yang sama, jadi setiap
-          penggal diberi muka air rata-ratanya sendiri dan pergeserannya dilaporkan di bawah —
-          bukan dibiarkan terserap ke dalam residu.
+          {fill(dict.catatan.stepBody, {
+            times: `${fit.steps.length}×`,
+          })}
         </p>
         <ul className="numeric mt-3 space-y-1 text-caption">
           {fit.levels.map((level) => (

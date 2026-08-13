@@ -155,10 +155,7 @@ export default async function ConstituentsPage({
                     </li>
                   ))}
                 </ul>
-                <Caption>
-                  Nilai terbit di atas hanya pembanding. Tidak satu pun dipakai sebagai masukan bagi
-                  angka yang dihitung di halaman ini.
-                </Caption>
+                <Caption>{dict.komponen.publishedNote}</Caption>
               </div>
             </Section>
           )}
@@ -174,7 +171,7 @@ export default async function ConstituentsPage({
           )}
 
           <Section
-            eyebrow="Interaktif"
+            eyebrow={dict.komponen.explorerEyebrow}
             title={dict.komponen.explorerTitle}
             lead={dict.komponen.explorerLead}
           >

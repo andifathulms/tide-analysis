@@ -3,7 +3,7 @@ import { NavigationWarning } from '@/components/NavigationWarning'
 import { StationHeader, StationNav } from '@/components/StationNav'
 import { RefusalNotice } from '@/components/Diagnostics'
 import { Card, Section, Stat } from '@/components/ui'
-import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
+import { dictionary, fill, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations } from '@/lib/records/registry'
 import { admiraltyFit, compareMethods } from '@/lib/tide/admiralty'
 import { ADMIRALTY_SET } from '@/lib/tide/constituents'
@@ -56,7 +56,7 @@ export default async function ComparisonPage({
         <NavigationWarning dict={dict} compact />
       </div>
 
-      <Section eyebrow="Metode" title={dict.banding.title} lead={dict.banding.lead} />
+      <Section eyebrow={dict.banding.eyebrow} title={dict.banding.title} lead={dict.banding.lead} />
 
       {primary.outcome.type === 'refusal' && <RefusalNotice dict={dict} refusal={primary.outcome} />}
       {admiralty.type === 'refusal' && <RefusalNotice dict={dict} refusal={admiralty} />}
@@ -153,15 +153,9 @@ export default async function ComparisonPage({
 
           <section className="max-w-reading space-y-2 text-caption text-inkMuted">
             <p>
-              Admiralty menyimpulkan {admiralty.inferred.join(' dan ')} dari tetangganya melalui
-              rasio baku, bukan menyelesaikannya. Kuadrat terkecil menyelesaikan semua komponen
-              bersama-sama sehingga memperhitungkan korelasi antar tetangga; itulah satu-satunya
-              perbedaan mendasar antara keduanya di sini.
+              {fill(dict.banding.inferredNote, { inferred: admiralty.inferred.join(', ') })}
             </p>
-            <p>
-              Implementasi Admiralty di sini adalah skema proyeksi dan inferensi, bukan reproduksi
-              tabulasi cetak NP 159 beserta pengali penyaringnya.
-            </p>
+            <p>{dict.banding.scopeNote}</p>
           </section>
         </>
       )}

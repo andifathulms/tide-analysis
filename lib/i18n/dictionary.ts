@@ -59,6 +59,7 @@ export interface Dictionary {
     readonly speed: string
     readonly period_h: string
     readonly constituent: string
+    readonly tideTypeColumn: string
     readonly conditionNumber: string
     readonly residualRms: string
     readonly meanLevel: string
@@ -86,6 +87,7 @@ export interface Dictionary {
     readonly inferred: string
     readonly uncertainty: string
     readonly provenance: string
+    readonly nodalAtPrediction: string
   }
   readonly conditioning: Record<'baik' | 'wajar' | 'marginal' | 'buruk', string>
   /**
@@ -98,7 +100,12 @@ export interface Dictionary {
    */
   readonly tideType: Record<
     'harian-ganda' | 'campuran-condong-ganda' | 'campuran-condong-tunggal' | 'harian-tunggal',
-    { readonly label: string; readonly description: string }
+    {
+      readonly label: string
+      readonly description: string
+      /** Two or three words, for the ruled scale strip where a row of full labels would not fit. */
+      readonly short: string
+    }
   >
   readonly asymmetryType: Record<
     'pasang-lebih-cepat' | 'surut-lebih-cepat' | 'hampir-simetris',
@@ -170,6 +177,9 @@ export interface Dictionary {
     readonly leakageIsolated: string
     readonly leakageConfounded: string
     readonly leakageWarning: string
+    readonly stepTitle: string
+    readonly stepBody: string
+    readonly noRecords: string
   }
   readonly komponen: {
     readonly eyebrow: string
@@ -186,10 +196,12 @@ export interface Dictionary {
     readonly fall: string
     readonly title: string
     readonly lead: string
+    readonly explorerEyebrow: string
     readonly explorerTitle: string
     readonly explorerLead: string
     readonly formzahlTitle: string
     readonly publishedTitle: string
+    readonly publishedNote: string
     readonly correlationEyebrow: string
     readonly correlationTitle: string
     readonly correlationLead: string
@@ -248,14 +260,21 @@ export interface Dictionary {
     readonly coverageNote: string
   }
   readonly banding: {
+    readonly eyebrow: string
     readonly title: string
     readonly lead: string
     readonly difference: string
+    readonly inferredNote: string
+    readonly scopeNote: string
   }
   readonly prediksi: {
+    readonly eyebrow: string
     readonly title: string
     readonly lead: string
     readonly extremaTitle: string
+    readonly clock: string
+    readonly kind: string
+    readonly provenance: string
   }
   readonly metode: {
     readonly title: string
@@ -296,6 +315,7 @@ const id: Dictionary = {
     speed: 'Kecepatan (°/jam)',
     period_h: 'Periode (jam)',
     constituent: 'Komponen',
+    tideTypeColumn: 'Tipe',
     conditionNumber: 'Bilangan kondisi κ',
     residualRms: 'RMS residu',
     meanLevel: 'Muka air rata-rata Z₀',
@@ -323,6 +343,7 @@ const id: Dictionary = {
     inferred: 'Disimpulkan',
     uncertainty: 'Ketidakpastian 1σ',
     provenance: 'Sumber, lisensi, dan catatan datum',
+    nodalAtPrediction: 'f dan u dihitung pada waktu prediksi',
   },
   conditioning: {
     baik: 'baik',
@@ -334,19 +355,23 @@ const id: Dictionary = {
     'harian-ganda': {
       label: 'Harian ganda (semidiurnal)',
       description: 'Dua pasang dan dua surut setiap hari, tingginya hampir sama.',
+      short: 'harian ganda',
     },
     'campuran-condong-ganda': {
       label: 'Campuran condong ke harian ganda',
       description: 'Dua pasang dan dua surut setiap hari, tetapi tinggi dan waktunya berbeda.',
+      short: 'campuran → ganda',
     },
     'campuran-condong-tunggal': {
       label: 'Campuran condong ke harian tunggal',
       description:
         'Umumnya satu pasang dan satu surut sehari; pada saat tertentu muncul dua yang sangat timpang.',
+      short: 'campuran → tunggal',
     },
     'harian-tunggal': {
       label: 'Harian tunggal (diurnal)',
       description: 'Satu pasang dan satu surut setiap hari.',
+      short: 'harian tunggal',
     },
   },
   asymmetryType: {
@@ -463,6 +488,10 @@ const id: Dictionary = {
       'Komponen yang ditolak tidak lenyap. Energinya tetap ada di rekaman, dan karena tidak ikut dimodelkan, ia mengendap di pita residu. Berikut besarnya residu pada frekuensi masing-masing — jawaban atas pertanyaan yang wajar: yang tadi ditolak itu remah-remah, atau sesuatu yang berarti?',
     leakageIsolated: '— tidak berimpit dengan komponen mana pun yang dicocokkan.',
     leakageConfounded: 'bercampur dengan',
+    stepTitle: 'Datum bergeser di tengah rekaman',
+    stepBody:
+      'Nol alat berubah {times} selama rekaman. Tinggi sebelum dan sesudahnya tidak merujuk nol yang sama, jadi setiap penggal diberi muka air rata-ratanya sendiri dan pergeserannya dilaporkan di bawah — bukan dibiarkan terserap ke dalam residu.',
+    noRecords: 'Belum ada rekaman yang lolos gerbang lisensi. Jalankan {command}.',
     leakageWarning:
       'Ini bukan konstanta harmonik dan tidak boleh diperlakukan sebagai amplitudo. Sebagian dari tiap angka di atas adalah milik komponen yang bercampur dengannya — semakin tinggi korelasi yang tertera, semakin besar bagian itu, dan pada 0,9 ke atas angkanya tidak lagi berarti apa pun sendirian. Berapa persisnya bagian itu tidak dapat diketahui; justru itulah sebabnya penyelesaian menolak. Fase sengaja tidak ditampilkan.',
   },
@@ -485,11 +514,14 @@ const id: Dictionary = {
     title: 'Komponen harmonik',
     lead:
       'Amplitudo, fase, dan frekuensi tiap komponen. Yang tidak dapat dipisahkan oleh rekaman ditandai, bukan dilaporkan.',
+    explorerEyebrow: 'Interaktif',
     explorerTitle: 'Penjelajah komponen',
     explorerLead:
       'Mulailah dengan M2 sendirian — gelombang dua kali sehari yang bersih. Tambahkan S2 dan irama purnama-perbani muncul dari pelayangan dua kosinus itu.',
     formzahlTitle: 'Bilangan Formzahl dan tipe pasang surut',
     publishedTitle: 'Nilai terbit untuk perbandingan',
+    publishedNote:
+      'Nilai terbit di atas hanya pembanding. Tidak satu pun dipakai sebagai masukan bagi angka yang dihitung di halaman ini.',
     correlationEyebrow: 'Geometri',
     correlationTitle: 'Seberapa mirip komponen-komponen ini di mata rekaman',
     correlationLead:
@@ -567,16 +599,26 @@ const id: Dictionary = {
       'Perhatikan kolom rentang: angkanya sama di setiap baris. Jeda diambil dari tengah, jadi sampel pertama dan terakhir tidak pernah bergeser — dan rentang adalah satu-satunya hal yang dibaca kriteria Rayleigh. Menurut ukuran itu, semua baris di atas adalah rekaman yang sama. Nyatanya tidak: satu jeda panjang meninggalkan dua gerombolan sampel tanpa apa pun yang menghubungkannya, sehingga beda fase antar keduanya menjadi ambigu dan pasangan yang berdekatan menyatu kembali. Jumlah jam yang sama, tetapi tersebar, membiarkan rekaman tetap menyambung dan nyaris tidak berbiaya. Topeng dibentuk oleh aturan tetap, bukan diundi, jadi tabel ini sama di setiap pembangunan situs.',
   },
   banding: {
+    eyebrow: 'Metode',
     title: 'Banding metode',
     lead:
       'Rekaman yang sama, dua metode klasik. Kuadrat terkecil menyelesaikan semua komponen bersama-sama; Admiralty memproyeksikan satu per satu dan menyimpulkan sisanya dari rasio baku.',
     difference: 'Selisih',
+    inferredNote:
+      'Admiralty menyimpulkan {inferred} dari tetangganya melalui rasio baku, bukan menyelesaikannya. Kuadrat terkecil menyelesaikan semua komponen bersama-sama sehingga memperhitungkan korelasi antar tetangga; itulah satu-satunya perbedaan mendasar antara keduanya di sini.',
+    scopeNote:
+      'Implementasi Admiralty di sini adalah skema proyeksi dan inferensi, bukan reproduksi tabulasi cetak NP 159 beserta pengali penyaringnya.',
   },
   prediksi: {
+    eyebrow: 'Ke depan',
     title: 'Prediksi',
     lead:
       'Konstanta hasil pencocokan diteruskan ke depan. Koreksi nodal dihitung ulang pada waktu prediksi, bukan dibawa dari jendela pencocokan.',
     extremaTitle: 'Pasang dan surut',
+    clock: 'Jam',
+    kind: 'Jenis',
+    provenance:
+      'Tinggi merujuk {datum}. Dihitung dari {count} komponen yang dicocokkan pada {from} — {to}; κ = {kappa}; RMS residu {rms} m. Bukan untuk navigasi.',
   },
   metode: {
     title: 'Metode',
@@ -618,6 +660,7 @@ const en: Dictionary = {
     speed: 'Speed (°/h)',
     period_h: 'Period (h)',
     constituent: 'Constituent',
+    tideTypeColumn: 'Type',
     conditionNumber: 'Condition number κ',
     residualRms: 'Residual RMS',
     meanLevel: 'Mean level Z₀',
@@ -645,6 +688,7 @@ const en: Dictionary = {
     inferred: 'Inferred',
     uncertainty: '1σ uncertainty',
     provenance: 'Source, licence and datum notes',
+    nodalAtPrediction: 'f and u are computed at the prediction time',
   },
   conditioning: {
     baik: 'good',
@@ -656,20 +700,24 @@ const en: Dictionary = {
     'harian-ganda': {
       label: 'Semidiurnal',
       description: 'Two high waters and two low waters a day, of nearly equal height.',
+      short: 'semidiurnal',
     },
     'campuran-condong-ganda': {
       label: 'Mixed, mainly semidiurnal',
       description:
         'Two high waters and two low waters a day, but of differing height and spacing.',
+      short: 'mixed → semi',
     },
     'campuran-condong-tunggal': {
       label: 'Mixed, mainly diurnal',
       description:
         'Usually one high and one low water a day; at times two, badly unequal.',
+      short: 'mixed → diurnal',
     },
     'harian-tunggal': {
       label: 'Diurnal',
       description: 'One high water and one low water a day.',
+      short: 'diurnal',
     },
   },
   asymmetryType: {
@@ -785,6 +833,10 @@ const en: Dictionary = {
       'A refused constituent does not stop existing. Its energy is still in the record, and since the fit did not model it, it has settled into the residual band. Here is the size of the residual at each refused frequency — an answer to the fair question of whether you were denied a rounding error or something that matters.',
     leakageIsolated: '— not confounded with anything in the fitted set.',
     leakageConfounded: 'mixed in with',
+    stepTitle: 'The datum moved mid-record',
+    stepBody:
+      'The gauge’s zero changed {times} during the record. Heights either side of it are not referenced to the same zero, so each segment is given its own mean level and the shift is reported below rather than being left to soak into the residual.',
+    noRecords: 'No record has passed the licence gate yet. Run {command}.',
     leakageWarning:
       'This is not a harmonic constant and must not be read as an amplitude. Part of each number above belongs to whatever it is mixed in with — the higher the correlation shown, the larger that part, and above about 0.9 the number means nothing on its own at all. How much exactly cannot be known, which is why the solve refused in the first place. No phase is shown, deliberately.',
   },
@@ -807,11 +859,14 @@ const en: Dictionary = {
     title: 'Harmonic constituents',
     lead:
       'Amplitude, phase and frequency per constituent. The ones the record cannot honestly resolve are marked, not reported.',
+    explorerEyebrow: 'Interactive',
     explorerTitle: 'Constituent explorer',
     explorerLead:
       'Start with M2 alone — a clean twice-daily wave. Add S2 and the spring-neap rhythm emerges from the beat between two cosines.',
     formzahlTitle: 'Formzahl number and tide type',
     publishedTitle: 'Published values, for comparison',
+    publishedNote:
+      'The published values above are for comparison only. Not one of them is an input to any number computed on this page.',
     correlationEyebrow: 'The geometry',
     correlationTitle: 'How alike these constituents look to the record',
     correlationLead:
@@ -889,16 +944,26 @@ const en: Dictionary = {
       'Look at the span column: it is the same on every row. The outage is taken from the middle, so the first and last samples never move — and span is the only thing the Rayleigh criterion reads. By that measure every row above is the same record. They are not: a single long outage leaves two clusters of samples with nothing joining them, so the phase difference across the hole becomes ambiguous and close pairs collapse back together. The same hours removed at scattered times leave the record joined up and cost almost nothing. The masks are constructed by a fixed rule rather than sampled, so this table is the same on every build.',
   },
   banding: {
+    eyebrow: 'Methods',
     title: 'Method comparison',
     lead:
       'The same record, two classical methods. Least squares solves every constituent jointly; Admiralty projects them one at a time and infers the rest from fixed ratios.',
     difference: 'Difference',
+    inferredNote:
+      'Admiralty infers {inferred} from its neighbours through fixed ratios rather than solving for them. Least squares solves every constituent jointly and so accounts for the correlation between neighbours; that is the only fundamental difference between the two here.',
+    scopeNote:
+      'The Admiralty implementation here is its projection-and-inference scheme, not a reproduction of the printed NP 159 tabulation and its filtering multipliers.',
   },
   prediksi: {
+    eyebrow: 'Forward',
     title: 'Prediction',
     lead:
       'The fitted constants carried forward. Nodal corrections are recomputed at the prediction time rather than carried from the fit window.',
     extremaTitle: 'High and low waters',
+    clock: 'Clock',
+    kind: 'Kind',
+    provenance:
+      'Heights are referenced to {datum}. Computed from {count} constituents fitted over {from} — {to}; κ = {kappa}; residual RMS {rms} m. Not for navigation.',
   },
   metode: {
     title: 'Method',

@@ -4,7 +4,7 @@ import { FormzahlComparison, type FormzahlRow } from '@/components/FormzahlCompa
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { TideChart } from '@/components/chart/TideChart'
 import { Badge, Card, Section, Stat, TraceKey } from '@/components/ui'
-import { dictionary, isLocale, type Locale } from '@/lib/i18n/dictionary'
+import { dictionary, fill, isLocale, type Locale } from '@/lib/i18n/dictionary'
 import { MANIFEST, stations } from '@/lib/records/registry'
 import { formatDate, formatDays } from '@/lib/view/format'
 import { heroChart } from '@/lib/view/hero'
@@ -222,7 +222,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
       >
         {list.length === 0 ? (
           <p className="text-body text-unresolved">
-            Belum ada rekaman yang lolos gerbang lisensi. Jalankan <code>pnpm records:fetch</code>.
+            {fill(dict.catatan.noRecords, { command: 'pnpm records:fetch' })}
           </p>
         ) : (
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

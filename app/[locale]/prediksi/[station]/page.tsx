@@ -4,7 +4,7 @@ import { TideChart } from '@/components/chart/TideChart'
 import { StationHeader, StationNav } from '@/components/StationNav'
 import { RefusalNotice } from '@/components/Diagnostics'
 import { Section } from '@/components/ui'
-import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
+import { dictionary, fill, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations } from '@/lib/records/registry'
 import { buildChartModel } from '@/lib/chart/model'
 import { findExtrema, predictHeights, timeGrid } from '@/lib/tide/predict'
@@ -97,10 +97,14 @@ export default async function PredictionPage({
       />
       <NavigationWarning dict={dict} />
 
-      <Section eyebrow="Ke depan" title={dict.prediksi.title} lead={dict.prediksi.lead} />
+      <Section
+        eyebrow={dict.prediksi.eyebrow}
+        title={dict.prediksi.title}
+        lead={dict.prediksi.lead}
+      />
       <p className="numeric max-w-reading text-caption text-inkMuted">
         {formatDate(startSec, zone)} — {formatDate(endSec, zone)} · {dict.common.datum}:{' '}
-        {record.datum.code} · f dan u dihitung pada waktu prediksi
+        {record.datum.code} · {dict.common.nodalAtPrediction}
       </p>
 
       <figure className="card p-4">
@@ -119,8 +123,10 @@ export default async function PredictionPage({
             <thead>
               <tr className="border-b border-rule text-left">
                 <th className="py-2 pr-4">{dict.common.time}</th>
-                <th className="py-2 pr-4">Jam ({zone.label})</th>
-                <th className="py-2 pr-4">Jenis</th>
+                <th className="py-2 pr-4">
+                  {dict.prediksi.clock} ({zone.label})
+                </th>
+                <th className="py-2 pr-4">{dict.prediksi.kind}</th>
                 <th className="py-2 text-right">{dict.common.height} (m)</th>
               </tr>
             </thead>
@@ -139,10 +145,14 @@ export default async function PredictionPage({
           </table>
         </div>
         <p className="mt-3 max-w-reading text-caption text-inkFaint">
-          Tinggi merujuk {record.datum.label}. Dihitung dari {fit.constants.length} komponen yang
-          dicocokkan pada {formatDateTime(fit.windowStartSec, zone)} —{' '}
-          {formatDateTime(fit.windowEndSec, zone)}; κ = {fit.conditionNumber.toFixed(2)}; RMS residu{' '}
-          {fit.residualRmsM.toFixed(4)} m. Bukan untuk navigasi.
+          {fill(dict.prediksi.provenance, {
+            datum: record.datum.label,
+            count: fit.constants.length,
+            from: formatDateTime(fit.windowStartSec, zone),
+            to: formatDateTime(fit.windowEndSec, zone),
+            kappa: fit.conditionNumber.toFixed(2),
+            rms: fit.residualRmsM.toFixed(4),
+          })}
         </p>
       </section>
     </div>
