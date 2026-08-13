@@ -11,6 +11,22 @@ export function isLocale(value: string): value is Locale {
   return (LOCALES as readonly string[]).includes(value)
 }
 
+/**
+ * Substitute `{name}` placeholders in a dictionary template.
+ *
+ * Several strings the UI needs are sentences about numbers, and the two
+ * languages do not put the numbers in the same place. Templates keep the word
+ * order in the dictionary where a translator can see it, rather than spliced
+ * across JSX fragments. A missing key renders as empty rather than as the
+ * literal placeholder — a half-formed sentence is better than one with
+ * braces in it.
+ */
+export function fill(template: string, values: Record<string, string | number>): string {
+  return template.replace(/\{(\w+)\}/g, (_, key: string) =>
+    key in values ? String(values[key]) : '',
+  )
+}
+
 export interface Dictionary {
   readonly siteName: string
   readonly tagline: string
@@ -35,6 +51,7 @@ export interface Dictionary {
     readonly datum: string
     readonly period: string
     readonly days: string
+    readonly hours: string
     readonly samples: string
     readonly gaps: string
     readonly amplitude: string
@@ -71,6 +88,30 @@ export interface Dictionary {
     readonly provenance: string
   }
   readonly conditioning: Record<'baik' | 'wajar' | 'marginal' | 'buruk', string>
+  /**
+   * Copy for values that lib/tide reports as a discriminated `type`.
+   *
+   * The numerical core also carries an Indonesian `label` and `description`
+   * beside each of these, which is where they used to be read from — and why
+   * an English reader met Indonesian prose on every station page. The type is
+   * the fact; the words are presentation, so they live here.
+   */
+  readonly tideType: Record<
+    'harian-ganda' | 'campuran-condong-ganda' | 'campuran-condong-tunggal' | 'harian-tunggal',
+    { readonly label: string; readonly description: string }
+  >
+  readonly asymmetryType: Record<
+    'pasang-lebih-cepat' | 'surut-lebih-cepat' | 'hampir-simetris',
+    { readonly label: string; readonly description: string }
+  >
+  readonly strength: Record<'kuat' | 'sedang' | 'lemah', string>
+  /** Refusal sentences, rebuilt from the structured conflict rather than baked. */
+  readonly refusalText: {
+    readonly rayleighPair: string
+    readonly rayleighMean: string
+    readonly conflictPair: string
+    readonly conflictMean: string
+  }
   readonly home: {
     readonly heroTitle: string
     readonly heroLead: string
@@ -247,6 +288,7 @@ const id: Dictionary = {
     datum: 'Datum',
     period: 'Periode',
     days: 'hari',
+    hours: 'jam',
     samples: 'sampel',
     gaps: 'jeda',
     amplitude: 'Amplitudo H (m)',
@@ -287,6 +329,52 @@ const id: Dictionary = {
     wajar: 'wajar',
     marginal: 'marginal',
     buruk: 'buruk — angka di bawah ini tidak dapat dipercaya',
+  },
+  tideType: {
+    'harian-ganda': {
+      label: 'Harian ganda (semidiurnal)',
+      description: 'Dua pasang dan dua surut setiap hari, tingginya hampir sama.',
+    },
+    'campuran-condong-ganda': {
+      label: 'Campuran condong ke harian ganda',
+      description: 'Dua pasang dan dua surut setiap hari, tetapi tinggi dan waktunya berbeda.',
+    },
+    'campuran-condong-tunggal': {
+      label: 'Campuran condong ke harian tunggal',
+      description:
+        'Umumnya satu pasang dan satu surut sehari; pada saat tertentu muncul dua yang sangat timpang.',
+    },
+    'harian-tunggal': {
+      label: 'Harian tunggal (diurnal)',
+      description: 'Satu pasang dan satu surut setiap hari.',
+    },
+  },
+  asymmetryType: {
+    'pasang-lebih-cepat': {
+      label: 'Pasang naik lebih cepat',
+      description:
+        'Air naik dalam waktu lebih singkat daripada turunnya. Arus pasang menjadi lebih kencang dan berumur pendek, arus surut lebih lemah dan panjang.',
+    },
+    'surut-lebih-cepat': {
+      label: 'Surut lebih cepat',
+      description:
+        'Air turun dalam waktu lebih singkat daripada naiknya. Arus surut menjadi lebih kencang, seperti yang tercatat di banyak estuari.',
+    },
+    'hampir-simetris': {
+      label: 'Hampir simetris',
+      description:
+        'Naik dan turun memakan waktu yang hampir sama. Perairan di sini terlalu dalam untuk menghasilkan distorsi perairan dangkal yang berarti.',
+    },
+  },
+  strength: { kuat: 'kuat', sedang: 'sedang', lemah: 'lemah' },
+  refusalText: {
+    rayleighPair: '{a} dan {b} tidak dapat dipisahkan pada rekaman {available} hari.',
+    rayleighMean:
+      '{a} tidak dapat dipisahkan dari muka air rata-rata pada rekaman {available} hari.',
+    conflictPair:
+      '{a} dan {b} berbeda hanya {separation}°/jam: perlu rekaman {required} hari untuk memisahkannya, tersedia {available} hari.',
+    conflictMean:
+      '{a} tidak dapat dipisahkan dari muka air rata-rata: perlu rekaman {required} hari, tersedia {available} hari.',
   },
   home: {
     heroTitle: 'Pasang surut, dihitung dari air laut yang sebenarnya',
@@ -522,6 +610,7 @@ const en: Dictionary = {
     datum: 'Datum',
     period: 'Period',
     days: 'days',
+    hours: 'h',
     samples: 'samples',
     gaps: 'gaps',
     amplitude: 'Amplitude H (m)',
@@ -562,6 +651,53 @@ const en: Dictionary = {
     wajar: 'fair',
     marginal: 'marginal',
     buruk: 'poor — the numbers below cannot be trusted',
+  },
+  tideType: {
+    'harian-ganda': {
+      label: 'Semidiurnal',
+      description: 'Two high waters and two low waters a day, of nearly equal height.',
+    },
+    'campuran-condong-ganda': {
+      label: 'Mixed, mainly semidiurnal',
+      description:
+        'Two high waters and two low waters a day, but of differing height and spacing.',
+    },
+    'campuran-condong-tunggal': {
+      label: 'Mixed, mainly diurnal',
+      description:
+        'Usually one high and one low water a day; at times two, badly unequal.',
+    },
+    'harian-tunggal': {
+      label: 'Diurnal',
+      description: 'One high water and one low water a day.',
+    },
+  },
+  asymmetryType: {
+    'pasang-lebih-cepat': {
+      label: 'The flood is faster',
+      description:
+        'The water rises in less time than it falls. Flood currents run stronger and shorter, ebb currents weaker and longer.',
+    },
+    'surut-lebih-cepat': {
+      label: 'The ebb is faster',
+      description:
+        'The water falls in less time than it rises, so ebb currents run stronger — as recorded in many estuaries.',
+    },
+    'hampir-simetris': {
+      label: 'Nearly symmetric',
+      description:
+        'Rise and fall take about the same time. The water here is too deep to produce meaningful shallow-water distortion.',
+    },
+  },
+  strength: { kuat: 'strong', sedang: 'moderate', lemah: 'weak' },
+  refusalText: {
+    rayleighPair: '{a} and {b} cannot be separated on a record of {available} days.',
+    rayleighMean:
+      '{a} cannot be separated from the mean level on a record of {available} days.',
+    conflictPair:
+      '{a} and {b} differ by only {separation}°/h: separating them needs a record of {required} days, and {available} are available.',
+    conflictMean:
+      '{a} cannot be separated from the mean level: that needs a record of {required} days, and {available} are available.',
   },
   home: {
     heroTitle: 'Tides, computed from the sea itself',

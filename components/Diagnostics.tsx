@@ -1,7 +1,8 @@
 import type { Dictionary } from '@/lib/i18n/dictionary'
 import type { Conditioning, HarmonicFit } from '@/lib/tide/fit'
 import type { HarmonicRefusal } from '@/lib/tide/fit'
-import { describeConflict } from '@/lib/tide/rayleigh'
+import { fill } from '@/lib/i18n/dictionary'
+import type { ResolutionConflict } from '@/lib/tide/rayleigh'
 
 const CONDITIONING_CLASS: Record<Conditioning, string> = {
   baik: 'text-prediction',
@@ -87,6 +88,46 @@ export function FitDiagnostics({ dict, fit }: { dict: Dictionary; fit: HarmonicF
 }
 
 /**
+ * The refusal sentences, built here rather than read off `refusal.message`.
+ *
+ * lib/tide bakes an Indonesian string into every refusal and conflict, which
+ * is how an English reader ended up meeting "S2 dan K2 berbeda hanya
+ * 0.0821°/jam" on /en. Everything those sentences say is already in the
+ * structured fields — the pair, the speed difference, the length required,
+ * the length available — so the words can come from the dictionary and the
+ * numbers from the result. The numerical core is not touched.
+ */
+function describeConflict(dict: Dictionary, conflict: ResolutionConflict): string {
+  const values = {
+    a: conflict.a,
+    b: conflict.b,
+    separation: conflict.separationDegPerHour.toFixed(4),
+    required: conflict.requiredDays.toFixed(1),
+    available: (conflict.availableHours / 24).toFixed(1),
+  }
+  return conflict.a === conflict.b
+    ? fill(dict.refusalText.conflictMean, values)
+    : fill(dict.refusalText.conflictPair, values)
+}
+
+function headline(dict: Dictionary, refusal: HarmonicRefusal): string {
+  const worst = refusal.conflicts[0]
+  // 'insufficient-data' refusals count samples against parameters, and neither
+  // number is on the refusal as a structured field — only inside its message.
+  // They cannot fire on a bundled record, which carries thousands of samples,
+  // so the baked string stands until the core has the counts to rebuild from.
+  if (refusal.reason !== 'rayleigh' || worst === undefined) return refusal.message
+  const values = {
+    a: worst.a,
+    b: worst.b,
+    available: refusal.availableDays.toFixed(1),
+  }
+  return worst.a === worst.b
+    ? fill(dict.refusalText.rayleighMean, values)
+    : fill(dict.refusalText.rayleighPair, values)
+}
+
+/**
  * A refusal is a result, not an error state. It names the conflicting pair and
  * the record length required, and it never shows an amplitude.
  */
@@ -107,11 +148,11 @@ export function RefusalNotice({
        */}
       <p className="eyebrow text-unresolved">{dict.common.refusalLabel}</p>
       <h2 className="mt-1 text-title text-unresolved">{dict.common.refusal}</h2>
-      <p className="mt-2 max-w-reading text-body">{refusal.message}</p>
+      <p className="mt-2 max-w-reading text-body">{headline(dict, refusal)}</p>
       <ul className="mt-3 space-y-1 text-caption">
         {refusal.conflicts.slice(0, 6).map((conflict) => (
           <li key={`${conflict.a}-${conflict.b}`} className="text-inkMuted">
-            {describeConflict(conflict)}
+            {describeConflict(dict, conflict)}
           </li>
         ))}
       </ul>

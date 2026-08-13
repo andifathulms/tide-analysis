@@ -35,10 +35,13 @@ export function AsymmetryPanel({
       <Card className="space-y-5">
         <div className="flex flex-wrap items-baseline justify-between gap-3">
           <div>
-            <h3 className="text-title">{asymmetry.label}</h3>
-            <p className="mt-1 max-w-reading text-body text-inkMuted">{asymmetry.description}</p>
+            {/* By type, not by the Indonesian label lib/tide ships beside it. */}
+            <h3 className="text-title">{dict.asymmetryType[asymmetry.type].label}</h3>
+            <p className="mt-1 max-w-reading text-body text-inkMuted">
+              {dict.asymmetryType[asymmetry.type].description}
+            </p>
           </div>
-          <Badge tone={tone}>{asymmetry.strength}</Badge>
+          <Badge tone={tone}>{dict.strength[asymmetry.strength]}</Badge>
         </div>
 
         {/* The two durations, drawn to scale against each other. */}
@@ -61,8 +64,12 @@ export function AsymmetryPanel({
             </div>
           </div>
           <div className="numeric flex justify-between text-caption text-inkMuted">
-            <span>{asymmetry.actual.meanRiseHours.toFixed(2)} jam</span>
-            <span>{asymmetry.actual.meanFallHours.toFixed(2)} jam</span>
+            <span>
+              {asymmetry.actual.meanRiseHours.toFixed(2)} {dict.common.hours}
+            </span>
+            <span>
+              {asymmetry.actual.meanFallHours.toFixed(2)} {dict.common.hours}
+            </span>
           </div>
         </div>
 
@@ -79,12 +86,12 @@ export function AsymmetryPanel({
           <Stat
             label={`${dict.komponen.asymmetryShallow} — ${dict.komponen.rise}`}
             value={asymmetry.shallowWater.meanRiseHours.toFixed(2)}
-            unit="jam"
+            unit={dict.common.hours}
           />
           <Stat
             label={`${dict.komponen.asymmetryShallow} — ${dict.komponen.fall}`}
             value={asymmetry.shallowWater.meanFallHours.toFixed(2)}
-            unit="jam"
+            unit={dict.common.hours}
           />
         </dl>
       </Card>

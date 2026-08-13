@@ -243,7 +243,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
                    */}
                   {character !== undefined && (
                     <p className="flex flex-wrap items-center gap-2">
-                      <Badge tone="prediction">{character.label}</Badge>
+                      <Badge tone="prediction">{dict.tideType[character.type].label}</Badge>
                       <span className="numeric text-caption text-inkFaint">
                         F {character.value.toFixed(2)}
                       </span>

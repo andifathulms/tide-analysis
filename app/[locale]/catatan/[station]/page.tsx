@@ -80,7 +80,11 @@ export default async function RecordPage({
           datumNote={record.datum.note}
           zone={zone}
           gapHours={summary.gapHours}
-          character={analysis.character?.label}
+          character={
+            analysis.character === null
+              ? undefined
+              : dict.tideType[analysis.character.type].label
+          }
         />
         <NavigationWarning dict={dict} compact />
       </div>

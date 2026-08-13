@@ -65,7 +65,9 @@ export function FormzahlComparison({
                   </Link>
                 </th>
                 <td className="py-1.5 pr-4 text-right text-prediction">{row.value.toFixed(3)}</td>
-                <td className="py-1.5 pr-4 text-caption text-inkMuted">{row.label}</td>
+                <td className="py-1.5 pr-4 text-caption text-inkMuted">
+                  {dict.tideType[row.type].label}
+                </td>
                 <td className="py-1.5 pr-4 text-right">{row.M2.toFixed(3)}</td>
                 <td className="py-1.5 pr-4 text-right">{row.S2.toFixed(3)}</td>
                 <td className="py-1.5 pr-4 text-right">{row.K1.toFixed(3)}</td>

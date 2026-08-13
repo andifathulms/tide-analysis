@@ -67,7 +67,11 @@ export default async function ConstituentsPage({
           datumNote={record.datum.note}
           zone={zoneOf(record)}
           gapHours={summary.gapHours}
-          character={analysis.character?.label}
+          character={
+            analysis.character === null
+              ? undefined
+              : dict.tideType[analysis.character.type].label
+          }
         />
         <NavigationWarning dict={dict} compact />
       </div>
@@ -118,7 +122,7 @@ export default async function ConstituentsPage({
             <Section
               eyebrow={dict.home.characterEyebrow}
               title={dict.komponen.formzahlTitle}
-              lead={analysis.character.description}
+              lead={dict.tideType[analysis.character.type].description}
             >
               <Card className="flex flex-wrap items-end gap-x-10 gap-y-5">
                 <Stat
@@ -126,7 +130,7 @@ export default async function ConstituentsPage({
                   value={analysis.character.value.toFixed(3)}
                   tone="prediction"
                   size="large"
-                  note={analysis.character.label}
+                  note={dict.tideType[analysis.character.type].label}
                 />
                 <p className="numeric text-caption text-inkFaint">
                   F = (K1 + O1) / (M2 + S2) = ({analysis.character.amplitudes.K1.toFixed(3)} +{' '}
