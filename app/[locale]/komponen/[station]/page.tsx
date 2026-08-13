@@ -92,6 +92,7 @@ export default async function ConstituentsPage({
               unresolved={fallback?.dropped ?? []}
             />
             <Caption>{dict.komponen.tableCaption}</Caption>
+            <Caption>{dict.komponen.tableUncertainty}</Caption>
 
             {/*
              * Both of these read the table above rather than changing the

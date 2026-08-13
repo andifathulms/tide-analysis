@@ -42,6 +42,9 @@ export function ConstituentTable({
               {dict.common.phase}
             </th>
             <th scope="col" className="eyebrow py-2 pr-4 text-right">
+              {dict.common.lag}
+            </th>
+            <th scope="col" className="eyebrow py-2 pr-4 text-right">
               {dict.common.speed}
             </th>
             <th scope="col" className="eyebrow py-2 pr-4 text-right">
@@ -78,6 +81,14 @@ export function ConstituentTable({
                   </span>
                 )}
               </td>
+              {/*
+               * The same phase in hours. g and the speed sat in adjacent
+               * columns and the table never divided one by the other, leaving
+               * the lag only in a unit a newcomer cannot picture.
+               */}
+              <td className="py-1.5 pr-4 text-right text-inkMuted">
+                {(constant.phaseDeg / constant.speedDegPerHour).toFixed(2)}
+              </td>
               <td className="py-1.5 pr-4 text-right">{constant.speedDegPerHour.toFixed(6)}</td>
               <td className="py-1.5 pr-4 text-right">
                 {(360 / constant.speedDegPerHour).toFixed(3)}
@@ -92,7 +103,7 @@ export function ConstituentTable({
               <th scope="row" className="py-1.5 pr-4 text-left font-medium text-unresolved">
                 {row.name}
               </th>
-              <td colSpan={6} className="py-1.5 text-left text-caption text-unresolved">
+              <td colSpan={7} className="py-1.5 text-left text-caption text-unresolved">
                 {dict.common.unresolved}
                 {row.type === 'unresolved' && row.conflictsWith[0] !== undefined && (
                   <span className="ml-2 text-inkMuted">

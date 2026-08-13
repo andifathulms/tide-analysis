@@ -217,6 +217,7 @@ export default async function RecordPage({
                 <Section eyebrow={dict.komponen.eyebrow} title={dict.komponen.title}>
                   <ConstituentTable dict={dict} constants={shown.outcome.constants} />
                   <Caption>{dict.komponen.tableCaption}</Caption>
+            <Caption>{dict.komponen.tableUncertainty}</Caption>
 
                   {/*
                    * The step the site never showed. It belongs here, directly

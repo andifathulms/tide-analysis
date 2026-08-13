@@ -57,6 +57,7 @@ export interface Dictionary {
     readonly gaps: string
     readonly amplitude: string
     readonly phase: string
+    readonly lag: string
     readonly speed: string
     readonly period_h: string
     readonly constituent: string
@@ -232,6 +233,7 @@ export interface Dictionary {
   readonly komponen: {
     readonly eyebrow: string
     readonly tableCaption: string
+    readonly tableUncertainty: string
     readonly asymmetryTitle: string
     readonly asymmetryLead: string
     readonly asymmetryEyebrow: string
@@ -402,6 +404,7 @@ const id: Dictionary = {
     gaps: 'jeda',
     amplitude: 'Amplitudo H (m)',
     phase: 'Fase g (°)',
+    lag: 'Keterlambatan (jam)',
     speed: 'Kecepatan (°/jam)',
     period_h: 'Periode (jam)',
     constituent: 'Komponen',
@@ -637,7 +640,9 @@ const id: Dictionary = {
   komponen: {
     eyebrow: 'Komponen',
     tableCaption:
-      'H adalah setengah tinggi gelombang komponen itu; g adalah keterlambatannya terhadap posisi Bulan atau Matahari. f dan u adalah koreksi 18,6 tahunan yang sudah diterapkan dan tetap ditampilkan.',
+      'H adalah setengah tinggi gelombang komponen itu; g adalah keterlambatannya terhadap posisi Bulan atau Matahari, dan kolom di sebelahnya menyatakan hal yang sama dalam jam — g dibagi kecepatan komponen. f dan u adalah koreksi 18,6 tahunan yang sudah diterapkan dan tetap ditampilkan.',
+    tableUncertainty:
+      'Angka ± adalah satu simpangan baku, diambil dari diagonal matriks kovarians penyelesaian. Ia mengandaikan derau rekaman saling bebas antar jam, dan residu pasang surut tidak demikian: cuaca berlangsung berhari-hari, sehingga jam yang berdekatan salah ke arah yang sama. Ketidakpastian yang sebenarnya lebih besar daripada yang tertera di sini — seberapa besar, tidak dihitung oleh situs ini.',
     asymmetryTitle: 'Naik dan turun tidak sama cepat',
     asymmetryLead:
       'Di perairan dangkal, gesekan dasar laut memindahkan sebagian energi M2 ke kelipatan frekuensinya, terutama M4. Akibatnya satu sisi gelombang menjadi curam dan sisi lainnya melandai: air naik lebih cepat daripada turunnya, atau sebaliknya.',
@@ -866,6 +871,7 @@ const en: Dictionary = {
     gaps: 'gaps',
     amplitude: 'Amplitude H (m)',
     phase: 'Phase g (°)',
+    lag: 'Lag (h)',
     speed: 'Speed (°/h)',
     period_h: 'Period (h)',
     constituent: 'Constituent',
@@ -1101,7 +1107,9 @@ const en: Dictionary = {
   komponen: {
     eyebrow: 'Constituents',
     tableCaption:
-      'H is half the height of that constituent’s wave; g is how late it arrives behind the Moon or Sun. f and u are the 18.6-year corrections, applied and still shown.',
+      'H is half the height of that constituent’s wave; g is how late it arrives behind the Moon or Sun, and the column beside it says the same thing in hours — g divided by the constituent’s speed. f and u are the 18.6-year corrections, applied and still shown.',
+    tableUncertainty:
+      'The ± figure is one standard error, taken from the diagonal of the solve’s covariance matrix. It assumes the record’s noise is independent from hour to hour, and tidal residuals are not: weather lasts for days, so neighbouring hours are wrong in the same direction. The true uncertainty is larger than what is printed here — by how much, this site does not compute.',
     asymmetryTitle: 'The rise and the fall are not the same length',
     asymmetryLead:
       'In shallow water, friction on the sea bed moves some of M2’s energy into multiples of its frequency, M4 above all. One half of the wave steepens and the other flattens: the water rises faster than it falls, or the reverse.',
