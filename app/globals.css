@@ -115,6 +115,15 @@
    */
   --control-hit: 2.75rem;
 
+  /**
+   * The sticky masthead's height, so nothing scrolls underneath it.
+   *
+   * py-3 either side of a 1.75rem lockup, plus the bottom rule. It exists as a
+   * token only because two places need the same number and drifting them apart
+   * would silently reintroduce the bug it fixes.
+   */
+  --header-height: 3.5rem;
+
   /* --- Spacing rhythm -------------------------------------------------- */
   /** Named by role, so a card's padding changes in one place. */
   --space-card: 1.25rem;
@@ -128,6 +137,13 @@
     background-color: rgb(var(--colour-paper));
     color: rgb(var(--colour-ink));
     -webkit-text-size-adjust: 100%;
+    /*
+     * The masthead is sticky, so a browser scrolling a newly focused element
+     * to the top of the viewport parks it underneath (WCAG 2.4.11). Reserving
+     * the header's height as scroll margin keeps whatever has just been
+     * focused — or jumped to by fragment — clear of it.
+     */
+    scroll-padding-top: calc(var(--header-height) + 0.5rem);
   }
 
   body {

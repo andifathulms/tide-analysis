@@ -61,6 +61,10 @@ const config: Config = {
         /** Chart-internal labels, in viewBox units. See the note in globals.css. */
         chartLabel: ['var(--text-chart-label)', { lineHeight: '1' }],
       },
+      height: {
+        /** Matches the scroll-padding reserved for the sticky masthead. */
+        header: 'var(--header-height)',
+      },
       spacing: {
         /** Named by role, so the page rhythm changes in one place. */
         card: 'var(--space-card)',

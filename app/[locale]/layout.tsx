@@ -55,8 +55,8 @@ export default function LocaleLayout({
         {dict.skipToContent}
       </a>
 
-      <header className="sticky top-0 z-20 border-b border-rule bg-paper/90 backdrop-blur">
-        <div className="mx-auto flex max-w-page items-center justify-between gap-4 px-gutter py-3">
+      <header className="sticky top-0 z-20 h-header border-b border-rule bg-paper/90 backdrop-blur">
+        <div className="mx-auto flex h-full max-w-page items-center justify-between gap-4 px-gutter">
           {/* The lockup: the mark, then the wordmark in the site's own serif. */}
           <Link href={`/${locale}`} className="group flex items-center gap-2.5">
             <BrandMark className="h-7 w-7 shrink-0 rounded-[6px]" />
