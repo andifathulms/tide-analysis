@@ -30,6 +30,7 @@ export function fill(template: string, values: Record<string, string | number>):
 export interface Dictionary {
   readonly siteName: string
   readonly tagline: string
+  readonly skipToContent: string
   readonly nav: {
     readonly beranda: string
     readonly catatan: string
@@ -336,6 +337,7 @@ export interface Dictionary {
 const id: Dictionary = {
   siteName: 'Tide Analysis',
   tagline: 'Analisis harmonik pasang surut dari pengamatan nyata',
+  skipToContent: 'Lompat ke isi',
   nav: {
     beranda: 'Beranda',
     catatan: 'Catatan',
@@ -751,6 +753,7 @@ const id: Dictionary = {
 const en: Dictionary = {
   siteName: 'Tide Analysis',
   tagline: 'Tidal harmonic analysis from real observations',
+  skipToContent: 'Skip to content',
   nav: {
     beranda: 'Home',
     catatan: 'Record',

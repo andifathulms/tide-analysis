@@ -38,6 +38,23 @@ export default function LocaleLayout({
    */
   return (
     <div lang={locale} className="flex min-h-screen flex-col">
+      {/*
+       * Eight tab stops stand between the top of every page and its content —
+       * three in the header, five more in the station nav — repeated across
+       * ninety pages. WCAG 2.4.1.
+       *
+       * Screen reader users could already skip: <header>, <nav>, <main> and
+       * <footer> are all native landmarks and were before this. It is
+       * keyboard-only sighted users who had no mechanism, so this is the one
+       * thing that adds, and it duplicates nothing they already have.
+       */}
+      <a
+        href="#isi"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-gutter focus:top-3 focus:z-30 focus:rounded-card focus:bg-prediction focus:px-4 focus:py-2 focus:text-body focus:font-medium focus:text-surface focus:shadow-raised"
+      >
+        {dict.skipToContent}
+      </a>
+
       <header className="sticky top-0 z-20 border-b border-rule bg-paper/90 backdrop-blur">
         <div className="mx-auto flex max-w-page items-center justify-between gap-4 px-gutter py-3">
           {/* The lockup: the mark, then the wordmark in the site's own serif. */}
@@ -82,7 +99,9 @@ export default function LocaleLayout({
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-page flex-1 px-gutter py-8 sm:py-10">{children}</main>
+      <main id="isi" className="mx-auto w-full max-w-page flex-1 px-gutter py-8 sm:py-10">
+        {children}
+      </main>
 
       <footer className="mt-section border-t border-rule bg-surface">
         <div className="mx-auto max-w-page px-gutter py-8 text-caption text-inkMuted">
