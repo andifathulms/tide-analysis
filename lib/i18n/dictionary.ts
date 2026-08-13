@@ -315,6 +315,17 @@ export interface Dictionary {
     readonly beatFull: string
     readonly beatWhyFull: string
     readonly beatDay: string
+    readonly recoveryEyebrow: string
+    readonly recoveryTitle: string
+    readonly recoveryLead: string
+    readonly recoveryTruth: string
+    readonly recoveryNoise: string
+    readonly recoveryFitted: string
+    readonly recoveryError: string
+    readonly recoveryPhaseError: string
+    readonly recoveryWorst: string
+    readonly recoveryReading: string
+    readonly recoveryNotAPlace: string
     readonly ladderStationTitle: string
     readonly surveyTitle: string
     readonly surveyLead: string
@@ -758,6 +769,20 @@ const id: Dictionary = {
     beatWhyFull:
       'Pada setengah rentang keduanya sudah berlawanan, jadi mengapa syaratnya satu siklus penuh dan bukan setengah? Karena pencocokan membaca seluruh rekaman sekaligus, bukan satu saat tertentu. Rekaman yang berhenti sebelum satu siklus penuh hanya sempat melihat sebagian putaran, dan pada bagian itu kedua gelombang masih cukup mirip untuk saling menyamar. Setelah satu siklus penuh, setiap kemungkinan hubungan fase sudah terwakili di dalam rekaman — dan hanya satu pasang amplitudo yang cocok dengan semuanya.',
     beatDay: 'hari',
+    recoveryEyebrow: 'Satu-satunya halaman yang jawabannya sudah diketahui',
+    recoveryTitle: 'Bila kita yang menentukan jawabannya, seberapa dekat penyelesai sampai?',
+    recoveryLead:
+      'Setiap angka lain di situs ini dicocokkan dari rekaman sungguhan, dan tidak ada cara memeriksanya — laut tidak menerbitkan konstantanya sendiri. Jadi di sini kebalikannya: kami memilih empat komponen, membangkitkan rekaman {days} hari darinya, menambahkan derau, lalu mencocokkannya dengan penyelesai yang sama persis yang dipakai setiap halaman stasiun. Yang masuk dan yang keluar ada di bawah, bersebelahan.',
+    recoveryTruth: 'Yang kami masukkan',
+    recoveryNoise: 'Derau per bacaan',
+    recoveryFitted: 'Yang dikembalikan',
+    recoveryError: 'Selisih (m)',
+    recoveryPhaseError: 'Selisih fase',
+    recoveryWorst: 'Selisih terburuk',
+    recoveryReading:
+      'Derau 15 cm pada setiap bacaan per jam — alat yang buruk di perairan yang kasar — masih menyisakan setiap amplitudo dalam jarak satu sentimeter dari kebenarannya. Bukan karena penyelesainya pintar, melainkan karena 1.440 bacaan dalam {days} hari saling meniadakan derauya, sedangkan kosinusnya tidak: kesalahan acak menyusut seperti √N, isyarat berirama tidak. Perhatikan juga RMS residu — ia sama dengan derau yang dimasukkan, karena di rekaman buatan ini memang tidak ada yang lain. Pada rekaman sungguhan, residu memuat cuaca dan segala hal lain yang tidak dijelaskan model.',
+    recoveryNotAPlace:
+      'Keempat konstanta ini karangan. Bukan sebuah tempat, bukan nilai terbit, dan tidak ada halaman lain yang membacanya — angka bulat sengaja dipilih agar mudah dibandingkan.',
     ladderTrivial:
       'Sisa pemisahan, semuanya di bawah dua hari. Rekaman yang terlalu pendek untuk memenuhinya juga terlalu pendek untuk dicocokkan sama sekali — satu komponen saja membutuhkan satu periode penuh untuk terpisah dari muka air rata-rata.',
     ladderStationTitle: 'Pasangan yang menentukan panjang rekaman',
@@ -1243,6 +1268,20 @@ const en: Dictionary = {
     beatWhyFull:
       'They are already opposed at half the span, so why does the criterion ask for a full cycle rather than half of one? Because the fit reads the whole record at once, not one moment in it. A record that stops short of a full cycle has seen only part of the turn, and across that part the two waves stay similar enough to stand in for one another. After a full cycle every phase relationship between them has appeared somewhere in the record — and only one pair of amplitudes fits all of them at once.',
     beatDay: 'days',
+    recoveryEyebrow: 'The one page where the answer is known in advance',
+    recoveryTitle: 'When we pick the answer, how close does the solver get?',
+    recoveryLead:
+      'Every other number on this site is fitted from a real record, and there is no way to check it — the sea does not publish its own constants. So here it is the other way round: we chose four constituents, generated a {days}-day record from them, added noise, and fitted it with exactly the solver every station page uses. What went in and what came back are side by side below.',
+    recoveryTruth: 'What we put in',
+    recoveryNoise: 'Noise per reading',
+    recoveryFitted: 'What came back',
+    recoveryError: 'Error (m)',
+    recoveryPhaseError: 'Phase error',
+    recoveryWorst: 'Worst error',
+    recoveryReading:
+      'Fifteen centimetres of noise on every hourly reading — a poor gauge in rough water — still leaves every amplitude within a centimetre of the truth. Not because the solver is clever, but because 1,440 readings over {days} days cancel their noise against each other while the cosines do not: random error shrinks like √N and a rhythmic signal does not. Note the residual RMS too — it equals the noise that was added, because in a made-up record there is nothing else for it to be. On a real record the residual holds weather and everything else the model does not explain.',
+    recoveryNotAPlace:
+      'These four constants are invented. Not a place, not published values, and no other page reads them — the round numbers are chosen so the comparison is easy to make.',
     ladderTrivial:
       'The remaining separations, all under two days. A record too short to meet these is too short to fit at all — a single constituent needs one full period just to separate from the mean level.',
     ladderStationTitle: 'The pairs that set the record length',

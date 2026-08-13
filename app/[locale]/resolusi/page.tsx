@@ -2,7 +2,9 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { BeatFigure } from '@/components/BeatFigure'
 import { Badge, Callout, Card, Scroller, Section } from '@/components/ui'
+import { RecoveryPanel } from '@/components/RecoveryPanel'
 import { beatFigure } from '@/lib/chart/beat'
+import { recoverySweep, RECOVERY_LENGTH_DAYS } from '@/lib/tide/recovery'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations } from '@/lib/records/registry'
 import { STANDARD_SET } from '@/lib/tide/constituents'
@@ -65,6 +67,22 @@ export default function LadderPage({ params }: { params: { locale: string } }) {
        * The mechanism, before any of the tables that depend on it. The formula
        * is in the lead above; this is the thing the formula is about.
        */}
+      {/*
+       * The only demonstration on the site with an answer key. It goes first,
+       * before the ladder and the survey table, because everything after it
+       * asks the reader to trust a solve they cannot check.
+       */}
+      <Section
+        eyebrow={dict.resolusi.recoveryEyebrow}
+        title={dict.resolusi.recoveryTitle}
+      >
+        <RecoveryPanel
+          dict={dict}
+          rows={recoverySweep()}
+          lengthDays={RECOVERY_LENGTH_DAYS}
+        />
+      </Section>
+
       <Section title={dict.resolusi.beatTitle}>
         <BeatFigure dict={dict} figure={beatFigure('K1', 'P1')} />
       </Section>
