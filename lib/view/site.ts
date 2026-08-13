@@ -46,6 +46,11 @@ export function siteRoutes(): SiteRoute[] {
   return routes
 }
 
+/**
+ * Trailing slash, because next.config.js sets `trailingSlash: true` and Next
+ * emits canonicals to match. A sitemap listing the same page without the slash
+ * describes a second URL, and the two then compete rather than agreeing.
+ */
 export function absolute(locale: Locale, path: string): string {
-  return path === '' ? `${SITE_URL}/${locale}` : `${SITE_URL}/${locale}/${path}`
+  return path === '' ? `${SITE_URL}/${locale}/` : `${SITE_URL}/${locale}/${path}/`
 }
