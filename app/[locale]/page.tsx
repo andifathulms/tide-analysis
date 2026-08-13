@@ -173,7 +173,14 @@ export default async function HomePage({ params }: { params: { locale: string } 
             {TOOLS.map((segment) => (
               <Card as="li" key={segment}>
                 <Link
-                  href={`/${locale}/${segment}/${entry}`}
+                  href={
+                    // Resolution has an index of its own: the separation
+                    // ladder needs no station, and it lists the stations at
+                    // the foot of the page rather than presuming one.
+                    segment === 'resolusi'
+                      ? `/${locale}/resolusi`
+                      : `/${locale}/${segment}/${entry}`
+                  }
                   className="prose-serif text-title text-ink hover:text-prediction"
                 >
                   {dict.nav[segment]}

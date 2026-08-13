@@ -162,7 +162,22 @@ The site states prominently and repeatedly that this is an educational tool, not
 
 ## Current state
 
-M0–M6 implemented. 229 tests green, `pnpm build` exports 62 pages, `pnpm lint` and `pnpm typecheck` clean.
+M0–M6 implemented. 339 tests green, `pnpm build` exports 90 pages in about 35 seconds, `pnpm lint` and `pnpm typecheck` clean.
+
+Design tokens live in `:root` in `app/globals.css` — colours as RGB channels so Tailwind's alpha modifiers still resolve, one type scale at ratio 1.2 from a 16px body, spacing named by role. `tailwind.config.ts` maps token names to those variables and holds no literal values. Every colour used as text clears 4.5:1 on paper, surface, sunken and its own tint; `residual` is the chart stroke and `residualText` is its darker sibling for type. The only unavoidable literal is `themeColor` in `app/layout.tsx`, which is emitted before any stylesheet loads.
+
+Four views were added after M6, all of them about what a record can support:
+
+- **`/resolusi`** (no station) — the separation ladder for the standard set, and what each length of deployment buys. Fifteen days resolves six of ten constituents, twenty-nine resolves eight, and nothing improves until a hundred and eighty-three, because K1/P1 and K2/S2 both wait on the solar year.
+- **Constituent correlation** (`lib/tide/correlation.ts`, on `/komponen`) — the cosine of the smallest principal angle between each pair of constituent subspaces, returned on `HarmonicFit` beside κ and not separable from it. It is the continuum that κ summarises and the Rayleigh criterion thresholds.
+- **Leakage** (`lib/tide/leakage.ts`, on `/catatan`) — the residual's magnitude at each refused frequency, so a refusal is an accounting rather than an absence. Never a constant: no phase is reported and the confounding constituents are part of the result type.
+- **Coverage** (`lib/tide/coverage.ts`, on `/resolusi/[station]`) — the same record refit under masks. Every row has identical span, and span is all the Rayleigh criterion reads.
+- **The node cycle** (`lib/tide/nodalcycle.ts`, on `/komponen`) — f swept across 18.61 years, so `f = 1.037` reads as scale rather than as rounding.
+
+Two things learned building those, both now asserted in tests:
+
+1. **Gaps are not simply bad.** What costs you is losing the middle, not losing hours. Removing 70% of Benoa as one outage takes the worst pair from 0.14 to 0.95; removing the same 70% at scattered times leaves it at 0.15. Kolinamil has 740 missing hours and fits cleanly because its gaps are scattered.
+2. **A refusal is conservative.** It fires when a pair has not drifted one *full* cycle apart, so a refused pair may still be partly separable — K2/S2 on Benoa's 141-day fit window sits at 0.27, not at the 0.97 the same pair scores on a fortnight.
 
 Eight IOC stations bundled, 212 days each, hourly, 1 January to 1 August 2026. `pnpm records:sweep` surveyed all 57 open Indonesian stations on a 35-day window and found all four Formzahl regimes, so the four-port contrast in PRD §3 is complete and computed rather than quoted:
 

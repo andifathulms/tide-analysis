@@ -334,7 +334,7 @@ const id: Dictionary = {
     tools: {
       catatan: 'Rekaman, hasil pencocokan di atasnya, dan sisa yang tak terjelaskan.',
       komponen: 'Amplitudo dan fase tiap gelombang penyusun, beserta koreksi nodalnya.',
-      resolusi: 'Perpendek jendelanya dan lihat komponen mana yang berhenti bisa dipisahkan.',
+      resolusi: 'Berapa lama harus mengamati untuk memisahkan sepasang komponen — dan apa yang terjadi pada rekaman sungguhan saat jendelanya diperpendek.',
       banding: 'Kuadrat terkecil berhadapan dengan metode Admiralty pada rekaman yang sama.',
       prediksi: 'Konstanta hasil pencocokan diteruskan ke depan, lengkap dengan pasang dan surutnya.',
     },
@@ -603,7 +603,7 @@ const en: Dictionary = {
     tools: {
       catatan: 'The record, the fit laid over it, and what the fit could not explain.',
       komponen: 'Amplitude and phase per constituent wave, with the nodal corrections applied.',
-      resolusi: 'Shorten the window and watch which constituents stop being separable.',
+      resolusi: 'How long you must watch to separate a pair of constituents — and what happens to a real record when the window shortens.',
       banding: 'Least squares against the Admiralty method on the same record.',
       prediksi: 'The fitted constants carried forward, with the high and low waters they imply.',
     },
