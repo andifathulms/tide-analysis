@@ -203,6 +203,20 @@ export interface Dictionary {
     readonly status: string
     readonly statusRefused: string
     readonly leakageWarning: string
+    readonly derivationEyebrow: string
+    readonly derivationTitle: string
+    readonly derivationLead: string
+    readonly derivationArgument: string
+    readonly derivationColumns: string
+    readonly derivationSolve: string
+    readonly derivationBack: string
+    readonly derivationHonesty: string
+    readonly derivationTime: string
+    readonly derivationV: string
+    readonly derivationCos: string
+    readonly derivationSin: string
+    readonly derivationShare: string
+    readonly derivationObserved: string
     readonly stepTitle: string
     readonly stepBody: string
     readonly noRecords: string
@@ -567,6 +581,26 @@ const id: Dictionary = {
       'Dicocokkan pada {percent} persen rekaman, {days} hari. Bilangan kondisi {kappa}. RMS residu {fitRms} m pada bagian yang dicocokkan, {heldRms} m pada bagian yang ditahan.',
     statusRefused:
       'Dicocokkan pada {percent} persen rekaman, {days} hari. Permintaan ditolak: {reason}',
+    derivationEyebrow: 'Satu komponen, dari awal',
+    derivationTitle: 'Bagaimana {name} keluar dari rekaman ini',
+    derivationLead:
+      'Tabel di atas adalah hasilnya. Ini jalannya, dengan angka rekaman ini sendiri — tidak ada yang disederhanakan atau dibulatkan untuk contoh.',
+    derivationArgument:
+      'Langkah 1 — Di mana Bulan dan Matahari berada. Setiap komponen punya enam bilangan Doodson yang menyatakan berapa kali tiap elemen astronomi masuk ke dalam sudutnya. Untuk {name} keenamnya adalah {coefficients}, jadi sudut kesetimbangannya V(t) = {formula}{offset}. Polinomial elemennya dari Meeus, Astronomical Algorithms (ed. 2), bab 22 dan 47.',
+    derivationColumns:
+      'Langkah 2 — Dua kolom, per jam. cos(V + u) dan sin(V + u) dihitung untuk setiap baris rekaman. Inilah dua kolom {name} di dalam matriks rancangan; empat baris berturut-turut dari rekaman ini:',
+    derivationSolve:
+      'Langkah 3 — Kuadrat terkecil memilih sepasang angka. Penyelesaian mencari a dan b yang membuat Σ (a·cos + b·sin) sedekat mungkin ke rekaman, untuk semua komponen sekaligus. Untuk {name} hasilnya a = {a} dan b = {b}. Kolom terakhir di atas adalah a·cos + b·sin: sumbangan {name} sendirian pada jam itu.',
+    derivationBack:
+      'Langkah 4 — Dua baris trigonometri. Pasangan (a, b) adalah amplitudo dan fase dalam bentuk lain: H = √(a² + b²) ÷ f = {amplitude} m, dan g = atan2(b, a) = {phase}°. Persis angka {name} pada tabel di atas. Dibagi f karena f adalah koreksi nodal 18,6 tahunan, yang dikeluarkan agar konstantanya tidak bergantung pada tahun pengamatan.',
+    derivationHonesty:
+      'Yang disederhanakan di sini: penyelesaian sebenarnya mengerjakan kedelapan komponen bersama-sama, bukan satu per satu. Mengerjakan {name} sendirian akan memberi jawaban yang sedikit berbeda, karena sebagian gerakan air yang menjadi milik komponen lain akan diserap olehnya. Itulah sebabnya korelasi antar komponen penting, dan mengapa bilangan kondisi dilaporkan.',
+    derivationTime: 'Waktu (UTC)',
+    derivationV: 'V(t)°',
+    derivationCos: 'cos(V+u)',
+    derivationSin: 'sin(V+u)',
+    derivationShare: 'Sumbangan {name} (m)',
+    derivationObserved: 'Terekam (m)',
     leakageWarning:
       'Ini bukan konstanta harmonik dan tidak boleh diperlakukan sebagai amplitudo. Sebagian dari tiap angka di atas adalah milik komponen yang bercampur dengannya — semakin tinggi korelasi yang tertera, semakin besar bagian itu, dan pada 0,9 ke atas angkanya tidak lagi berarti apa pun sendirian. Berapa persisnya bagian itu tidak dapat diketahui; justru itulah sebabnya penyelesaian menolak. Fase sengaja tidak ditampilkan.',
   },
@@ -986,6 +1020,26 @@ const en: Dictionary = {
       'Fitted over {percent} per cent of the record, {days} days. Condition number {kappa}. Residual RMS {fitRms} m over the fitted part, {heldRms} m over the held-out part.',
     statusRefused:
       'Fitted over {percent} per cent of the record, {days} days. Request refused: {reason}',
+    derivationEyebrow: 'One constituent, from the start',
+    derivationTitle: 'How {name} came out of this record',
+    derivationLead:
+      'The table above is the answer. This is the route to it, in this record’s own numbers — nothing simplified or rounded for the example.',
+    derivationArgument:
+      'Step 1 — Where the Moon and Sun are. Every constituent has six Doodson numbers saying how many times each astronomical element enters its angle. For {name} they are {coefficients}, so its equilibrium argument is V(t) = {formula}{offset}. The element polynomials are from Meeus, Astronomical Algorithms (2nd ed.), chapters 22 and 47.',
+    derivationColumns:
+      'Step 2 — Two columns, hour by hour. cos(V + u) and sin(V + u) are evaluated at every sample in the record. These are {name}’s two columns of the design matrix; four consecutive hours of this record:',
+    derivationSolve:
+      'Step 3 — Least squares picks one pair of numbers. The solve looks for the a and b that bring Σ (a·cos + b·sin) as close to the record as it can get, for every constituent at once. For {name} it returned a = {a} and b = {b}. The last column above is a·cos + b·sin: what {name} alone contributes at that hour.',
+    derivationBack:
+      'Step 4 — Two lines of trigonometry. The pair (a, b) is amplitude and phase in another form: H = √(a² + b²) ÷ f = {amplitude} m, and g = atan2(b, a) = {phase}°. Exactly the numbers on {name}’s row above. The division by f takes out the 18.6-year nodal correction, so the constant does not depend on which year you happened to observe.',
+    derivationHonesty:
+      'What is simplified here: the solve does all eight constituents together, not one at a time. Doing {name} on its own would give a slightly different answer, because it would absorb movement that belongs to its neighbours. That is why the correlation between constituents matters, and why the condition number is reported.',
+    derivationTime: 'Time (UTC)',
+    derivationV: 'V(t)°',
+    derivationCos: 'cos(V+u)',
+    derivationSin: 'sin(V+u)',
+    derivationShare: '{name}’s share (m)',
+    derivationObserved: 'Recorded (m)',
     leakageWarning:
       'This is not a harmonic constant and must not be read as an amplitude. Part of each number above belongs to whatever it is mixed in with — the higher the correlation shown, the larger that part, and above about 0.9 the number means nothing on its own at all. How much exactly cannot be known, which is why the solve refused in the first place. No phase is shown, deliberately.',
   },

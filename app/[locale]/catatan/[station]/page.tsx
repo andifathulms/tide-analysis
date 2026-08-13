@@ -11,6 +11,8 @@ import { Callout, Caption, Card, Section, Stat, TraceKey } from '@/components/ui
 import { dictionary, fill, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations } from '@/lib/records/registry'
 import { buildChartModel } from '@/lib/chart/model'
+import { DerivationPanel } from '@/components/DerivationPanel'
+import { deriveConstituent, largestConstituent } from '@/lib/view/derivation'
 import { analyseStation } from '@/lib/view/station'
 import { zoneOf } from '@/lib/view/format'
 
@@ -38,6 +40,25 @@ export default async function RecordPage({
   const { station, record, primary, fallback, summary } = analysis
   const shown = primary.outcome.type === 'fit' ? primary : (fallback?.analysis ?? primary)
   const zone = zoneOf(record)
+
+  /*
+   * One constituent walked from timestamp to constant, on this record. The
+   * largest one, because that is the one a reader has just been looking at on
+   * the chart.
+   */
+  const derivation =
+    shown.outcome.type === 'fit'
+      ? (() => {
+          const constant = largestConstituent(shown.outcome.constants)
+          return constant === null
+            ? null
+            : deriveConstituent({
+                record,
+                constant,
+                meanLevelM: shown.outcome.meanLevelM,
+              })
+        })()
+      : null
 
   const model =
     shown.series === null
@@ -192,6 +213,22 @@ export default async function RecordPage({
                 <Section eyebrow={dict.komponen.eyebrow} title={dict.komponen.title}>
                   <ConstituentTable dict={dict} constants={shown.outcome.constants} />
                   <Caption>{dict.komponen.tableCaption}</Caption>
+
+                  {/*
+                   * The step the site never showed. It belongs here, directly
+                   * under the table it derives, rather than on the method page
+                   * — a reader should be able to look up from the worked H and
+                   * g to the row they reproduce.
+                   */}
+                  {derivation !== null && (
+                    <Section
+                      level={3}
+                      eyebrow={dict.catatan.derivationEyebrow}
+                      title={fill(dict.catatan.derivationTitle, { name: derivation.name })}
+                    >
+                      <DerivationPanel dict={dict} derivation={derivation} />
+                    </Section>
+                  )}
                 </Section>
               </>
             )}
