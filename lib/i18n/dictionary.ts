@@ -57,6 +57,7 @@ export interface Dictionary {
     readonly admiralty: string
     readonly loading: string
     readonly refusal: string
+    readonly refusalLabel: string
     readonly recordLength: string
     readonly requiredLength: string
     readonly high: string
@@ -266,6 +267,7 @@ const id: Dictionary = {
     admiralty: 'Admiralty',
     loading: 'Menghitung…',
     refusal: 'Permintaan ditolak',
+    refusalLabel: 'Hasil',
     recordLength: 'Panjang rekaman',
     requiredLength: 'Panjang yang dibutuhkan',
     high: 'Pasang',
@@ -536,6 +538,7 @@ const en: Dictionary = {
     admiralty: 'Admiralty',
     loading: 'Computing…',
     refusal: 'Request refused',
+    refusalLabel: 'Result',
     recordLength: 'Record length',
     requiredLength: 'Length required',
     high: 'High water',

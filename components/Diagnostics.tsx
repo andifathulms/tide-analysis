@@ -52,7 +52,13 @@ export function FitDiagnostics({ dict, fit }: { dict: Dictionary; fit: HarmonicF
 
     {fit.steps.length > 0 && (
       <section className="mt-4 rounded-r-card border-l-4 border-unresolved bg-unresolvedSoft/60 px-5 py-4">
-        <h3 className="eyebrow text-unresolved">
+        {/*
+         * Invariant 9 makes the datum first-class, and this block is where a
+         * moved zero gets announced. It wore `eyebrow` — 12px, uppercase —
+         * which put the loudest fact about the record in the quietest type on
+         * the page.
+         */}
+        <h3 className="text-title text-unresolved">
           Datum bergeser di tengah rekaman
         </h3>
         <p className="mt-1.5 max-w-reading text-body">
@@ -93,10 +99,15 @@ export function RefusalNotice({
 }) {
   return (
     <section className="rounded-r-card border-l-4 border-unresolved bg-unresolvedSoft/60 px-5 py-4">
-      <h2 className="eyebrow text-unresolved">
-        {dict.common.refusal}
-      </h2>
-      <p className="mt-1.5 max-w-reading text-body">{refusal.message}</p>
+      {/*
+       * The refusal is invariant 6, the project's central honesty mechanism,
+       * and it was set in the smallest type the site has — visually ranked
+       * below the section heading that contains it. The eyebrow stays as a
+       * label above the heading rather than being the heading.
+       */}
+      <p className="eyebrow text-unresolved">{dict.common.refusalLabel}</p>
+      <h2 className="mt-1 text-title text-unresolved">{dict.common.refusal}</h2>
+      <p className="mt-2 max-w-reading text-body">{refusal.message}</p>
       <ul className="mt-3 space-y-1 text-caption">
         {refusal.conflicts.slice(0, 6).map((conflict) => (
           <li key={`${conflict.a}-${conflict.b}`} className="text-inkMuted">
