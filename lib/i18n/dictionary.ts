@@ -185,6 +185,8 @@ export interface Dictionary {
     readonly ladderSeparation: string
     readonly ladderRequired: string
     readonly ladderFullTitle: string
+    readonly ladderDeciding: string
+    readonly ladderTrivial: string
     readonly ladderStationTitle: string
     readonly surveyTitle: string
     readonly surveyLead: string
@@ -445,6 +447,10 @@ const id: Dictionary = {
     ladderSeparation: 'Selisih kecepatan (°/jam)',
     ladderRequired: 'Panjang minimum (hari)',
     ladderFullTitle: 'Tangga lengkap: setiap pemisahan yang dituntut himpunan baku',
+    ladderDeciding:
+      'Yang menentukan panjang survei adalah tiga belas pemisahan berikut. Sisanya sudah terpenuhi oleh rekaman dua hari mana pun, dan dicantumkan di bawah demi kelengkapan.',
+    ladderTrivial:
+      'Sisa pemisahan, semuanya di bawah dua hari. Rekaman yang terlalu pendek untuk memenuhinya juga terlalu pendek untuk dicocokkan sama sekali — satu komponen saja membutuhkan satu periode penuh untuk terpisah dari muka air rata-rata.',
     ladderStationTitle: 'Pasangan yang menentukan panjang rekaman',
     surveyTitle: 'Yang dibeli oleh setiap panjang pengamatan',
     surveyLead:
@@ -715,6 +721,10 @@ const en: Dictionary = {
     ladderSeparation: 'Speed difference (°/h)',
     ladderRequired: 'Minimum length (days)',
     ladderFullTitle: 'The full ladder: every separation the standard set demands',
+    ladderDeciding:
+      'Thirteen separations decide how long a survey has to run. The rest are met by any record of more than two days, and are listed below for completeness.',
+    ladderTrivial:
+      'The remaining separations, all under two days. A record too short to meet these is too short to fit at all — a single constituent needs one full period just to separate from the mean level.',
     ladderStationTitle: 'The pairs that set the record length',
     surveyTitle: 'What each length of observation buys',
     surveyLead:

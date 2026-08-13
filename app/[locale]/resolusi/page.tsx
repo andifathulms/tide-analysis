@@ -24,7 +24,18 @@ export default function LadderPage({ params }: { params: { locale: string } }) {
   const locale = params.locale as Locale
   const dict = dictionary(locale)
 
+  /*
+   * The ladder is complete, but it is not uniformly interesting. Of its
+   * fifty-five rungs, forty-two ask for under two days — and a record too
+   * short to clear those cannot support a harmonic fit at all, since a single
+   * constituent needs a full period just to separate from the mean level. As
+   * one table they buried the thirteen rungs that decide how long a survey has
+   * to run. Split, not truncated: nothing is hidden from the reader.
+   */
+  const DECIDING_DAYS = 2
   const ladder = separationLadder(STANDARD_SET)
+  const deciding = ladder.filter((rung) => rung.requiredDays >= DECIDING_DAYS)
+  const trivial = ladder.filter((rung) => rung.requiredDays < DECIDING_DAYS)
   const surveys = SURVEY_DAYS.map((days) => ({
     days,
     ...resolvableSubset(STANDARD_SET, days * 24),
@@ -84,7 +95,7 @@ export default function LadderPage({ params }: { params: { locale: string } }) {
         </Scroller>
       </Section>
 
-      <Section title={dict.resolusi.ladderFullTitle}>
+      <Section title={dict.resolusi.ladderFullTitle} lead={dict.resolusi.ladderDeciding}>
         <Scroller>
           <table className="w-full min-w-[520px] border-collapse text-caption">
             <thead>
@@ -97,7 +108,7 @@ export default function LadderPage({ params }: { params: { locale: string } }) {
               </tr>
             </thead>
             <tbody className="numeric">
-              {ladder.map((rung) => (
+              {deciding.map((rung) => (
                 <tr
                   key={`${rung.a}-${rung.b ?? 'Z0'}`}
                   className="border-b border-rule/60 hover:bg-sunken/50"
@@ -123,6 +134,29 @@ export default function LadderPage({ params }: { params: { locale: string } }) {
             </tbody>
           </table>
         </Scroller>
+
+        {/*
+         * The remaining rungs, demoted rather than dropped. As a table they
+         * were forty-two rows of identical-looking noise that buried the
+         * thirteen above; as a dense run of pairs they read as what they are —
+         * a completeness check a reader scans once and never returns to.
+         */}
+        {trivial.length > 0 && (
+          <div className="mt-6 border-t border-rule pt-4">
+            <p className="max-w-reading text-caption text-inkMuted">
+              {dict.resolusi.ladderTrivial}
+            </p>
+            <p className="numeric mt-3 text-caption leading-7 text-inkMuted">
+              {trivial.map((rung, index) => (
+                <span key={`${rung.a}-${rung.b ?? 'Z0'}`} className="whitespace-nowrap">
+                  {index > 0 && <span className="px-2 text-inkFaint">·</span>}
+                  {rung.b === null ? `${rung.a}/Z₀` : `${rung.a}/${rung.b}`}{' '}
+                  <span className="text-inkFaint">{formatDays(rung.requiredDays)}</span>
+                </span>
+              ))}
+            </p>
+          </div>
+        )}
       </Section>
 
       {list.length > 0 && (
