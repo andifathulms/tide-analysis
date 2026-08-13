@@ -22,8 +22,22 @@ export default function LocaleLayout({
   /** Each language names itself, in itself. */
   const otherName = other === 'en' ? 'English' : 'Bahasa Indonesia'
 
+  /*
+   * The document language, as close to the document as this router allows.
+   *
+   * <html> lives in the root layout, which has no locale param and cannot get
+   * one — App Router requires html and body there, above the [locale] segment.
+   * So every page shipped lang="id", and a screen reader read the whole
+   * English site with Indonesian pronunciation rules (WCAG 3.1.1).
+   *
+   * Assistive technology honours lang on any element for its subtree, so
+   * declaring it here fixes what a reader actually hears: everything inside is
+   * the page. The root <html lang="id"> remains as the document default, which
+   * is correct for the site as a whole — Indonesian is the primary language
+   * (PRD §9) — and is what /id pages want anyway.
+   */
   return (
-    <div className="flex min-h-screen flex-col">
+    <div lang={locale} className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-20 border-b border-rule bg-paper/90 backdrop-blur">
         <div className="mx-auto flex max-w-page items-center justify-between gap-4 px-gutter py-3">
           {/* The lockup: the mark, then the wordmark in the site's own serif. */}
