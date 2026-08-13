@@ -33,11 +33,14 @@ export default function LadderPage({ params }: { params: { locale: string } }) {
 
   return (
     <div className="space-y-section">
-      <Section
-        eyebrow={dict.resolusi.eyebrow}
-        title={dict.resolusi.ladderTitle}
-        lead={dict.resolusi.ladderLead}
-      />
+      {/* Section always emits an h2, so a page built only from Sections has no
+          h1 at all. Every other page type carries one — the home page, the
+          method page, and the station pages through StationHeader. */}
+      <header className="max-w-reading space-y-3">
+        <p className="eyebrow">{dict.resolusi.eyebrow}</p>
+        <h1 className="text-display">{dict.resolusi.ladderTitle}</h1>
+        <p className="text-lead text-inkMuted">{dict.resolusi.ladderLead}</p>
+      </header>
 
       {/* The one page on the site that needs no station, and says so — the
           universal half of PRD §1 made into an object rather than asserted. */}
