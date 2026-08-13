@@ -277,9 +277,35 @@ export interface Dictionary {
     readonly provenance: string
   }
   readonly metode: {
+    readonly eyebrow: string
     readonly title: string
     readonly lead: string
+    readonly astroTitle: string
+    readonly astroArguments: string
+    readonly astroSpeeds: string
+    readonly astroNodal: string
+    readonly fitTitle: string
+    readonly fitModel: string
+    readonly fitConditioning: string
+    readonly fitRayleigh: string
+    readonly setTitle: string
+    readonly setLead: string
+    readonly setDoodson: string
+    readonly setMeaning: string
+    readonly recordsTitle: string
+    readonly recordsNote: string
+    readonly gapHoursUnit: string
+    readonly admiraltyTitle: string
+    readonly admiraltyBody: string
+    readonly sourcesTitle: string
+    readonly sourceActive: string
   }
+  /**
+   * What each constituent physically is. lib/tide carries an Indonesian
+   * `description` beside every definition; the name is the fact, the sentence
+   * is presentation.
+   */
+  readonly constituentMeaning: Record<string, string>
 }
 
 const id: Dictionary = {
@@ -621,9 +647,59 @@ const id: Dictionary = {
       'Tinggi merujuk {datum}. Dihitung dari {count} komponen yang dicocokkan pada {from} — {to}; κ = {kappa}; RMS residu {rms} m. Bukan untuk navigasi.',
   },
   metode: {
+    eyebrow: 'Pengungkapan',
     title: 'Metode',
     lead:
       'Apa yang dihitung, dari rekaman mana, dengan cara apa, dan seberapa besar sisanya yang tidak dijelaskan.',
+    astroTitle: 'Astronomi',
+    astroArguments:
+      'Argumen kesetimbangan setiap komponen dihitung dari formulasi Doodson atas enam argumen astronomi: waktu bulan rata-rata τ, bujur rata-rata Bulan s, bujur rata-rata Matahari h, bujur perigee bulan p, bujur simpul naik N, dan bujur perihelion p′. Polinomialnya diambil dari Meeus, {book} (ed. 2), bab 22, 25, dan 47.',
+    astroSpeeds:
+      'Kecepatan komponen diturunkan dari laju perubahan keenam elemen itu — tidak ada satu pun frekuensi yang ditulis sebagai angka mati di dalam kode. Uji {command} membandingkannya dengan tabel terbit Schureman (1958) sampai 1e-6 °/jam.',
+    astroNodal:
+      'Koreksi nodal f dan u mengikuti deret ringkas Schureman sebagaimana disajikan Pugh (1987) tabel 4:2, dievaluasi di tengah jendela pencocokan. Nilainya ditampilkan di tabel komponen, tidak dilebur diam-diam ke dalam konstanta.',
+    fitTitle: 'Pencocokan',
+    fitModel:
+      'Model tinggi muka laut adalah η(t) = Z₀ + Σ f·H·cos(V(t) + u − g). Model ini linear terhadap pasangan (a, b) = f·H·(cos g, sin g), sehingga penyelesaiannya adalah kuadrat terkecil biasa. Matriks normal AᵀA didiagonalkan dengan rotasi Jacobi siklik; dari situ diperoleh sekaligus penyelesaian, nilai singular A, dan bilangan kondisi κ = σmaks/σmin.',
+    fitConditioning:
+      'κ adalah bagian wajib dari hasil, bukan diagnostik opsional. Ambangnya: κ < 10 baik, < 100 wajar, < 1000 marginal, selebihnya buruk.',
+    fitRayleigh:
+      'Kriteria Rayleigh ditegakkan sebelum penyelesaian. Dua komponen hanya dapat dipisahkan bila rekaman mencapai T = 360° / |σᵢ − σⱼ|; bila tidak, permintaan ditolak dengan menyebut pasangan yang bentrok dan panjang rekaman yang dibutuhkan. Tidak ada jalur yang mengembalikan amplitudo tak stabil seolah-olah hasil.',
+    setTitle: 'Himpunan komponen',
+    setLead:
+      'Himpunan baku yang diminta pada setiap stasiun: {set}. Seluruh komponen yang didefinisikan proyek ini:',
+    setDoodson: 'Doodson',
+    setMeaning: 'Keterangan',
+    recordsTitle: 'Rekaman dan hasilnya',
+    recordsNote:
+      'Residu adalah selisih pengamatan dikurangi model. Ia memuat cuaca, surge, dan segala yang tidak dijelaskan model harmonik, dan RMS-nya adalah ukuran jujur atas mutu pencocokan. Residu tidak pernah disembunyikan atau dihaluskan.',
+    gapHoursUnit: 'j',
+    admiraltyTitle: 'Metode Admiralty',
+    admiraltyBody:
+      'Skema Admiralty di sini memproyeksikan rekaman ke argumen tiap komponen satu per satu, lalu menyimpulkan K2 dari S2 (rasio 0,27) dan P1 dari K1 (rasio 0,331) memakai hubungan inferensi klasik. Ini bukan reproduksi tabulasi cetak NP 159 lengkap dengan pengali penyaringnya, dan setiap konstanta ditandai langsung atau disimpulkan.',
+    sourcesTitle: 'Sumber data dan lisensi',
+    sourceActive: 'aktif',
+  },
+  constituentMeaning: {
+    Sa: 'Tahunan matahari — musiman, sebagian besar bukan gravitasi',
+    Ssa: 'Setengah tahunan matahari',
+    Mm: 'Bulanan bulan — siklus perigee',
+    Mf: 'Dwimingguan bulan — deklinasi',
+    Q1: 'Eliptik besar diurnal bulan',
+    O1: 'Diurnal utama bulan',
+    P1: 'Diurnal utama matahari',
+    K1: 'Diurnal deklinasi bulan-matahari',
+    '2N2': 'Eliptik orde kedua bulan',
+    MU2: 'Variasional bulan',
+    N2: 'Eliptik besar semidiurnal bulan',
+    NU2: 'Evektional besar bulan',
+    M2: 'Semidiurnal utama bulan — biasanya yang terbesar',
+    S2: 'Semidiurnal utama matahari — pasangan purnama-perbani M2',
+    K2: 'Deklinasi semidiurnal bulan-matahari',
+    MN4: 'Perairan dangkal, interaksi M2 dengan N2',
+    M4: 'Harmonik keempat M2 — asimetri pasang surut',
+    MS4: 'Perairan dangkal, interaksi M2 dengan S2',
+    M6: 'Harmonik keenam M2',
   },
 }
 
@@ -966,9 +1042,59 @@ const en: Dictionary = {
       'Heights are referenced to {datum}. Computed from {count} constituents fitted over {from} — {to}; κ = {kappa}; residual RMS {rms} m. Not for navigation.',
   },
   metode: {
+    eyebrow: 'Disclosure',
     title: 'Method',
     lead:
       'What is computed, from which record, by what means, and how much is left unexplained.',
+    astroTitle: 'The astronomy',
+    astroArguments:
+      'Each constituent’s equilibrium argument is computed from the Doodson formulation over six astronomical arguments: mean lunar time τ, the mean longitude of the Moon s, of the Sun h, of lunar perigee p, of the ascending node N, and of perihelion p′. The polynomials are from Meeus, {book} (2nd ed.), chapters 22, 25 and 47.',
+    astroSpeeds:
+      'Constituent speeds are derived from the rates of change of those six elements — not one frequency is written into the code as a literal. The test {command} checks them against Schureman’s published tables (1958) to 1e-6 °/h.',
+    astroNodal:
+      'The nodal corrections f and u follow Schureman’s compact series as presented in Pugh (1987) table 4:2, evaluated at the centre of the fit window. Their values are shown in the constituent table rather than folded silently into the constants.',
+    fitTitle: 'The fit',
+    fitModel:
+      'The sea level model is η(t) = Z₀ + Σ f·H·cos(V(t) + u − g). It is linear in the pair (a, b) = f·H·(cos g, sin g), so solving it is ordinary least squares. The normal matrix AᵀA is diagonalised by cyclic Jacobi rotation, which yields the solution, the singular values of A, and the condition number κ = σmax/σmin together.',
+    fitConditioning:
+      'κ is a required part of the result, not an optional diagnostic. The thresholds: κ < 10 good, < 100 fair, < 1000 marginal, anything beyond that poor.',
+    fitRayleigh:
+      'The Rayleigh criterion is enforced before the solve. Two constituents can only be separated once the record reaches T = 360° / |σᵢ − σⱼ|; where it does not, the request is refused, naming the conflicting pair and the record length required. There is no path that returns unstable amplitudes as though they were results.',
+    setTitle: 'The constituent set',
+    setLead:
+      'The standard set requested at every station: {set}. Every constituent this project defines:',
+    setDoodson: 'Doodson',
+    setMeaning: 'What it is',
+    recordsTitle: 'The records, and what they produced',
+    recordsNote:
+      'The residual is observation minus model. It holds weather, surge and everything the harmonic model does not explain, and its RMS is the honest measure of the fit. It is never hidden or smoothed.',
+    gapHoursUnit: 'h',
+    admiraltyTitle: 'The Admiralty method',
+    admiraltyBody:
+      'The Admiralty scheme here projects the record onto each constituent’s argument one at a time, then infers K2 from S2 (ratio 0.27) and P1 from K1 (ratio 0.331) using the classical inference relations. It is not a reproduction of the printed NP 159 tabulation with its filtering multipliers, and every constant is marked as directly determined or inferred.',
+    sourcesTitle: 'Data sources and licensing',
+    sourceActive: 'enabled',
+  },
+  constituentMeaning: {
+    Sa: 'Solar annual — seasonal, largely not gravitational',
+    Ssa: 'Solar semi-annual',
+    Mm: 'Lunar monthly — the perigee cycle',
+    Mf: 'Lunar fortnightly — declinational',
+    Q1: 'Larger lunar elliptic diurnal',
+    O1: 'Principal lunar diurnal',
+    P1: 'Principal solar diurnal',
+    K1: 'Luni-solar declinational diurnal',
+    '2N2': 'Second-order lunar elliptic',
+    MU2: 'Lunar variational',
+    N2: 'Larger lunar elliptic semidiurnal',
+    NU2: 'Larger lunar evectional',
+    M2: 'Principal lunar semidiurnal — usually the largest',
+    S2: 'Principal solar semidiurnal — M2’s spring-neap partner',
+    K2: 'Luni-solar declinational semidiurnal',
+    MN4: 'Shallow water, M2 interacting with N2',
+    M4: 'Fourth harmonic of M2 — tidal asymmetry',
+    MS4: 'Shallow water, M2 interacting with S2',
+    M6: 'Sixth harmonic of M2',
   },
 }
 

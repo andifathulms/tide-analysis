@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { NavigationWarning } from '@/components/NavigationWarning'
+import type { ReactNode } from 'react'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { MANIFEST, stations } from '@/lib/records/registry'
 import { CONSTITUENTS, constituentSpeed, STANDARD_SET } from '@/lib/tide/constituents'
@@ -10,6 +11,27 @@ import { formatDate, formatDays } from '@/lib/view/format'
 
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }))
+}
+
+/**
+ * Split a dictionary template on a single `{key}` placeholder and put a node
+ * in its place.
+ *
+ * Two sentences here need markup inside them — a book title in italics, a
+ * command in mono — and the words either side of that markup fall in
+ * different orders in the two languages. Keeping the whole sentence in the
+ * dictionary and splicing the node in is the only way a translator can see
+ * what they are translating.
+ */
+function splice(template: string, key: string, node: ReactNode): ReactNode {
+  const [before = '', after = ''] = template.split(`{${key}}`)
+  return (
+    <>
+      {before}
+      {node}
+      {after}
+    </>
+  )
 }
 
 /** PRD §6.8: which record, which source and licence, which constituents,
@@ -26,67 +48,51 @@ export default async function MethodPage({ params }: { params: { locale: string 
       <NavigationWarning dict={dict} />
 
       <header className="max-w-reading space-y-3">
-        <p className="eyebrow">Pengungkapan</p>
+        <p className="eyebrow">{dict.metode.eyebrow}</p>
         <h1 className="text-display">{dict.metode.title}</h1>
         <p className="text-lead text-inkMuted">{dict.metode.lead}</p>
       </header>
 
       <section className="max-w-reading space-y-3">
-        <h2 className="text-headline">Astronomi</h2>
+        <h2 className="text-headline">{dict.metode.astroTitle}</h2>
         <p>
-          Argumen kesetimbangan setiap komponen dihitung dari formulasi Doodson atas enam argumen
-          astronomi: waktu bulan rata-rata τ, bujur rata-rata Bulan s, bujur rata-rata Matahari h,
-          bujur perigee bulan p, bujur simpul naik N, dan bujur perihelion p′. Polinomialnya diambil
-          dari Meeus, <em>Astronomical Algorithms</em> (ed. 2), bab 22, 25, dan 47.
+          {splice(dict.metode.astroArguments, 'book', <em>Astronomical Algorithms</em>)}
         </p>
         <p>
-          Kecepatan komponen diturunkan dari laju perubahan keenam elemen itu — tidak ada satu pun
-          frekuensi yang ditulis sebagai angka mati di dalam kode. Uji <code>pnpm test:astro</code>{' '}
-          membandingkannya dengan tabel terbit Schureman (1958) sampai 1e-6 °/jam.
+          {splice(
+            dict.metode.astroSpeeds,
+            'command',
+            <code className="numeric">pnpm test:astro</code>,
+          )}
         </p>
-        <p>
-          Koreksi nodal f dan u mengikuti deret ringkas Schureman sebagaimana disajikan Pugh (1987)
-          tabel 4:2, dievaluasi di tengah jendela pencocokan. Nilainya ditampilkan di tabel
-          komponen, tidak dilebur diam-diam ke dalam konstanta.
-        </p>
+        <p>{dict.metode.astroNodal}</p>
       </section>
 
       <section className="max-w-reading space-y-3">
-        <h2 className="text-headline">Pencocokan</h2>
-        <p>
-          Model tinggi muka laut adalah η(t) = Z₀ + Σ f·H·cos(V(t) + u − g). Model ini linear
-          terhadap pasangan (a, b) = f·H·(cos g, sin g), sehingga penyelesaiannya adalah kuadrat
-          terkecil biasa. Matriks normal AᵀA didiagonalkan dengan rotasi Jacobi siklik; dari situ
-          diperoleh sekaligus penyelesaian, nilai singular A, dan bilangan kondisi κ = σmaks/σmin.
-        </p>
-        <p>
-          κ adalah bagian wajib dari hasil, bukan diagnostik opsional. Ambangnya: κ &lt; 10 baik,
-          &lt; 100 wajar, &lt; 1000 marginal, selebihnya buruk.
-        </p>
-        <p>
-          Kriteria Rayleigh ditegakkan sebelum penyelesaian. Dua komponen hanya dapat dipisahkan
-          bila rekaman mencapai T = 360° / |σᵢ − σⱼ|; bila tidak, permintaan ditolak dengan menyebut
-          pasangan yang bentrok dan panjang rekaman yang dibutuhkan. Tidak ada jalur yang
-          mengembalikan amplitudo tak stabil seolah-olah hasil.
-        </p>
+        <h2 className="text-headline">{dict.metode.fitTitle}</h2>
+        <p>{dict.metode.fitModel}</p>
+        <p>{dict.metode.fitConditioning}</p>
+        <p>{dict.metode.fitRayleigh}</p>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-headline">Himpunan komponen</h2>
+        <h2 className="text-headline">{dict.metode.setTitle}</h2>
         <p className="max-w-reading text-caption text-inkMuted">
-          Himpunan baku yang diminta pada setiap stasiun:{' '}
-          <span className="numeric">{STANDARD_SET.join(', ')}</span>. Seluruh komponen yang
-          didefinisikan proyek ini:
+          {splice(
+            dict.metode.setLead,
+            'set',
+            <span className="numeric">{STANDARD_SET.join(', ')}</span>,
+          )}
         </p>
         <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
           <table className="w-full min-w-[640px] border-collapse text-caption">
             <thead>
               <tr className="border-b border-rule text-left">
                 <th className="py-2 pr-4">{dict.common.constituent}</th>
-                <th className="py-2 pr-4">Doodson</th>
+                <th className="py-2 pr-4">{dict.metode.setDoodson}</th>
                 <th className="py-2 pr-4 text-right">{dict.common.speed}</th>
                 <th className="py-2 pr-4 text-right">{dict.common.period_h}</th>
-                <th className="py-2">Keterangan</th>
+                <th className="py-2">{dict.metode.setMeaning}</th>
               </tr>
             </thead>
             <tbody className="numeric">
@@ -102,7 +108,9 @@ export default async function MethodPage({ params }: { params: { locale: string 
                   <td className="py-1.5 pr-4 text-right">
                     {(360 / constituentSpeed(constituent.name)).toFixed(3)}
                   </td>
-                  <td className="py-1.5 text-caption">{constituent.description}</td>
+                  <td className="py-1.5 text-caption">
+                    {dict.constituentMeaning[constituent.name] ?? constituent.description}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -111,7 +119,7 @@ export default async function MethodPage({ params }: { params: { locale: string 
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-headline">Rekaman dan hasilnya</h2>
+        <h2 className="text-headline">{dict.metode.recordsTitle}</h2>
         <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
           <table className="w-full min-w-[640px] border-collapse text-caption">
             <thead>
@@ -150,7 +158,8 @@ export default async function MethodPage({ params }: { params: { locale: string 
                       {formatDays(analysis.station.lengthDays)}
                     </td>
                     <td className="py-1.5 pr-4 text-right">
-                      {analysis.summary.gapCount} ({analysis.summary.gapHours.toFixed(0)} j)
+                      {analysis.summary.gapCount} ({analysis.summary.gapHours.toFixed(0)}{' '}
+                      {dict.metode.gapHoursUnit})
                     </td>
                     <td className="py-1.5 pr-4">{analysis.station.datumCode}</td>
                     <td className="py-1.5 pr-4 text-right">
@@ -169,25 +178,16 @@ export default async function MethodPage({ params }: { params: { locale: string 
             </tbody>
           </table>
         </div>
-        <p className="max-w-reading text-caption text-inkMuted">
-          Residu adalah selisih pengamatan dikurangi model. Ia memuat cuaca, surge, dan segala yang
-          tidak dijelaskan model harmonik, dan RMS-nya adalah ukuran jujur atas mutu pencocokan.
-          Residu tidak pernah disembunyikan atau dihaluskan.
-        </p>
+        <p className="max-w-reading text-caption text-inkMuted">{dict.metode.recordsNote}</p>
       </section>
 
       <section className="max-w-reading space-y-3">
-        <h2 className="text-headline">Metode Admiralty</h2>
-        <p>
-          Skema Admiralty di sini memproyeksikan rekaman ke argumen tiap komponen satu per satu,
-          lalu menyimpulkan K2 dari S2 (rasio 0,27) dan P1 dari K1 (rasio 0,331) memakai hubungan
-          inferensi klasik. Ini bukan reproduksi tabulasi cetak NP 159 lengkap dengan pengali
-          penyaringnya, dan setiap konstanta ditandai langsung atau disimpulkan.
-        </p>
+        <h2 className="text-headline">{dict.metode.admiraltyTitle}</h2>
+        <p>{dict.metode.admiraltyBody}</p>
       </section>
 
       <section className="max-w-reading space-y-3">
-        <h2 className="text-headline">Sumber data dan lisensi</h2>
+        <h2 className="text-headline">{dict.metode.sourcesTitle}</h2>
         <ul className="space-y-3 text-caption">
           {MANIFEST.sources
             .filter((source) => source.id !== 'synthetic')
@@ -196,7 +196,7 @@ export default async function MethodPage({ params }: { params: { locale: string 
                 <p className="font-medium">
                   {source.name}{' '}
                   <span className={source.enabled ? 'text-prediction' : 'text-unresolved'}>
-                    ({source.enabled ? 'aktif' : source.status})
+                    ({source.enabled ? dict.metode.sourceActive : source.status})
                   </span>
                 </p>
                 {source.licence !== '' && (
