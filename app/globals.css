@@ -13,13 +13,17 @@
     font-family: theme('fontFamily.ui');
     font-size: theme('fontSize.body[0]');
     line-height: 1.6;
+    /*
+     * Warm paper, and nothing printed on it.
+     *
+     * The page carried the same ruling as the chart for a while, which was a
+     * mistake: the chart's grid is a measurement scale a reader takes values
+     * off, and repeating it behind the prose turned an instrument into
+     * wallpaper. The ruling belongs to the chart alone (PRD §9 rules the
+     * chart, not the page). Depth comes from the paper sitting a shade darker
+     * than the card surface instead.
+     */
     background-color: theme('colors.paper');
-    /* The ruling of the roll, printed faintly across the whole page. */
-    background-image:
-      linear-gradient(to right, theme('colors.grid') 1px, transparent 1px),
-      linear-gradient(to bottom, theme('colors.grid') 1px, transparent 1px);
-    background-size: 28px 28px;
-    background-position: -1px -1px;
   }
 
   /* Prose and headings wear the serif; controls and labels wear the sans. */
