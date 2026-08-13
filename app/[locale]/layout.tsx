@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { BrandMark } from '@/components/BrandMark'
 import { MakerSignature } from '@/components/MakerSignature'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 
@@ -23,24 +24,10 @@ export default function LocaleLayout({
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-20 border-b border-rule bg-paper/90 backdrop-blur">
         <div className="mx-auto flex max-w-page items-center justify-between gap-4 px-5 py-3">
-          <Link href={`/${locale}`} className="group flex items-baseline gap-2.5">
-            {/* A tide mark: two crests and a trough, drawn once. */}
-            <svg
-              width="26"
-              height="16"
-              viewBox="0 0 26 16"
-              aria-hidden="true"
-              className="shrink-0 text-prediction"
-            >
-              <path
-                d="M1 11 C4 3, 8 3, 11 8 S18 13, 21 5 L25 5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-            <span className="prose-serif text-title text-ink group-hover:text-prediction">
+          {/* The lockup: the mark, then the wordmark in the site's own serif. */}
+          <Link href={`/${locale}`} className="group flex items-center gap-2.5">
+            <BrandMark className="h-7 w-7 shrink-0 rounded-[6px]" />
+            <span className="prose-serif text-title leading-none text-ink group-hover:text-prediction">
               {dict.siteName}
             </span>
           </Link>
