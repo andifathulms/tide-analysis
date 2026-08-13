@@ -143,6 +143,16 @@ export interface Dictionary {
     readonly explorerLead: string
     readonly formzahlTitle: string
     readonly publishedTitle: string
+    readonly correlationEyebrow: string
+    readonly correlationTitle: string
+    readonly correlationLead: string
+    readonly correlationWorst: string
+    readonly correlationMean: string
+    readonly correlationNote: string
+    readonly correlationBands: Record<
+      'identical' | 'strong' | 'moderate' | 'slight' | 'negligible',
+      string
+    >
   }
   readonly resolusi: {
     readonly title: string
@@ -359,6 +369,21 @@ const id: Dictionary = {
       'Mulailah dengan M2 sendirian — gelombang dua kali sehari yang bersih. Tambahkan S2 dan irama purnama-perbani muncul dari pelayangan dua kosinus itu.',
     formzahlTitle: 'Bilangan Formzahl dan tipe pasang surut',
     publishedTitle: 'Nilai terbit untuk perbandingan',
+    correlationEyebrow: 'Geometri',
+    correlationTitle: 'Seberapa mirip komponen-komponen ini di mata rekaman',
+    correlationLead:
+      'Bilangan kondisi mengatakan penyelesaian ini sulit; kriteria Rayleigh mengatakan pasangan mana yang mustahil. Di antara keduanya ada hal yang tidak dilaporkan satu pun: seberapa sulit, dan gara-gara siapa. Angka di bawah adalah kosinus sudut utama terkecil antara dua komponen pada rekaman ini — 0 berarti benar-benar terpisah, 1 berarti tidak terbedakan.',
+    correlationWorst: 'Pasangan paling mirip pada rekaman ini:',
+    correlationMean: 'Mendekati muka air rata-rata Z₀:',
+    correlationNote:
+      'Dihitung dari matriks rancangan yang benar-benar diselesaikan, jadi angka ini melihat waktu sampel yang sebenarnya — bukan sekadar rentangnya, satu-satunya hal yang dilihat kriteria Rayleigh. Yang menentukan bukan berapa jam yang hilang, melainkan di mana hilangnya: satu jeda panjang memangkas rentang efektif dan membuat pasangan yang sulit menyatu kembali, sedangkan jeda yang tersebar dengan jumlah jam yang sama nyaris tidak berbiaya. Björck & Golub 1973.',
+    correlationBands: {
+      identical: 'nyaris tak terbedakan',
+      strong: 'kuat',
+      moderate: 'sedang',
+      slight: 'sedikit',
+      negligible: 'dapat diabaikan',
+    },
   },
   resolusi: {
     title: 'Resolusi',
@@ -581,6 +606,21 @@ const en: Dictionary = {
       'Start with M2 alone — a clean twice-daily wave. Add S2 and the spring-neap rhythm emerges from the beat between two cosines.',
     formzahlTitle: 'Formzahl number and tide type',
     publishedTitle: 'Published values, for comparison',
+    correlationEyebrow: 'The geometry',
+    correlationTitle: 'How alike these constituents look to the record',
+    correlationLead:
+      'The condition number says this solve was hard; the Rayleigh criterion says which pairs are impossible. Between them sits the thing neither reports: how hard, and because of whom. Each number below is the cosine of the smallest principal angle between two constituents in this record — 0 means cleanly separable, 1 means indistinguishable.',
+    correlationWorst: 'The most nearly parallel pair in this record:',
+    correlationMean: 'Close to the mean level Z₀:',
+    correlationNote:
+      'Computed from the design matrix that was actually solved, so it sees the record’s real sample times rather than only its span, which is all the Rayleigh criterion sees. What matters is not how many hours are missing but where: one long outage cuts the effective span and lets a hard pair collapse back together, while the same number of hours missing at scattered times costs almost nothing. Björck & Golub 1973.',
+    correlationBands: {
+      identical: 'all but indistinguishable',
+      strong: 'strong',
+      moderate: 'moderate',
+      slight: 'slight',
+      negligible: 'negligible',
+    },
   },
   resolusi: {
     title: 'Resolution',

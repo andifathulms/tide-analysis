@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { AsymmetryPanel } from '@/components/AsymmetryPanel'
 import { ConstituentExplorer } from '@/components/ConstituentExplorer'
 import { ConstituentTable } from '@/components/table/ConstituentTable'
+import { CorrelationPanel } from '@/components/CorrelationPanel'
 import { FitDiagnostics, RefusalNotice } from '@/components/Diagnostics'
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { StationHeader, StationNav } from '@/components/StationNav'
@@ -77,6 +78,15 @@ export default async function ConstituentsPage({
               unresolved={fallback?.dropped ?? []}
             />
             <Caption>{dict.komponen.tableCaption}</Caption>
+          </Section>
+
+          {/* Where the condition number above came from. */}
+          <Section
+            eyebrow={dict.komponen.correlationEyebrow}
+            title={dict.komponen.correlationTitle}
+            lead={dict.komponen.correlationLead}
+          >
+            <CorrelationPanel dict={dict} report={shown.outcome.correlations} />
           </Section>
 
           {analysis.character !== null && (

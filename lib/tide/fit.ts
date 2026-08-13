@@ -9,6 +9,7 @@
 
 import { RAD_TO_DEG, normaliseDegrees } from '@/lib/astro/time'
 import { constituent, constituentDoodsonNumber, type ConstituentName } from './constituents'
+import { constituentCorrelations, type CorrelationReport } from './correlation'
 import { buildDesignMatrix, evaluateDesign, type DesignMatrix } from './design'
 import { assessResolution, type ResolutionAssessment, type ResolutionConflict } from './rayleigh'
 import { recordCentreSec, recordLengthHours, type TideRecord } from './record'
@@ -68,6 +69,13 @@ export interface HarmonicFit {
   readonly constants: readonly ConstituentConstant[]
   /** κ(A). Not optional, ever. */
   readonly conditionNumber: number
+  /**
+   * Where the conditioning came from. κ says the solve was hard; this says
+   * which pairs made it hard, and it is part of the result for the same
+   * reason κ is (invariant 5) — a caller should not be able to report the
+   * amplitudes while discarding the geometry that produced them.
+   */
+  readonly correlations: CorrelationReport
   readonly conditioning: Conditioning
   readonly residualRmsM: number
   readonly nodalEpochSec: number
@@ -226,6 +234,7 @@ export function fitHarmonics(options: FitOptions): FitOutcome {
     constants: [...constants].sort((x, y) => y.amplitudeM - x.amplitudeM),
     conditionNumber: solution.conditionNumber,
     conditioning: conditioningOf(solution.conditionNumber),
+    correlations: constituentCorrelations(design),
     residualRmsM: solution.residualRmsM,
     nodalEpochSec,
     nodeLongitudeDeg: design.nodeLongitudeDeg,
