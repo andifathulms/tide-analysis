@@ -14,19 +14,30 @@ export function Section({
   lead,
   children,
   id,
+  level = 2,
 }: {
   eyebrow?: string
   title?: string
   lead?: ReactNode
   children?: ReactNode
   id?: string
+  /**
+   * 2 for a subject of its own, 3 for something that explains the section it
+   * sits inside. A page whose every section is a level 2 tells the reader that
+   * all of its parts are equally about equally different things, which on a
+   * page carrying diagnostics beside their subject is not true.
+   */
+  level?: 2 | 3
 }) {
+  const Heading = level === 2 ? 'h2' : 'h3'
   return (
     <section id={id} className="space-y-4">
       {(eyebrow !== undefined || title !== undefined) && (
         <header className="space-y-1.5">
           {eyebrow !== undefined && <p className="eyebrow">{eyebrow}</p>}
-          {title !== undefined && <h2 className="text-headline">{title}</h2>}
+          {title !== undefined && (
+            <Heading className={level === 2 ? 'text-headline' : 'text-title'}>{title}</Heading>
+          )}
           {lead !== undefined && (
             <div className="max-w-reading text-body text-inkMuted">{lead}</div>
           )}

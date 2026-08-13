@@ -92,30 +92,39 @@ export default async function ConstituentsPage({
               unresolved={fallback?.dropped ?? []}
             />
             <Caption>{dict.komponen.tableCaption}</Caption>
-          </Section>
 
-          {/* Where the condition number above came from. */}
-          <Section
-            eyebrow={dict.komponen.correlationEyebrow}
-            title={dict.komponen.correlationTitle}
-            lead={dict.komponen.correlationLead}
-          >
-            <CorrelationPanel dict={dict} report={shown.outcome.correlations} />
-          </Section>
+            {/*
+             * Both of these read the table above rather than changing the
+             * subject: one is where its condition number came from, the other
+             * is the scale of the correction it reports as a column. As
+             * siblings at the same level they made the page look like six
+             * unrelated topics, two of which were footnotes.
+             */}
+            <div className="space-y-block border-t border-rule pt-block">
+              <Section
+                level={3}
+                eyebrow={dict.komponen.correlationEyebrow}
+                title={dict.komponen.correlationTitle}
+                lead={dict.komponen.correlationLead}
+              >
+                <CorrelationPanel dict={dict} report={shown.outcome.correlations} />
+              </Section>
 
-          {/* The scale of the correction the table above reports as a column. */}
-          <Section
-            eyebrow={dict.komponen.nodalEyebrow}
-            title={dict.komponen.nodalTitle}
-            lead={dict.komponen.nodalLead}
-          >
-            <NodalCyclePanel
-              dict={dict}
-              cycles={nodalCycles({
-                names: shown.outcome.constants.map((c) => c.name),
-                epochSec: shown.outcome.nodalEpochSec,
-              })}
-            />
+              <Section
+                level={3}
+                eyebrow={dict.komponen.nodalEyebrow}
+                title={dict.komponen.nodalTitle}
+                lead={dict.komponen.nodalLead}
+              >
+                <NodalCyclePanel
+                  dict={dict}
+                  cycles={nodalCycles({
+                    names: shown.outcome.constants.map((c) => c.name),
+                    epochSec: shown.outcome.nodalEpochSec,
+                  })}
+                />
+              </Section>
+            </div>
           </Section>
 
           {analysis.character !== null && (
