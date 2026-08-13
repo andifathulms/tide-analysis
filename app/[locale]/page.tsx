@@ -211,6 +211,23 @@ export default async function HomePage({ params }: { params: { locale: string } 
               <span className="numeric text-caption text-prediction">0{index + 1}</span>
               <h3 className="mt-2 text-title">{step.title}</h3>
               <p className="mt-2 text-body text-inkMuted">{step.body}</p>
+              {/*
+               * Step two said the record is "taken apart" and stopped there —
+               * an assertion with no number in it, on the page that is
+               * supposed to make the claim. One real result from the station
+               * already on screen turns it into something checkable two
+               * clicks away.
+               */}
+              {index === 1 && hero?.largest != null && (
+                <p className="mt-3 border-t border-rule pt-3 text-caption text-ink">
+                  {fill(dict.home.plainExample, {
+                    station: hero.stationName,
+                    name: hero.largest.name,
+                    amplitude: hero.largest.amplitudeM.toFixed(2),
+                    lag: hero.largest.lagHours.toFixed(1),
+                  })}
+                </p>
+              )}
             </Card>
           ))}
         </ol>

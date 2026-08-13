@@ -16,6 +16,7 @@
 
 import { buildChartModel, type ChartModel } from '@/lib/chart/model'
 import { stations } from '@/lib/records/registry'
+import { largestConstituent } from './derivation'
 import { analyseStation } from './station'
 
 /** Two thirds fitted, matching the record page, so the two agree. */
@@ -46,6 +47,17 @@ export interface HeroChart {
   readonly residualRmsM: number | null
   /** How many constituents the shown prediction was built from. */
   readonly constituentCount: number
+  /**
+   * The largest constituent at this station, so the front page can make its
+   * claim with a number instead of a description.
+   */
+  readonly largest: {
+    readonly name: string
+    readonly amplitudeM: number
+    readonly phaseDeg: number
+    /** g ÷ speed: how far behind the Moon or Sun it actually arrives. */
+    readonly lagHours: number
+  } | null
 }
 
 /** Index of the first sample at or after `atSec`. */
@@ -81,6 +93,9 @@ export async function heroChart(): Promise<HeroChart | null> {
   const timesSec = shown.series.timesSec.slice(from, to)
   const residualM = shown.series.residualM.slice(from, to)
 
+  const largest =
+    shown.outcome.type === 'fit' ? largestConstituent(shown.outcome.constants) : null
+
   const model = buildChartModel({
     timesSec,
     observedM: shown.series.observedM.slice(from, to),
@@ -105,5 +120,14 @@ export async function heroChart(): Promise<HeroChart | null> {
     residualRmsM: shown.fitResidualRmsM,
     constituentCount:
       shown.outcome.type === 'fit' ? shown.outcome.constants.length : 0,
+    largest:
+      largest === null
+        ? null
+        : {
+            name: largest.name,
+            amplitudeM: largest.amplitudeM,
+            phaseDeg: largest.phaseDeg,
+            lagHours: largest.phaseDeg / largest.speedDegPerHour,
+          },
   }
 }

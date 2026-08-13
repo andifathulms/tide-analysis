@@ -154,6 +154,7 @@ export interface Dictionary {
     readonly heroTitle: string
     readonly heroLead: string
     readonly plainTitle: string
+    readonly plainExample: string
     readonly plainSteps: readonly { readonly title: string; readonly body: string }[]
     readonly lead: string
     readonly whyTitle: string
@@ -518,6 +519,8 @@ const id: Dictionary = {
     heroLead:
       'Lihat pasang surut pelabuhan-pelabuhan Indonesia diurai menjadi gelombang penyusunnya, lalu diramalkan ke depan. Semua angkanya dihitung di sini, bukan disalin dari tabel.',
     plainTitle: 'Cara kerjanya, dalam tiga langkah',
+    plainExample:
+      'Di {station}, gelombang terbesarnya ternyata {name}: tingginya {amplitude} m dan ia tiba {lag} jam di belakang Bulan. Kedua angka itu tidak ada di mana pun sebelum rekaman dicocokkan — buka halaman rekaman untuk melihat asal keduanya, baris demi baris.',
     plainSteps: [
       {
         title: 'Air laut direkam',
@@ -981,6 +984,8 @@ const en: Dictionary = {
     heroLead:
       'Watch the tide at Indonesian ports taken apart into the waves it is made of, then predicted forward. Every number is computed here rather than copied from a table.',
     plainTitle: 'How it works, in three steps',
+    plainExample:
+      'At {station} the largest of those waves turns out to be {name}: {amplitude} m tall, arriving {lag} hours behind the Moon. Neither number existed anywhere until the record was fitted — the record page shows where both came from, row by row.',
     plainSteps: [
       {
         title: 'The sea is recorded',
