@@ -7,6 +7,7 @@
  */
 
 import { STANDARD_SET, type ConstituentName } from '@/lib/tide/constituents'
+import { residualLeakage, type LeakageEstimate } from '@/lib/tide/leakage'
 import { resolvableSubset, type ConstituentResolution } from '@/lib/tide/rayleigh'
 import { recordLengthHours, type TideRecord } from '@/lib/tide/record'
 import { loadRecord, stationSummary, type StationSummary } from '@/lib/records/registry'
@@ -28,6 +29,12 @@ export interface StationAnalysis {
     readonly constituents: readonly ConstituentName[]
     readonly dropped: readonly ConstituentResolution[]
   } | null
+  /**
+   * What the refusal cost: the residual's magnitude at each refused
+   * frequency, with the fitted constituents it is confounded with. Empty when
+   * nothing was refused.
+   */
+  readonly leakage: readonly LeakageEstimate[]
   readonly summary: ReturnType<typeof describeRecord>
   /**
    * The station's tidal character, always from the whole record.
@@ -83,7 +90,41 @@ export async function analyseStation(
     requested,
     primary,
     fallback,
+    leakage: leakageFor(fallback),
     summary: describeRecord(record),
     character: wholeRecord.formzahl,
   }
+}
+
+/**
+ * What the refusal cost, measured over the window that was actually fitted.
+ *
+ * The held-out part is excluded on purpose: its residual carries prediction
+ * error as well as the missing constituent, and attributing that to a
+ * frequency the fit never saw would overstate the leak.
+ */
+function leakageFor(fallback: StationAnalysis['fallback']): LeakageEstimate[] {
+  if (fallback === null) return []
+  const { analysis, dropped } = fallback
+  if (analysis.outcome.type !== 'fit' || analysis.series === null) return []
+  if (dropped.length === 0) return []
+
+  const { series, fitWindow } = analysis
+  let end = series.timesSec.length
+  for (let i = 0; i < series.timesSec.length; i += 1) {
+    if ((series.timesSec[i] as number) > fitWindow.endSec) {
+      end = i
+      break
+    }
+  }
+  if (end < 4) return []
+
+  return residualLeakage({
+    timesSec: series.timesSec.slice(0, end),
+    residualM: series.residualM.slice(0, end),
+    fitted: analysis.outcome.constants.map((c) => c.name),
+    refused: dropped.map((d) => d.name),
+    nodalEpochSec: analysis.outcome.nodalEpochSec,
+    steps: analysis.outcome.steps,
+  })
 }

@@ -5,6 +5,7 @@ import { TideChart } from '@/components/chart/TideChart'
 import { ConstituentTable } from '@/components/table/ConstituentTable'
 import { FitDiagnostics, RefusalNotice } from '@/components/Diagnostics'
 import { FitWindowControl } from '@/components/FitWindowControl'
+import { LeakagePanel } from '@/components/LeakagePanel'
 import { StationHeader, StationNav } from '@/components/StationNav'
 import { Callout, Caption, Card, Section, Stat, TraceKey } from '@/components/ui'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
@@ -115,6 +116,8 @@ export default async function RecordPage({
                     <span className="numeric">{fallback.constituents.join(', ')}</span>.
                   </p>
                 )}
+                {/* A refusal with no accounting is just an absence. */}
+                <LeakagePanel dict={dict} estimates={analysis.leakage} />
               </>
             )}
 

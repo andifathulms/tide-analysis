@@ -123,6 +123,11 @@ export interface Dictionary {
     readonly readingTitle: string
     readonly readingBody: string
     readonly fallbackNote: string
+    readonly leakageTitle: string
+    readonly leakageLead: string
+    readonly leakageIsolated: string
+    readonly leakageConfounded: string
+    readonly leakageWarning: string
   }
   readonly komponen: {
     readonly eyebrow: string
@@ -344,6 +349,13 @@ const id: Dictionary = {
       'Bila garis biru menempel pada garis hitam, komponen pasang surut sudah menjelaskan hampir semua gerakan air. Bagian yang diarsir di sebelah kanan tidak pernah dilihat saat menghitung — di sana garis biru murni ramalan. Pita ochre di bawah adalah selisihnya; ia tidak pernah disembunyikan atau dihaluskan.',
     fallbackNote:
       'Yang ditampilkan di bawah adalah himpunan terbesar yang masih didukung jendela ini:',
+    leakageTitle: 'Berapa besar yang hilang karena penolakan itu',
+    leakageLead:
+      'Komponen yang ditolak tidak lenyap. Energinya tetap ada di rekaman, dan karena tidak ikut dimodelkan, ia mengendap di pita residu. Berikut besarnya residu pada frekuensi masing-masing — jawaban atas pertanyaan yang wajar: yang tadi ditolak itu remah-remah, atau sesuatu yang berarti?',
+    leakageIsolated: '— tidak berimpit dengan komponen mana pun yang dicocokkan.',
+    leakageConfounded: 'bercampur dengan',
+    leakageWarning:
+      'Ini bukan konstanta harmonik dan tidak boleh diperlakukan sebagai amplitudo. Sebagian dari tiap angka di atas adalah milik komponen yang bercampur dengannya — semakin tinggi korelasi yang tertera, semakin besar bagian itu, dan pada 0,9 ke atas angkanya tidak lagi berarti apa pun sendirian. Berapa persisnya bagian itu tidak dapat diketahui; justru itulah sebabnya penyelesaian menolak. Fase sengaja tidak ditampilkan.',
   },
   komponen: {
     eyebrow: 'Komponen',
@@ -581,6 +593,13 @@ const en: Dictionary = {
     readingBody:
       'Where the blue line sits on the black one, the constituents have explained almost all of the water’s movement. The shaded part on the right was never seen while fitting — there the blue line is pure prediction. The ochre band beneath is the difference, and it is never hidden or smoothed.',
     fallbackNote: 'What follows is the largest set this window can still support:',
+    leakageTitle: 'What that refusal cost',
+    leakageLead:
+      'A refused constituent does not stop existing. Its energy is still in the record, and since the fit did not model it, it has settled into the residual band. Here is the size of the residual at each refused frequency — an answer to the fair question of whether you were denied a rounding error or something that matters.',
+    leakageIsolated: '— not confounded with anything in the fitted set.',
+    leakageConfounded: 'mixed in with',
+    leakageWarning:
+      'This is not a harmonic constant and must not be read as an amplitude. Part of each number above belongs to whatever it is mixed in with — the higher the correlation shown, the larger that part, and above about 0.9 the number means nothing on its own at all. How much exactly cannot be known, which is why the solve refused in the first place. No phase is shown, deliberately.',
   },
   komponen: {
     eyebrow: 'Constituents',
