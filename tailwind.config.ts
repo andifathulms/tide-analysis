@@ -58,6 +58,8 @@ const config: Config = {
         headline: ['var(--text-headline)', { lineHeight: '2.25rem', letterSpacing: '-0.015em' }],
         display: ['var(--text-display)', { lineHeight: '2.9rem', letterSpacing: '-0.02em' }],
         hero: ['var(--text-hero)', { lineHeight: '3.25rem', letterSpacing: '-0.03em' }],
+        /** Chart-internal labels, in viewBox units. See the note in globals.css. */
+        chartLabel: ['var(--text-chart-label)', { lineHeight: '1' }],
       },
       spacing: {
         /** Named by role, so the page rhythm changes in one place. */

@@ -51,8 +51,15 @@
    */
   /** Prediction.                                     4.9:1 on paper */
   --colour-prediction: 0 113 158;
-  /** Residual, as a chart stroke.                    3.1:1 — graphical only */
-  --colour-residual: 192 122 22;
+  /**
+   * Residual, as a chart stroke.                    3.3:1 — graphical only
+   *
+   * Nudged four units down from #C07A16, which measured 2.92:1 where the
+   * trace crosses the shaded held-out region — under the 3:1 floor for a
+   * graphical object, on the one part of the chart that carries the argument.
+   * CVD separation from the other two traces is unchanged.
+   */
+  --colour-residual: 188 119 21;
   /**
    * Residual, as text.                               5.4:1 on paper
    *
@@ -92,6 +99,13 @@
   --text-headline: 1.75rem;
   --text-display: 2.5rem;
   --text-hero: 3rem;
+  /**
+   * Axis and trace labels inside the chart. Not a step on the scale above:
+   * the SVG is drawn in viewBox units and scaled to the container, so this is
+   * a geometry constant that happens to be expressed in px. It is a token so
+   * that seven labels across the chart cannot drift apart from each other.
+   */
+  --text-chart-label: 10px;
 
   /* --- Spacing rhythm -------------------------------------------------- */
   /** Named by role, so a card's padding changes in one place. */

@@ -93,7 +93,12 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  /* The paper the site is printed on, so the browser chrome matches it. */
+  /*
+   * The paper the site is printed on, so the browser chrome matches it.
+   * The one place a raw value is unavoidable — this is emitted as a meta tag
+   * before any stylesheet loads, so it cannot read --colour-paper. Keep it in
+   * step with that token by hand.
+   */
   themeColor: '#F7F3E9',
   colorScheme: 'light',
 }

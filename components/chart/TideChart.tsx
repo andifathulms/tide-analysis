@@ -45,7 +45,7 @@ export function TideChart({
               <text
                 x={model.heldOutRect.x + 6}
                 y={model.plot.y + 12}
-                className="fill-inkFaint text-[10px]"
+                className="fill-inkFaint text-chartLabel"
               >
                 {heldOutLabel}
               </text>
@@ -101,7 +101,7 @@ export function TideChart({
             <text
               x={mark.x + 4}
               y={model.plot.y + 24}
-              className="fill-unresolved text-[10px] font-medium"
+              className="fill-unresolved text-chartLabel font-medium"
             >
               datum {mark.label}
             </text>
@@ -124,7 +124,7 @@ export function TideChart({
               <text
                 x={model.plot.x + model.plot.width + 6}
                 y={datum.y + 3}
-                className="fill-datum text-[10px]"
+                className="fill-datum text-chartLabel"
               >
                 {datum.label}
               </text>
@@ -139,7 +139,7 @@ export function TideChart({
               x={model.plot.x - 8}
               y={rule.y + 3}
               textAnchor="end"
-              className="fill-inkFaint text-[10px]"
+              className="fill-inkFaint text-chartLabel"
             >
               {rule.label}
             </text>
@@ -150,7 +150,7 @@ export function TideChart({
               x={rule.x}
               y={model.height - 8}
               textAnchor="middle"
-              className="fill-inkFaint text-[10px]"
+              className="fill-inkFaint text-chartLabel"
             >
               {rule.label}
             </text>
@@ -161,7 +161,7 @@ export function TideChart({
               x={model.plot.x - 8}
               y={rule.y + 3}
               textAnchor="end"
-              className="fill-residual text-[10px]"
+              className="fill-residualText text-chartLabel"
             >
               {rule.label}
             </text>
@@ -200,7 +200,7 @@ export function TideChart({
             <text
               x={model.plot.x + model.plot.width + 6}
               y={model.residualZeroY + 3}
-              className="fill-residual text-[10px] font-medium"
+              className="fill-residualText text-chartLabel font-medium"
             >
               {residualLabel}
             </text>
