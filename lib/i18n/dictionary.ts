@@ -114,6 +114,13 @@ export interface Dictionary {
     readonly methods: string
   }
   readonly conditioning: Record<'baik' | 'wajar' | 'marginal' | 'buruk', string>
+  /** What κ is, said where κ is printed. */
+  readonly kappa: {
+    readonly what: string
+    readonly meaning: string
+    readonly thresholds: string
+    readonly where: string
+  }
   /**
    * Copy for values that lib/tide reports as a discriminated `type`.
    *
@@ -433,6 +440,14 @@ const id: Dictionary = {
     records: 'Rekaman yang dipakai dan hasil pencocokannya',
     extrema: 'Waktu dan tinggi pasang serta surut',
     methods: 'Kuadrat terkecil dibandingkan dengan Admiralty',
+  },
+  kappa: {
+    what:
+      'Bilangan kondisi κ adalah perbandingan nilai singular terbesar terhadap terkecil dari matriks rancangan, σmaks/σmin. Ia mengukur seberapa buruk penyelesaian melipatgandakan kesalahan.',
+    meaning:
+      'Bacaan praktisnya: kesalahan 1 cm pada rekaman dapat menjadi kesalahan hingga {kappa} cm pada konstanta di bawah ini. Karena itu κ dilaporkan bersama setiap penyelesaian, bukan sebagai diagnostik tambahan — angka tanpa κ tidak dapat dinilai.',
+    thresholds: 'κ < 10 baik · < 100 wajar · < 1000 marginal · selebihnya buruk.',
+    where: 'Dari mana κ ini berasal — korelasi antar komponen',
   },
   conditioning: {
     baik: 'baik',
@@ -877,6 +892,14 @@ const en: Dictionary = {
     records: 'The records used and what they produced',
     extrema: 'Times and heights of high and low water',
     methods: 'Least squares compared with Admiralty',
+  },
+  kappa: {
+    what:
+      'The condition number κ is the ratio of the largest singular value of the design matrix to the smallest, σmax/σmin. It measures how badly the solve multiplies error.',
+    meaning:
+      'What that means in practice: an error of 1 cm in the record can become an error of as much as {kappa} cm in the constants below. This is why κ is reported with every solve rather than as an extra diagnostic — a number without it cannot be judged.',
+    thresholds: 'κ < 10 good · < 100 fair · < 1000 marginal · beyond that, poor.',
+    where: 'Where this κ came from — the correlation between constituents',
   },
   conditioning: {
     baik: 'good',

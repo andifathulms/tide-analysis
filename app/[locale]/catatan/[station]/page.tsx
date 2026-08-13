@@ -183,7 +183,11 @@ export default async function RecordPage({
 
             {shown.outcome.type === 'fit' && (
               <>
-                <FitDiagnostics dict={dict} fit={shown.outcome} />
+                <FitDiagnostics
+                  dict={dict}
+                  fit={shown.outcome}
+                  correlationHref={`/${locale}/komponen/${station.stationId}`}
+                />
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Card>

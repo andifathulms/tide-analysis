@@ -1,6 +1,7 @@
 import type { Dictionary } from '@/lib/i18n/dictionary'
 import type { Conditioning, HarmonicFit } from '@/lib/tide/fit'
 import type { HarmonicRefusal } from '@/lib/tide/fit'
+import Link from 'next/link'
 import { fill } from '@/lib/i18n/dictionary'
 import type { ResolutionConflict } from '@/lib/tide/rayleigh'
 
@@ -16,7 +17,16 @@ const CONDITIONING_CLASS: Record<Conditioning, string> = {
  * not a footnote: it is the statement of whether the amplitudes above mean
  * anything at all.
  */
-export function FitDiagnostics({ dict, fit }: { dict: Dictionary; fit: HarmonicFit }) {
+export function FitDiagnostics({
+  dict,
+  fit,
+  correlationHref,
+}: {
+  dict: Dictionary
+  fit: HarmonicFit
+  /** Where the geometry behind this κ is shown, when the page can link to it. */
+  correlationHref?: string
+}) {
   return (
     <>
     <dl className="card grid grid-cols-2 gap-6 p-5 sm:grid-cols-4">
@@ -50,6 +60,37 @@ export function FitDiagnostics({ dict, fit }: { dict: Dictionary; fit: HarmonicF
         </dd>
       </div>
     </dl>
+
+    {/*
+     * What κ is, beside the κ it explains.
+     *
+     * The number and the word "baik" were the whole story on this page, with
+     * the definition a page away on /metode. CLAUDE.md's third principle is
+     * that a solver reporting numbers without saying whether they mean
+     * anything is the failure this project exists to expose — which the
+     * project's own headline diagnostic was doing.
+     */}
+    <div className="mt-4 max-w-reading space-y-2 border-l-4 border-prediction bg-predictionSoft/60 px-card py-3 text-caption">
+      <p>{dict.kappa.what}</p>
+      <p>
+        {fill(dict.kappa.meaning, {
+          kappa: Number.isFinite(fit.conditionNumber)
+            ? fit.conditionNumber.toFixed(1)
+            : '∞',
+        })}
+      </p>
+      <p className="numeric text-inkMuted">{dict.kappa.thresholds}</p>
+      {correlationHref !== undefined && (
+        <p>
+          <Link
+            href={correlationHref}
+            className="text-prediction underline underline-offset-4 hover:text-ink"
+          >
+            {dict.kappa.where}
+          </Link>
+        </p>
+      )}
+    </div>
 
     {fit.steps.length > 0 && (
       <section className="mt-4 rounded-r-card border-l-4 border-unresolved bg-unresolvedSoft/60 px-5 py-4">
