@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { RayleighSlider } from '@/components/RayleighSlider'
@@ -6,27 +7,14 @@ import { Section } from '@/components/ui'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations, stationSummary } from '@/lib/records/registry'
 import { STANDARD_SET } from '@/lib/tide/constituents'
-import { requiredHoursFor } from '@/lib/tide/rayleigh'
+import { separationLadder } from '@/lib/tide/rayleigh'
 import { analyseStation } from '@/lib/view/station'
-import { zoneOf } from '@/lib/view/format'
+import { formatDays, zoneOf } from '@/lib/view/format'
 
 export function generateStaticParams() {
   return LOCALES.flatMap((locale) =>
     stations().map((station) => ({ locale, station: station.stationId })),
   )
-}
-
-/** The pairs that decide how long a record has to be, worst first. */
-function tightestPairs(limit: number) {
-  const pairs: Array<{ a: string; b: string; days: number }> = []
-  for (let i = 0; i < STANDARD_SET.length; i += 1) {
-    for (let j = i + 1; j < STANDARD_SET.length; j += 1) {
-      const a = STANDARD_SET[i]!
-      const b = STANDARD_SET[j]!
-      pairs.push({ a, b, days: requiredHoursFor(a, b) / 24 })
-    }
-  }
-  return pairs.sort((x, y) => y.days - x.days).slice(0, limit)
 }
 
 export default async function ResolutionPage({
@@ -43,6 +31,12 @@ export default async function ResolutionPage({
   const analysis = await analyseStation(params.station)
   if (analysis === null) notFound()
 
+  // The six longest rungs of the standard set — the ones that decide whether a
+  // record of this length is long enough at all.
+  const worstPairs = separationLadder(STANDARD_SET)
+    .filter((rung) => rung.b !== null)
+    .slice(0, 6)
+
   return (
     <div className="space-y-8">
       <StationNav dict={dict} locale={locale} stationId={summary.stationId} active="resolusi" />
@@ -55,7 +49,7 @@ export default async function ResolutionPage({
       />
       <NavigationWarning dict={dict} compact />
 
-      <Section eyebrow="Batas" title={dict.resolusi.title} lead={dict.resolusi.lead} />
+      <Section eyebrow={dict.resolusi.eyebrow} title={dict.resolusi.title} lead={dict.resolusi.lead} />
 
       <RayleighSlider
         dict={dict}
@@ -63,30 +57,44 @@ export default async function ResolutionPage({
         maxDays={Math.floor(summary.lengthDays)}
       />
 
+      {/* The worst rungs of the universal ladder, against this record's own
+          length. The full ladder, and the survey lengths that clear it, live
+          at /resolusi — it needs no station, so it does not belong here. */}
       <section className="max-w-reading">
-        <h2 className="text-headline">Pasangan yang menentukan panjang rekaman</h2>
-        <p className="mt-1 text-caption text-inkMuted">
-          T = 360° / |σᵢ − σⱼ|. Semakin dekat dua kecepatan, semakin panjang rekaman yang
-          dibutuhkan untuk memisahkannya.
-        </p>
+        <h2 className="text-headline">{dict.resolusi.ladderStationTitle}</h2>
+        <p className="mt-1 text-caption text-inkMuted">{dict.resolusi.ladderLead}</p>
         <table className="mt-3 w-full border-collapse text-caption">
           <thead>
             <tr className="border-b border-rule text-left">
-              <th className="py-2">Pasangan</th>
-              <th className="py-2 text-right">Panjang minimum (hari)</th>
+              <th className="eyebrow py-2">{dict.resolusi.ladderPair}</th>
+              <th className="eyebrow py-2 text-right">{dict.resolusi.ladderRequired}</th>
             </tr>
           </thead>
           <tbody className="numeric">
-            {tightestPairs(6).map((pair) => (
-              <tr key={`${pair.a}-${pair.b}`} className="border-b border-rule/60">
+            {worstPairs.map((rung) => (
+              <tr key={`${rung.a}-${rung.b}`} className="border-b border-rule/60">
                 <td className="py-1.5">
-                  {pair.a} / {pair.b}
+                  {rung.a} / {rung.b}
                 </td>
-                <td className="py-1.5 text-right">{pair.days.toFixed(1)}</td>
+                <td
+                  className={`py-1.5 text-right ${
+                    rung.requiredDays > summary.lengthDays ? 'text-unresolved' : 'text-inkMuted'
+                  }`}
+                >
+                  {formatDays(rung.requiredDays)}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <p className="mt-3 text-caption text-inkFaint">
+          <Link
+            href={`/${locale}/resolusi`}
+            className="text-prediction underline underline-offset-4 hover:text-ink"
+          >
+            {dict.resolusi.ladderTitle}
+          </Link>
+        </p>
       </section>
     </div>
   )

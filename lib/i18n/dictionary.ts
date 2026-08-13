@@ -151,6 +151,25 @@ export interface Dictionary {
     readonly keptTitle: string
     readonly droppedTitle: string
     readonly conditionTitle: string
+    readonly eyebrow: string
+    /** The station-free ladder. */
+    readonly ladderTitle: string
+    readonly ladderLead: string
+    readonly ladderUniversal: string
+    readonly ladderPair: string
+    readonly ladderAgainstMean: string
+    readonly ladderSeparation: string
+    readonly ladderRequired: string
+    readonly ladderFullTitle: string
+    readonly ladderStationTitle: string
+    readonly surveyTitle: string
+    readonly surveyLead: string
+    readonly surveyLength: string
+    readonly surveyKept: string
+    readonly surveyLost: string
+    readonly surveyNone: string
+    readonly perStationTitle: string
+    readonly perStationLead: string
   }
   readonly banding: {
     readonly title: string
@@ -349,6 +368,28 @@ const id: Dictionary = {
     keptTitle: 'Masih dapat dipisahkan',
     droppedTitle: 'Tidak dapat dipisahkan pada jendela ini',
     conditionTitle: 'Bilangan kondisi',
+    eyebrow: 'Batas',
+    ladderTitle: 'Berapa lama harus mengamati',
+    ladderLead:
+      'Dua komponen baru dapat dipisahkan bila rekaman cukup panjang untuk membuat keduanya bergeser satu siklus penuh: T = 360° / |σᵢ − σⱼ|. Semakin dekat dua kecepatan, semakin panjang rekaman yang dibutuhkan.',
+    ladderUniversal:
+      'Halaman ini tidak memuat satu pun rekaman. Kecepatan komponen berasal dari orbit Bulan dan Matahari, jadi tangga di bawah ini berlaku sama di Sabang, di Bristol, dan di mana pun ada laut. Yang bersifat lokal hanya amplitudo dan fase — dan itu memerlukan rekaman.',
+    ladderPair: 'Pasangan',
+    ladderAgainstMean: 'terhadap muka air rata-rata',
+    ladderSeparation: 'Selisih kecepatan (°/jam)',
+    ladderRequired: 'Panjang minimum (hari)',
+    ladderFullTitle: 'Tangga lengkap: setiap pemisahan yang dituntut himpunan baku',
+    ladderStationTitle: 'Pasangan yang menentukan panjang rekaman',
+    surveyTitle: 'Yang dibeli oleh setiap panjang pengamatan',
+    surveyLead:
+      'Himpunan baku berisi sepuluh komponen. Berikut berapa banyak yang benar-benar dapat dipisahkan oleh pengamatan sepanjang ini — bukan berapa yang akan dikembalikan oleh penyelesai yang tidak memeriksa.',
+    surveyLength: 'Lama pengamatan',
+    surveyKept: 'Dapat dipisahkan',
+    surveyLost: 'Berguguran',
+    surveyNone: 'tidak ada',
+    perStationTitle: 'Rekaman yang ada di situs ini',
+    perStationLead:
+      'Tangga di atas berlaku universal. Untuk melihat tangga itu berhadapan dengan rekaman sungguhan — komponen berguguran dan bilangan kondisi naik saat jendela diperpendek — pilih satu stasiun.',
   },
   banding: {
     title: 'Banding metode',
@@ -549,6 +590,28 @@ const en: Dictionary = {
     keptTitle: 'Still separable',
     droppedTitle: 'Not separable on this window',
     conditionTitle: 'Condition number',
+    eyebrow: 'The limit',
+    ladderTitle: 'How long you have to watch',
+    ladderLead:
+      'Two constituents can only be separated once the record is long enough for them to drift a full cycle apart: T = 360° / |σᵢ − σⱼ|. The closer two speeds are, the longer the record has to be.',
+    ladderUniversal:
+      'This page loads no record at all. Constituent speeds come from the orbits of the Moon and the Sun, so the ladder below holds equally at Sabang, at Bristol, and anywhere else there is a sea. Only amplitude and phase are local — and those need a record.',
+    ladderPair: 'Pair',
+    ladderAgainstMean: 'against mean level',
+    ladderSeparation: 'Speed difference (°/h)',
+    ladderRequired: 'Minimum length (days)',
+    ladderFullTitle: 'The full ladder: every separation the standard set demands',
+    ladderStationTitle: 'The pairs that set the record length',
+    surveyTitle: 'What each length of observation buys',
+    surveyLead:
+      'The standard set holds ten constituents. Here is how many of them an observation this long can actually separate — not how many a solver that does not check would hand back.',
+    surveyLength: 'Time observed',
+    surveyKept: 'Separable',
+    surveyLost: 'Dropped',
+    surveyNone: 'none',
+    perStationTitle: 'The records on this site',
+    perStationLead:
+      'The ladder above is universal. To watch it meet a real record — constituents dropping out and the condition number climbing as the window shortens — pick a station.',
   },
   banding: {
     title: 'Method comparison',

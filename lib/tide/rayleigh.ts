@@ -200,6 +200,78 @@ export function resolvableSubset(
   return { kept, dropped }
 }
 
+/**
+ * One rung of the separation ladder: two constituents and the record length
+ * that tells them apart. A rung against the mean level has `b === null`.
+ */
+export interface LadderRung {
+  readonly a: ConstituentName
+  /** The partner, or null when the rung is the constituent against Z0. */
+  readonly b: ConstituentName | null
+  readonly separationDegPerHour: number
+  readonly requiredHours: number
+  readonly requiredDays: number
+}
+
+/**
+ * Every separation a constituent set demands, longest first.
+ *
+ * This is the universal half of the problem and it needs no record at all:
+ * the speeds come from the astronomy, so the ladder is the same at every
+ * station on Earth (PRD §1). It answers the question the slider cannot —
+ * not "what does my record lose", but "how long must I watch to gain this"
+ * — which is what someone planning a deployment actually asks.
+ *
+ * For a set of n constituents there are n(n−1)/2 pair rungs plus n mean-level
+ * rungs. Nothing is truncated here; a caller that wants the worst few can
+ * take them from the head.
+ */
+export function separationLadder(constituents: readonly ConstituentName[]): LadderRung[] {
+  const rungs: LadderRung[] = []
+
+  for (const name of constituents) {
+    const requiredHours = requiredHoursAgainstMean(name)
+    rungs.push({
+      a: name,
+      b: null,
+      separationDegPerHour: Math.abs(constituentSpeed(name)),
+      requiredHours,
+      requiredDays: requiredHours / HOURS_PER_DAY,
+    })
+  }
+
+  for (let i = 0; i < constituents.length; i += 1) {
+    for (let j = i + 1; j < constituents.length; j += 1) {
+      const first = constituents[i] as ConstituentName
+      const second = constituents[j] as ConstituentName
+      // Alphabetical within the rung, so K1/P1 and P1/K1 are one fact rather
+      // than two. Canonical, not conventional: the field would write S2/K2
+      // and this writes K2/S2. A stable order is worth more here than a
+      // familiar one, and the pair reads the same either way.
+      const [a, b] = first.localeCompare(second) <= 0 ? [first, second] : [second, first]
+      const requiredHours = requiredHoursFor(a, b)
+      rungs.push({
+        a,
+        b,
+        separationDegPerHour: Math.abs(constituentSpeed(a) - constituentSpeed(b)),
+        requiredHours,
+        requiredDays: requiredHours / HOURS_PER_DAY,
+      })
+    }
+  }
+
+  // Longest first, then by name, so the order is total and the same on every
+  // run — two rungs can demand the same length (K2/S2 and K1/P1 both want the
+  // solar year) and a sort that leaves those two in input order is not
+  // determinism, it is luck.
+  return rungs.sort(
+    (x, y) =>
+      y.requiredHours - x.requiredHours ||
+      x.a.localeCompare(y.a) ||
+      (x.b ?? '').localeCompare(y.b ?? ''),
+  )
+}
+
 /** One line of Indonesian explaining why a pair cannot be separated. */
 export function describeConflict(c: ResolutionConflict): string {
   if (c.a === c.b) {
