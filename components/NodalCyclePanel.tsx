@@ -40,7 +40,7 @@ export function NodalCyclePanel({
     <div className="space-y-4">
       <ul className="space-y-3">
         {modulated.map((cycle) => (
-          <li key={cycle.name} className="grid grid-cols-[3.5rem_1fr_4.5rem] items-center gap-3">
+          <li key={cycle.name} className="grid grid-cols-[3.5rem_1fr_8rem] items-center gap-3">
             <span className="numeric text-caption font-medium">{cycle.name}</span>
 
             <span className="relative block h-6">
@@ -57,16 +57,27 @@ export function NodalCyclePanel({
                 className="absolute top-1/2 h-3.5 w-px -translate-y-1/2 bg-grid"
                 style={{ left: `${position(1)}%` }}
               />
-              {/* Where this record's own fit sits on the cycle. */}
+              {/*
+               * Where this record's own fit sits on the cycle. Decorative: the
+               * value it marks is printed in the column to the right, so
+               * labelling the dot as well would say it twice.
+               */}
               <span
+                aria-hidden="true"
                 className="absolute top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-surface bg-prediction"
                 style={{ left: `${position(cycle.atEpoch.f)}%` }}
-                title={`f = ${cycle.atEpoch.f.toFixed(4)}`}
               />
             </span>
 
+            {/*
+             * f at this record's epoch, in text. It was on the dot as a title
+             * attribute, which no keyboard reaches and no screen reader
+             * reliably announces — the one number on this panel that existed
+             * nowhere else on the page (WCAG 1.3.1).
+             */}
             <span className="numeric text-caption text-right text-inkMuted">
-              ±{Math.round((cycle.swing / 2) * 100)}%
+              <span className="text-ink">f {cycle.atEpoch.f.toFixed(3)}</span>{' '}
+              <span className="text-inkFaint">±{Math.round((cycle.swing / 2) * 100)}%</span>
             </span>
           </li>
         ))}

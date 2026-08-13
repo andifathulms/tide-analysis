@@ -96,12 +96,19 @@ export function FormzahlComparison({
               </span>
             </span>
           ))}
+          {/*
+           * The dots carried the station name and its F in a title attribute —
+           * mouse-only, and the sole source for both. They are decorative
+           * instead: the table directly above lists every station with its F,
+           * so labelling eight dots would make a screen reader read the same
+           * eight stations a second time.
+           */}
           {rows.map((row) => (
             <span
               key={row.stationId}
+              aria-hidden="true"
               className="absolute h-2.5 w-2.5 -translate-x-1/2 rounded-full border-2 border-surface bg-prediction"
               style={{ left: `${position(row.value)}%`, top: -5 }}
-              title={`${row.stationName} — F = ${row.value.toFixed(3)}`}
             />
           ))}
         </div>
