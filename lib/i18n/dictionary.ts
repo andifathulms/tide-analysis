@@ -158,6 +158,14 @@ export interface Dictionary {
       'identical' | 'strong' | 'moderate' | 'slight' | 'negligible',
       string
     >
+    readonly nodalEyebrow: string
+    readonly nodalTitle: string
+    readonly nodalLead: string
+    readonly nodalRange: string
+    readonly nodalHere: string
+    readonly nodalUnity: string
+    readonly nodalSolar: string
+    readonly nodalNote: string
   }
   readonly resolusi: {
     readonly title: string
@@ -404,6 +412,16 @@ const id: Dictionary = {
       slight: 'sedikit',
       negligible: 'dapat diabaikan',
     },
+    nodalEyebrow: 'Daur 18,61 tahun',
+    nodalTitle: 'Yang sebenarnya dikoreksi oleh f',
+    nodalLead:
+      'Simpul bulan mundur satu putaran penuh dalam 18,61 tahun, dan sepanjang itu ia mengubah amplitudo tiap komponen bulan. Pada tabel di atas f hanyalah satu kolom, dan «f = 1,037» terbaca seperti koreksi pembulatan. Bukan: sepanjang daur itu f milik K2 bergerak dari 0,748 sampai 1,317 — gelombang yang sama pernah setinggi tiga perempat nilai nominalnya, dan pernah empat pertiga.',
+    nodalRange: 'jangkauan f sepanjang satu daur',
+    nodalHere: 'posisi rekaman ini',
+    nodalUnity: 'f = 1, bila simpul diabaikan',
+    nodalSolar: 'Komponen matahari tidak mengikuti simpul bulan sama sekali — f = 1 dan u = 0 untuk selamanya:',
+    nodalNote:
+      'Amplitudo H yang dilaporkan sudah dibagi f, jadi ia tidak bergantung pada daur; gelombang yang benar-benar ada di air adalah H·f. Karena itulah f dan u dihitung ulang pada waktu prediksi, bukan dibawa dari jendela pencocokan — konstanta harmonik adalah konstanta terhadap suatu epok, dan menyalin konstanta tanpa epoknya adalah kesalahan yang tidak terlihat pada hasilnya. Deret dari Schureman 1958, SP 98, tabel 14.',
   },
   resolusi: {
     title: 'Resolusi',
@@ -662,6 +680,16 @@ const en: Dictionary = {
       slight: 'slight',
       negligible: 'negligible',
     },
+    nodalEyebrow: 'The 18.61-year cycle',
+    nodalTitle: 'What f is actually correcting for',
+    nodalLead:
+      'The lunar node regresses once in 18.61 years, and modulates the amplitude of every lunar constituent as it goes. In the table above f is just a column, and “f = 1.037” reads as a rounding correction. It is not: across that cycle K2’s f runs from 0.748 to 1.317 — the same wave stands at three quarters of its nominal height at one point and four thirds at another.',
+    nodalRange: 'range of f over one cycle',
+    nodalHere: 'where this record sits',
+    nodalUnity: 'f = 1, if the node were ignored',
+    nodalSolar: 'Solar constituents do not follow the lunar node at all — f = 1 and u = 0, for all time:',
+    nodalNote:
+      'The reported amplitude H has f divided out, so it does not depend on the cycle; the wave actually in the water is H·f. That is why f and u are recomputed at prediction time rather than carried forward from the fit window — a harmonic constant is a constant with respect to an epoch, and copying one without its epoch is the kind of error that never shows in the output. Series from Schureman 1958, SP 98, table 14.',
   },
   resolusi: {
     title: 'Resolution',

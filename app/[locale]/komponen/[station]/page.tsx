@@ -3,6 +3,7 @@ import { AsymmetryPanel } from '@/components/AsymmetryPanel'
 import { ConstituentExplorer } from '@/components/ConstituentExplorer'
 import { ConstituentTable } from '@/components/table/ConstituentTable'
 import { CorrelationPanel } from '@/components/CorrelationPanel'
+import { NodalCyclePanel } from '@/components/NodalCyclePanel'
 import { FitDiagnostics, RefusalNotice } from '@/components/Diagnostics'
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { StationHeader, StationNav } from '@/components/StationNav'
@@ -11,6 +12,7 @@ import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionar
 import { stations } from '@/lib/records/registry'
 import { analyseAsymmetry } from '@/lib/tide/asymmetry'
 import { PUBLISHED_INDONESIAN_FORMZAHL } from '@/lib/tide/formzahl'
+import { nodalCycles } from '@/lib/tide/nodalcycle'
 import { analyseStation } from '@/lib/view/station'
 import { zoneOf } from '@/lib/view/format'
 
@@ -87,6 +89,21 @@ export default async function ConstituentsPage({
             lead={dict.komponen.correlationLead}
           >
             <CorrelationPanel dict={dict} report={shown.outcome.correlations} />
+          </Section>
+
+          {/* The scale of the correction the table above reports as a column. */}
+          <Section
+            eyebrow={dict.komponen.nodalEyebrow}
+            title={dict.komponen.nodalTitle}
+            lead={dict.komponen.nodalLead}
+          >
+            <NodalCyclePanel
+              dict={dict}
+              cycles={nodalCycles({
+                names: shown.outcome.constants.map((c) => c.name),
+                epochSec: shown.outcome.nodalEpochSec,
+              })}
+            />
           </Section>
 
           {analysis.character !== null && (
