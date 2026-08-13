@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Newsreader, Inter_Tight, Roboto_Mono } from 'next/font/google'
+import { SITE_URL } from '@/lib/view/site'
 import './globals.css'
 
 /** Self-hosted via next/font (PRD §12) — no runtime request to a font CDN. */
@@ -29,18 +30,23 @@ const mono = Roboto_Mono({
 const base = process.env.NEXT_PUBLIC_BASE_PATH ?? ''
 
 /**
- * Where the site is published. Social cards need absolute URLs, and without
- * this Next resolves them against localhost — a share preview that works in
- * development and shows nothing anywhere else. Trailing slash matters: it is
- * what keeps a relative asset inside the repository subdirectory.
+ * Where the site is published. Social cards need absolute URLs, and without a
+ * metadataBase Next resolves them against localhost — a share preview that
+ * works in development and shows nothing anywhere else.
+ *
+ * SITE_URL lives in lib/view/site now, shared with the sitemap and with every
+ * page's canonical, and it is stored without a trailing slash so those can
+ * join paths to it cleanly. metadataBase needs the slash back: without it a
+ * relative asset like og.png resolves to the domain root rather than into the
+ * repository subdirectory, and the card silently 404s.
  */
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://andifathulms.github.io/tide-analysis/'
+const METADATA_BASE = new URL(`${SITE_URL}/`)
 
 const DESCRIPTION =
   'Mencocokkan komponen pasang surut dari pengamatan tinggi muka laut dengan kuadrat terkecil, melaporkan kondisi penyelesaiannya, dan menolak apa yang tidak didukung rekaman. Alat edukasi, bukan untuk navigasi.'
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
+  metadataBase: METADATA_BASE,
   title: {
     default: 'Tide Analysis — analisis harmonik pasang surut',
     template: '%s · Tide Analysis',

@@ -41,9 +41,21 @@ async function formzahlRows(): Promise<FormzahlRow[]> {
   return rows.sort((a, b) => a.value - b.value)
 }
 
-export default async function HomePage({ params }: { params: { locale: string } }) {
+export default async function HomeRoute({ params }: { params: { locale: string } }) {
   if (!isLocale(params.locale)) notFound()
-  const locale = params.locale as Locale
+  return <Home locale={params.locale as Locale} />
+}
+
+/**
+ * The home page, as a component rather than only a route.
+ *
+ * The site root renders it too. `app/page.tsx` used to call redirect('/id'),
+ * which a static export cannot perform — it emits an error shell with no meta
+ * refresh and no link to anywhere, so the redirect happened only after React
+ * hydrated. A crawler arriving at the front door found a page with a title, an
+ * OG card and no way onward to any of the other eighty-eight.
+ */
+export async function Home({ locale }: { locale: Locale }) {
   const dict = dictionary(locale)
   const list = stations()
   const formzahl = await formzahlRows()
