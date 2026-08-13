@@ -136,6 +136,18 @@ export function ConstituentExplorer({
 
   return (
     <div className="space-y-4">
+      {/*
+       * The honest label. This control is the most engaging thing on the site
+       * and it demonstrates synthesis — PRD §6.6's spring-neap beat emerging
+       * from two cosines, which is a real lesson. Unlabelled, though, it reads
+       * as analysis: press a button, watch the fit change. It does not. Saying
+       * so is the difference between teaching the distinction the project is
+       * built on and quietly undermining it.
+       */}
+      <p className="max-w-reading border-l-4 border-prediction bg-predictionSoft/60 px-card py-3 text-caption">
+        {dict.komponen.explorerNotRefit}
+      </p>
+
       <div className="flex flex-wrap gap-2">
         {fit.constants.map((constant) => {
           const on = enabled.has(constant.name)
@@ -161,14 +173,14 @@ export function ConstituentExplorer({
           onClick={() => setEnabled(new Set(fit.constants.map((c) => c.name)))}
           className="rounded-sm border border-rule px-2.5 py-1 text-caption text-inkMuted hover:border-prediction/60"
         >
-          + semua
+          {dict.komponen.explorerAll}
         </button>
         <button
           type="button"
           onClick={() => setEnabled(new Set(['M2']))}
           className="rounded-sm border border-rule px-2.5 py-1 text-caption text-inkMuted hover:border-prediction/60"
         >
-          M2 saja
+          {dict.komponen.explorerOnly}
         </button>
       </div>
 

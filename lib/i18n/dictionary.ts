@@ -240,6 +240,10 @@ export interface Dictionary {
     readonly explorerEyebrow: string
     readonly explorerTitle: string
     readonly explorerLead: string
+    readonly explorerNotRefit: string
+    readonly explorerAll: string
+    readonly explorerOnly: string
+    readonly explorerCount: string
     readonly formzahlTitle: string
     readonly publishedTitle: string
     readonly publishedNote: string
@@ -628,6 +632,11 @@ const id: Dictionary = {
     explorerTitle: 'Penjelajah komponen',
     explorerLead:
       'Mulailah dengan M2 sendirian — gelombang dua kali sehari yang bersih. Tambahkan S2 dan irama purnama-perbani muncul dari pelayangan dua kosinus itu.',
+    explorerNotRefit:
+      'Yang ditambah dan dikurangi di sini adalah suku-suku penjumlahan, bukan pencocokannya. Kedelapan konstanta sudah dicocokkan sekali, bersama-sama, dari seluruh rekaman; angkanya tidak berubah saat tombol ditekan. Mematikan M2 tidak berarti mencocokkan ulang tanpa M2 — untuk melihat pencocokan yang benar-benar berubah, perpendek jendelanya di halaman Resolusi dan lihat komponen berguguran.',
+    explorerAll: 'Semua',
+    explorerOnly: 'M2 saja',
+    explorerCount: '{count} dari {total} komponen',
     formzahlTitle: 'Bilangan Formzahl dan tipe pasang surut',
     publishedTitle: 'Nilai terbit untuk perbandingan',
     publishedNote:
@@ -1067,6 +1076,11 @@ const en: Dictionary = {
     explorerTitle: 'Constituent explorer',
     explorerLead:
       'Start with M2 alone — a clean twice-daily wave. Add S2 and the spring-neap rhythm emerges from the beat between two cosines.',
+    explorerNotRefit:
+      'What these buttons add and remove are terms in the sum, not the fit. All eight constants were fitted once, together, over the whole record, and none of them changes when you press a button. Switching M2 off is not the same as refitting without M2 — to watch a fit actually change, shorten the window on the Resolution page and see constituents drop out.',
+    explorerAll: 'All',
+    explorerOnly: 'M2 only',
+    explorerCount: '{count} of {total} constituents',
     formzahlTitle: 'Formzahl number and tide type',
     publishedTitle: 'Published values, for comparison',
     publishedNote:
