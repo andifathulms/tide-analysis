@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { BeatFigure } from '@/components/BeatFigure'
 import { Badge, Callout, Card, Scroller, Section } from '@/components/ui'
+import { beatFigure } from '@/lib/chart/beat'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations } from '@/lib/records/registry'
 import { STANDARD_SET } from '@/lib/tide/constituents'
@@ -58,6 +60,14 @@ export default function LadderPage({ params }: { params: { locale: string } }) {
       <Callout tone="note">
         <p className="max-w-reading">{dict.resolusi.ladderUniversal}</p>
       </Callout>
+
+      {/*
+       * The mechanism, before any of the tables that depend on it. The formula
+       * is in the lead above; this is the thing the formula is about.
+       */}
+      <Section title={dict.resolusi.beatTitle}>
+        <BeatFigure dict={dict} figure={beatFigure('K1', 'P1')} />
+      </Section>
 
       <Section title={dict.resolusi.surveyTitle} lead={dict.resolusi.surveyLead}>
         <Scroller labelledBy="survey-caption">

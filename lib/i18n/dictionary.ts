@@ -292,6 +292,14 @@ export interface Dictionary {
     readonly ladderFullTitle: string
     readonly ladderDeciding: string
     readonly ladderTrivial: string
+    readonly beatTitle: string
+    readonly beatLead: string
+    readonly beatAtStart: string
+    readonly beatQuarter: string
+    readonly beatHalf: string
+    readonly beatFull: string
+    readonly beatWhyFull: string
+    readonly beatDay: string
     readonly ladderStationTitle: string
     readonly surveyTitle: string
     readonly surveyLead: string
@@ -703,6 +711,16 @@ const id: Dictionary = {
     ladderFullTitle: 'Tangga lengkap: setiap pemisahan yang dituntut himpunan baku',
     ladderDeciding:
       'Yang menentukan panjang survei adalah tiga belas pemisahan berikut. Sisanya sudah terpenuhi oleh rekaman dua hari mana pun, dan dicantumkan di bawah demi kelengkapan.',
+    beatTitle: 'Mengapa satu siklus penuh',
+    beatLead:
+      'K1 dan P1 berbeda hanya {separation}°/jam — kurang dari sepersepuluh derajat. Empat cuplikan dua-harian berikut diambil dari titik-titik berbeda pada rentang {required} hari yang dituntut pasangan ini, dan menunjukkan apa yang sedang ditunggu oleh kriteria itu.',
+    beatAtStart: 'Hari 0 — beda fase 0°: satu gelombang, dua nama',
+    beatQuarter: 'Hari {days} — beda fase 90°',
+    beatHalf: 'Hari {days} — beda fase 180°: berlawanan, dan di sinilah keduanya terpisahkan',
+    beatFull: 'Hari {days} — beda fase kembali 0°: seperti semula',
+    beatWhyFull:
+      'Pada setengah rentang keduanya sudah berlawanan, jadi mengapa syaratnya satu siklus penuh dan bukan setengah? Karena pencocokan membaca seluruh rekaman sekaligus, bukan satu saat tertentu. Rekaman yang berhenti sebelum satu siklus penuh hanya sempat melihat sebagian putaran, dan pada bagian itu kedua gelombang masih cukup mirip untuk saling menyamar. Setelah satu siklus penuh, setiap kemungkinan hubungan fase sudah terwakili di dalam rekaman — dan hanya satu pasang amplitudo yang cocok dengan semuanya.',
+    beatDay: 'hari',
     ladderTrivial:
       'Sisa pemisahan, semuanya di bawah dua hari. Rekaman yang terlalu pendek untuk memenuhinya juga terlalu pendek untuk dicocokkan sama sekali — satu komponen saja membutuhkan satu periode penuh untuk terpisah dari muka air rata-rata.',
     ladderStationTitle: 'Pasangan yang menentukan panjang rekaman',
@@ -1155,6 +1173,16 @@ const en: Dictionary = {
     ladderFullTitle: 'The full ladder: every separation the standard set demands',
     ladderDeciding:
       'Thirteen separations decide how long a survey has to run. The rest are met by any record of more than two days, and are listed below for completeness.',
+    beatTitle: 'Why a full cycle',
+    beatLead:
+      'K1 and P1 differ by {separation}°/h — less than a tenth of a degree. These four two-day snapshots are taken from different points across the {required} days this pair demands, and show what the criterion is waiting for.',
+    beatAtStart: 'Day 0 — 0° apart: one wave with two names',
+    beatQuarter: 'Day {days} — 90° apart',
+    beatHalf: 'Day {days} — 180° apart: opposed, and this is where they become separable',
+    beatFull: 'Day {days} — back to 0°: as they began',
+    beatWhyFull:
+      'They are already opposed at half the span, so why does the criterion ask for a full cycle rather than half of one? Because the fit reads the whole record at once, not one moment in it. A record that stops short of a full cycle has seen only part of the turn, and across that part the two waves stay similar enough to stand in for one another. After a full cycle every phase relationship between them has appeared somewhere in the record — and only one pair of amplitudes fits all of them at once.',
+    beatDay: 'days',
     ladderTrivial:
       'The remaining separations, all under two days. A record too short to meet these is too short to fit at all — a single constituent needs one full period just to separate from the mean level.',
     ladderStationTitle: 'The pairs that set the record length',
