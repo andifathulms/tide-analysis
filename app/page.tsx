@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Home } from '@/app/[locale]/page'
-import { DEFAULT_LOCALE } from '@/lib/i18n/dictionary'
-import { SITE_URL } from '@/lib/view/site'
+import { dictionary, DEFAULT_LOCALE } from '@/lib/i18n/dictionary'
+import { pageMetadata } from '@/lib/view/metadata'
 
 /**
  * The site root, which serves the Indonesian home page rather than pointing at
@@ -18,7 +18,12 @@ import { SITE_URL } from '@/lib/view/site'
  * canonical points at /id/ so the two URLs consolidate rather than compete.
  */
 export const metadata: Metadata = {
-  alternates: { canonical: `${SITE_URL}/${DEFAULT_LOCALE}` },
+  ...pageMetadata({
+    locale: DEFAULT_LOCALE,
+    path: '',
+    title: dictionary(DEFAULT_LOCALE).home.heroTitle,
+    description: dictionary(DEFAULT_LOCALE).home.heroLead,
+  }),
 }
 
 export default function RootPage() {

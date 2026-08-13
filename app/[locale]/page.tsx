@@ -1,9 +1,11 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { FormzahlComparison, type FormzahlRow } from '@/components/FormzahlComparison'
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { TideChart } from '@/components/chart/TideChart'
 import { Badge, Card, Section, Stat, TraceKey } from '@/components/ui'
+import { pageMetadata } from '@/lib/view/metadata'
 import { dictionary, fill, isLocale, type Locale } from '@/lib/i18n/dictionary'
 import { MANIFEST, stations } from '@/lib/records/registry'
 import { formatDate, formatDays } from '@/lib/view/format'
@@ -39,6 +41,22 @@ async function formzahlRows(): Promise<FormzahlRow[]> {
   }
 
   return rows.sort((a, b) => a.value - b.value)
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string }
+}): Promise<Metadata> {
+  if (!isLocale(params.locale)) return {}
+  const locale = params.locale as Locale
+  const dict = dictionary(locale)
+  return pageMetadata({
+    locale,
+    path: '',
+    title: dict.home.heroTitle,
+    description: dict.home.heroLead,
+  })
 }
 
 export default async function HomeRoute({ params }: { params: { locale: string } }) {

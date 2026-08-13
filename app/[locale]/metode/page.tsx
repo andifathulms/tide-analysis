@@ -1,14 +1,32 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { Scroller } from '@/components/ui'
 import type { ReactNode } from 'react'
+import { pageMetadata } from '@/lib/view/metadata'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { MANIFEST, stations } from '@/lib/records/registry'
 import { CONSTITUENTS, constituentSpeed, STANDARD_SET } from '@/lib/tide/constituents'
 import { constituentDoodsonNumber } from '@/lib/tide/constituents'
 import { analyseStation } from '@/lib/view/station'
 import { formatDate, formatDays } from '@/lib/view/format'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string }
+}): Promise<Metadata> {
+  if (!isLocale(params.locale)) return {}
+  const locale = params.locale as Locale
+  const dict = dictionary(locale)
+  return pageMetadata({
+    locale,
+    path: 'metode',
+    title: dict.metode.title,
+    description: dict.metode.lead,
+  })
+}
 
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }))

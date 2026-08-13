@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { AsymmetryPanel } from '@/components/AsymmetryPanel'
 import { ConstituentExplorer } from '@/components/ConstituentExplorer'
@@ -9,12 +10,37 @@ import { NavigationWarning } from '@/components/NavigationWarning'
 import { StationHeader, StationNav } from '@/components/StationNav'
 import { Caption, Card, Section, Stat } from '@/components/ui'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
-import { stations } from '@/lib/records/registry'
+import { stations, stationSummary } from '@/lib/records/registry'
 import { analyseAsymmetry } from '@/lib/tide/asymmetry'
 import { PUBLISHED_INDONESIAN_FORMZAHL } from '@/lib/tide/formzahl'
 import { nodalCycles } from '@/lib/tide/nodalcycle'
+import { pageMetadata } from '@/lib/view/metadata'
 import { analyseStation } from '@/lib/view/station'
 import { zoneOf } from '@/lib/view/format'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string; station: string }
+}): Promise<Metadata> {
+  if (!isLocale(params.locale)) return {}
+  const locale = params.locale as Locale
+  const dict = dictionary(locale)
+  const station = stationSummary(params.station)
+  if (station === undefined) return {}
+
+  // The station's name and this view's own heading and lead — the same strings
+  // the page renders, so the card cannot drift from the page.
+  return pageMetadata({
+    locale,
+    path: `komponen/${station.stationId}`,
+    title: `${station.stationName} — ${dict.komponen.title}`,
+    // Prefixed with the station, which is this page's own h1 — otherwise
+    // every station shares one view's lead and sixteen pages describe
+    // themselves identically.
+    description: `${station.stationName}. ${dict.komponen.lead}`,
+  })
+}
 
 export function generateStaticParams() {
   return LOCALES.flatMap((locale) =>

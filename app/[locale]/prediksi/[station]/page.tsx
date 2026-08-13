@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { TideChart } from '@/components/chart/TideChart'
@@ -5,14 +6,39 @@ import { StationHeader, StationNav } from '@/components/StationNav'
 import { RefusalNotice } from '@/components/Diagnostics'
 import { Scroller, Section } from '@/components/ui'
 import { dictionary, fill, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
-import { stations } from '@/lib/records/registry'
+import { stations, stationSummary } from '@/lib/records/registry'
 import { buildChartModel } from '@/lib/chart/model'
 import { findExtrema, predictHeights, timeGrid } from '@/lib/tide/predict'
+import { pageMetadata } from '@/lib/view/metadata'
 import { analyseStation } from '@/lib/view/station'
 import { formatClock, formatDate, formatDateTime, zoneOf } from '@/lib/view/format'
 
 /** Seven days beyond the end of the record. */
 const FORWARD_DAYS = 7
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string; station: string }
+}): Promise<Metadata> {
+  if (!isLocale(params.locale)) return {}
+  const locale = params.locale as Locale
+  const dict = dictionary(locale)
+  const station = stationSummary(params.station)
+  if (station === undefined) return {}
+
+  // The station's name and this view's own heading and lead — the same strings
+  // the page renders, so the card cannot drift from the page.
+  return pageMetadata({
+    locale,
+    path: `prediksi/${station.stationId}`,
+    title: `${station.stationName} — ${dict.prediksi.title}`,
+    // Prefixed with the station, which is this page's own h1 — otherwise
+    // every station shares one view's lead and sixteen pages describe
+    // themselves identically.
+    description: `${station.stationName}. ${dict.prediksi.lead}`,
+  })
+}
 
 export function generateStaticParams() {
   return LOCALES.flatMap((locale) =>

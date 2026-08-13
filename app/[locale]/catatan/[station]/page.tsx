@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { TideChart } from '@/components/chart/TideChart'
@@ -9,17 +10,42 @@ import { LeakagePanel } from '@/components/LeakagePanel'
 import { StationHeader, StationNav } from '@/components/StationNav'
 import { Callout, Caption, Card, Section, Stat, TraceKey } from '@/components/ui'
 import { dictionary, fill, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
-import { stations } from '@/lib/records/registry'
+import { stations, stationSummary } from '@/lib/records/registry'
 import { buildChartModel } from '@/lib/chart/model'
 import { DerivationPanel } from '@/components/DerivationPanel'
 import { StabilityPanel } from '@/components/StabilityPanel'
 import { windowStability } from '@/lib/tide/stability'
 import { deriveConstituent, largestConstituent } from '@/lib/view/derivation'
+import { pageMetadata } from '@/lib/view/metadata'
 import { analyseStation } from '@/lib/view/station'
 import { zoneOf } from '@/lib/view/format'
 
 /** Two thirds fitted, one third held out and predicted (PRD §6.1). */
 const FIT_FRACTION = 2 / 3
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string; station: string }
+}): Promise<Metadata> {
+  if (!isLocale(params.locale)) return {}
+  const locale = params.locale as Locale
+  const dict = dictionary(locale)
+  const station = stationSummary(params.station)
+  if (station === undefined) return {}
+
+  // The station's name and this view's own heading and lead — the same strings
+  // the page renders, so the card cannot drift from the page.
+  return pageMetadata({
+    locale,
+    path: `catatan/${station.stationId}`,
+    title: `${station.stationName} — ${dict.catatan.title}`,
+    // Prefixed with the station, which is this page's own h1 — otherwise
+    // every station shares one view's lead and sixteen pages describe
+    // themselves identically.
+    description: `${station.stationName}. ${dict.catatan.lead}`,
+  })
+}
 
 export function generateStaticParams() {
   return LOCALES.flatMap((locale) =>

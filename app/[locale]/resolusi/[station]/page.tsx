@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { CoveragePanel } from '@/components/CoveragePanel'
@@ -11,9 +12,34 @@ import { stations, stationSummary } from '@/lib/records/registry'
 import { STANDARD_SET } from '@/lib/tide/constituents'
 import { coverageSweep } from '@/lib/tide/coverage'
 import { separationLadder } from '@/lib/tide/rayleigh'
+import { pageMetadata } from '@/lib/view/metadata'
 import { analyseStation } from '@/lib/view/station'
 import { analyseWindow, DEFAULT_WINDOW_DAYS } from '@/lib/view/window'
 import { formatDays, zoneOf } from '@/lib/view/format'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string; station: string }
+}): Promise<Metadata> {
+  if (!isLocale(params.locale)) return {}
+  const locale = params.locale as Locale
+  const dict = dictionary(locale)
+  const station = stationSummary(params.station)
+  if (station === undefined) return {}
+
+  // The station's name and this view's own heading and lead — the same strings
+  // the page renders, so the card cannot drift from the page.
+  return pageMetadata({
+    locale,
+    path: `resolusi/${station.stationId}`,
+    title: `${station.stationName} — ${dict.resolusi.title}`,
+    // Prefixed with the station, which is this page's own h1 — otherwise
+    // every station shares one view's lead and sixteen pages describe
+    // themselves identically.
+    description: `${station.stationName}. ${dict.resolusi.lead}`,
+  })
+}
 
 export function generateStaticParams() {
   return LOCALES.flatMap((locale) =>

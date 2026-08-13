@@ -1,14 +1,40 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { StationHeader, StationNav } from '@/components/StationNav'
 import { RefusalNotice } from '@/components/Diagnostics'
 import { Card, Scroller, Section, Stat } from '@/components/ui'
 import { dictionary, fill, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
-import { stations } from '@/lib/records/registry'
+import { stations, stationSummary } from '@/lib/records/registry'
 import { admiraltyFit, compareMethods } from '@/lib/tide/admiralty'
 import { ADMIRALTY_SET } from '@/lib/tide/constituents'
+import { pageMetadata } from '@/lib/view/metadata'
 import { analyseStation } from '@/lib/view/station'
 import { zoneOf } from '@/lib/view/format'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string; station: string }
+}): Promise<Metadata> {
+  if (!isLocale(params.locale)) return {}
+  const locale = params.locale as Locale
+  const dict = dictionary(locale)
+  const station = stationSummary(params.station)
+  if (station === undefined) return {}
+
+  // The station's name and this view's own heading and lead — the same strings
+  // the page renders, so the card cannot drift from the page.
+  return pageMetadata({
+    locale,
+    path: `banding/${station.stationId}`,
+    title: `${station.stationName} — ${dict.banding.title}`,
+    // Prefixed with the station, which is this page's own h1 — otherwise
+    // every station shares one view's lead and sixteen pages describe
+    // themselves identically.
+    description: `${station.stationName}. ${dict.banding.lead}`,
+  })
+}
 
 export function generateStaticParams() {
   return LOCALES.flatMap((locale) =>
