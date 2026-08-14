@@ -10,6 +10,9 @@ import { loadRecord } from '@/lib/records/registry'
 import type { ConstituentName } from '@/lib/tide/constituents'
 import { analyse, type Analysis } from '@/lib/view/analysis'
 import type { TideRecord } from '@/lib/tide/record'
+import { readIntParam, withIntParam } from '@/lib/view/queryState'
+
+const PERCENT_PARAM = 'fit'
 
 /**
  * How much of the record to fit, as a control.
@@ -42,6 +45,21 @@ export function FitWindowControl({
   const [percent, setPercent] = useState(initialPercent)
   const [record, setRecord] = useState<TideRecord | null>(null)
   const [touched, setTouched] = useState(false)
+
+  /*
+   * A reader who reaches this page via `?fit=40` gets that split on load
+   * rather than the server-rendered default — the static export has no
+   * request to render from, so this can only happen client-side, after the
+   * default view has already painted once.
+   */
+  useEffect(() => {
+    const fromUrl = readIntParam(window.location.search, PERCENT_PARAM)
+    if (fromUrl === null) return
+    setPercent(Math.min(Math.max(fromUrl, 10), 100))
+    setTouched(true)
+    // Only meant to run once, against the URL the page was opened with.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (!touched || record !== null) return
@@ -89,6 +107,17 @@ export function FitWindowControl({
       }),
     }
   }, [record, constituents, settled])
+
+  /**
+   * The split a reader is looking at, kept in the address bar so it can be
+   * linked — tracks `settled` rather than the raw thumb position, so
+   * dragging doesn't call `replaceState` on every animation frame.
+   */
+  useEffect(() => {
+    if (!touched) return
+    const url = `${window.location.pathname}${withIntParam(window.location.search, PERCENT_PARAM, settled)}${window.location.hash}`
+    window.history.replaceState(null, '', url)
+  }, [touched, settled])
 
   const spanDays =
     record === null

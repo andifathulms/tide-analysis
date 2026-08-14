@@ -7,6 +7,9 @@ import { loadRecord } from '@/lib/records/registry'
 import { STANDARD_SET } from '@/lib/tide/constituents'
 import type { TideRecord } from '@/lib/tide/record'
 import { analyseWindow } from '@/lib/view/window'
+import { readIntParam, withIntParam } from '@/lib/view/queryState'
+
+const DAYS_PARAM = 'days'
 
 /**
  * The reason the project exists (PRD §6.3): record length against resolvable
@@ -42,6 +45,22 @@ export function RayleighSlider({
   const [days, setDays] = useState<number>(initialDays)
   const [touched, setTouched] = useState(false)
 
+  /*
+   * A reader who reaches this page via `?days=15` gets that window on load
+   * rather than the server-rendered default — the static export has no
+   * request to render from, so this can only happen client-side, after the
+   * default view has already painted once.
+   */
+  useEffect(() => {
+    const fromUrl = readIntParam(window.location.search, DAYS_PARAM)
+    if (fromUrl === null) return
+    const clamped = Math.min(Math.max(fromUrl, 3), Math.max(Math.floor(maxDays), 4))
+    setDays(clamped)
+    setTouched(true)
+    // Only meant to run once, against the URL the page was opened with.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   useEffect(() => {
     if (!touched || record !== null) return
     let cancelled = false
@@ -70,6 +89,17 @@ export function RayleighSlider({
     () => (record === null ? null : analyseWindow(record, settled)),
     [record, settled],
   )
+
+  /**
+   * The window a reader is looking at, kept in the address bar so it can be
+   * linked — tracks `settled` rather than the raw thumb position, so dragging
+   * doesn't call `replaceState` on every animation frame.
+   */
+  useEffect(() => {
+    if (!touched) return
+    const url = `${window.location.pathname}${withIntParam(window.location.search, DAYS_PARAM, settled)}${window.location.hash}`
+    window.history.replaceState(null, '', url)
+  }, [touched, settled])
 
   return (
     <div className="space-y-5">
