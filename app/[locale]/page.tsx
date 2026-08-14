@@ -111,7 +111,6 @@ export async function Home({ locale }: { locale: Locale }) {
           is an instrument and prose is a poor substitute for looking at one. */}
       <section className="space-y-block pt-2">
         <div className="max-w-3xl space-y-4">
-          <Badge tone="prediction">{dict.tagline}</Badge>
           <h1 className="text-display sm:text-hero">{dict.home.heroTitle}</h1>
           <p className="max-w-reading text-lead text-inkMuted">{dict.home.heroLead}</p>
         </div>
