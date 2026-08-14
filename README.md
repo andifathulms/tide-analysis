@@ -1,11 +1,11 @@
 <div align="center">
 
-<img src="public/brand/lockup-horizontal-light.png" alt="Tide Analysis" width="460">
+<img src="docs/brand/lockup-horizontal-light.png" alt="Tide Analysis" width="460">
 
 **Fit the tide from real observations, then predict it forward — and see why fifteen days of data can't tell you what six months can.**
 
 [![Live site](https://img.shields.io/badge/live-andifathulms.github.io%2Ftide--analysis-00719E?style=flat-square)](https://andifathulms.github.io/tide-analysis/)
-[![Tests](https://img.shields.io/badge/tests-301%20passing-1C6E93?style=flat-square)](#testing)
+[![Tests](https://img.shields.io/badge/tests-366%20passing-1C6E93?style=flat-square)](#testing)
 [![Deploy](https://github.com/andifathulms/tide-analysis/actions/workflows/deploy.yml/badge.svg)](https://github.com/andifathulms/tide-analysis/actions/workflows/deploy.yml)
 [![No dependencies](https://img.shields.io/badge/tide%20%2F%20algebra%20%2F%20chart%20libraries-none-C07A16?style=flat-square)](#no-libraries)
 
