@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useDeferredValue, useEffect, useMemo, useState } from 'react'
 import { TideChart } from '@/components/chart/TideChart'
 import { ConstituentTable } from '@/components/table/ConstituentTable'
 import { FitDiagnostics, RefusalNotice } from '@/components/Diagnostics'
@@ -54,9 +54,18 @@ export function FitWindowControl({
     }
   }, [touched, record, stationId])
 
+  /*
+   * A tick here measures about 22 ms on a fast laptop — the fit plus the chart
+   * model — and a range input fires onChange continuously while dragged.
+   * Computing it in the render path made every one of those a blocking task.
+   * The thumb and its readout now update at input speed and the chart follows,
+   * skipping the intermediate splits nobody was going to read. See the note in
+   * RayleighSlider; React 18 is already a dependency.
+   */
+  const settled = useDeferredValue(percent)
   const recomputed = useMemo((): { analysis: Analysis; model: ChartModel | null } | null => {
     if (record === null) return null
-    const analysis = analyse({ record, constituents, fitFraction: percent / 100 })
+    const analysis = analyse({ record, constituents, fitFraction: settled / 100 })
     if (analysis.series === null) return { analysis, model: null }
 
     return {
@@ -79,15 +88,19 @@ export function FitWindowControl({
         datumSteps: analysis.outcome.type === 'fit' ? analysis.outcome.steps : [],
       }),
     }
-  }, [record, constituents, percent])
+  }, [record, constituents, settled])
 
-  const lengthDays =
+  const spanDays =
     record === null
       ? null
-      : (((record.timesSec[record.timesSec.length - 1] as number) -
+      : ((record.timesSec[record.timesSec.length - 1] as number) -
           (record.timesSec[0] as number)) /
-          86400) *
-        (percent / 100)
+        86400
+
+  /** The readout tracks the thumb, at input speed. */
+  const lengthDays = spanDays === null ? null : spanDays * (percent / 100)
+  /** Everything that describes a result tracks the result, one frame behind. */
+  const settledLengthDays = spanDays === null ? null : spanDays * (settled / 100)
 
   return (
     <div className="space-y-5">
@@ -140,15 +153,15 @@ export function FitWindowControl({
             ? dict.common.loading
             : recomputed.analysis.outcome.type === 'fit'
               ? fill(dict.catatan.status, {
-                  percent,
-                  days: lengthDays === null ? '—' : lengthDays.toFixed(0),
+                  percent: settled,
+                  days: settledLengthDays === null ? '—' : settledLengthDays.toFixed(0),
                   kappa: recomputed.analysis.outcome.conditionNumber.toFixed(2),
                   fitRms: recomputed.analysis.fitResidualRmsM?.toFixed(4) ?? '—',
                   heldRms: recomputed.analysis.heldOutResidualRmsM?.toFixed(4) ?? '—',
                 })
               : fill(dict.catatan.statusRefused, {
-                  percent,
-                  days: lengthDays === null ? '—' : lengthDays.toFixed(0),
+                  percent: settled,
+                  days: settledLengthDays === null ? '—' : settledLengthDays.toFixed(0),
                   reason: recomputed.analysis.outcome.message,
                 })}
       </output>
@@ -175,7 +188,7 @@ export function FitWindowControl({
                 description={
                   fill(dict.common.chartAlt, {
                     station: stationName,
-                    days: lengthDays === null ? '—' : lengthDays.toFixed(0),
+                    days: settledLengthDays === null ? '—' : settledLengthDays.toFixed(0),
                     count: constituents.length,
                   }) +
                   (recomputed.analysis.fitResidualRmsM === null

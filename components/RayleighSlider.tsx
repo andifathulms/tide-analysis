@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useDeferredValue, useEffect, useMemo, useState } from 'react'
 import { RayleighResults } from '@/components/RayleighResults'
 import { fill, type Dictionary } from '@/lib/i18n/dictionary'
 import { loadRecord } from '@/lib/records/registry'
@@ -53,9 +53,22 @@ export function RayleighSlider({
     }
   }, [touched, record, stationId])
 
+  /*
+   * A full-record tick measures about 29 ms on a fast laptop and roughly four
+   * times that on a mid-range phone, and a range input fires onChange
+   * continuously while it is dragged. Computing it in the render path made
+   * every one of those a blocking task, so the thumb stuttered against its own
+   * results.
+   *
+   * useDeferredValue lets the thumb and its readout update at input speed
+   * while the fit follows at whatever speed it can manage, dropping the
+   * intermediate windows nobody was going to read. React 18 is already here;
+   * no dependency is added for this.
+   */
+  const settled = useDeferredValue(days)
   const state = useMemo(
-    () => (record === null ? null : analyseWindow(record, days)),
-    [record, days],
+    () => (record === null ? null : analyseWindow(record, settled)),
+    [record, settled],
   )
 
   return (
