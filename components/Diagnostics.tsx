@@ -4,6 +4,7 @@ import type { HarmonicRefusal } from '@/lib/tide/fit'
 import Link from 'next/link'
 import { fill } from '@/lib/i18n/dictionary'
 import type { ResolutionConflict } from '@/lib/tide/rayleigh'
+import { Callout } from '@/components/ui'
 
 const CONDITIONING_CLASS: Record<Conditioning, string> = {
   baik: 'text-prediction',
@@ -70,7 +71,7 @@ export function FitDiagnostics({
      * anything is the failure this project exists to expose — which the
      * project's own headline diagnostic was doing.
      */}
-    <div className="mt-4 max-w-reading space-y-2 border-l-4 border-prediction bg-predictionSoft/60 px-card py-3 text-caption">
+    <Callout tone="note" size="caption" className="mt-4 max-w-reading">
       <p>{dict.kappa.what}</p>
       <p>
         {fill(dict.kappa.meaning, {
@@ -90,23 +91,19 @@ export function FitDiagnostics({
           </Link>
         </p>
       )}
-    </div>
+    </Callout>
 
     {fit.steps.length > 0 && (
-      <section className="mt-4 rounded-r-card border-l-4 border-unresolved bg-unresolvedSoft/60 px-5 py-4">
-        {/*
-         * Invariant 9 makes the datum first-class, and this block is where a
-         * moved zero gets announced. It wore `eyebrow` — 12px, uppercase —
-         * which put the loudest fact about the record in the quietest type on
-         * the page.
-         */}
-        <h3 className="text-title text-unresolved">{dict.catatan.stepTitle}</h3>
-        <p className="mt-1.5 max-w-reading text-body">
+      // Invariant 9 makes the datum first-class, and this is where a moved
+      // zero gets announced — the loudest fact about the record, not the
+      // quietest type on the page.
+      <Callout tone="refusal" as="section" heading={dict.catatan.stepTitle} className="mt-4">
+        <p className="max-w-reading">
           {fill(dict.catatan.stepBody, {
             times: `${fit.steps.length}×`,
           })}
         </p>
-        <ul className="numeric mt-3 space-y-1 text-caption">
+        <ul className="numeric space-y-1 text-caption">
           {fit.levels.map((level) => (
             <li key={level.fromSec}>
               Z₀ = {level.meanLevelM.toFixed(4)} m
@@ -119,7 +116,7 @@ export function FitDiagnostics({
             </li>
           ))}
         </ul>
-      </section>
+      </Callout>
     )}
     </>
   )
@@ -177,27 +174,27 @@ export function RefusalNotice({
   refusal: HarmonicRefusal
 }) {
   return (
-    <section className="rounded-r-card border-l-4 border-unresolved bg-unresolvedSoft/60 px-5 py-4">
-      {/*
-       * The refusal is invariant 6, the project's central honesty mechanism,
-       * and it was set in the smallest type the site has — visually ranked
-       * below the section heading that contains it. The eyebrow stays as a
-       * label above the heading rather than being the heading.
-       */}
-      <p className="eyebrow text-unresolved">{dict.common.refusalLabel}</p>
-      <h2 className="mt-1 text-title text-unresolved">{dict.common.refusal}</h2>
-      <p className="mt-2 max-w-reading text-body">{headline(dict, refusal)}</p>
-      <ul className="mt-3 space-y-1 text-caption">
+    // The refusal is invariant 6, the project's central honesty mechanism —
+    // the eyebrow stays as a label above the heading rather than being it.
+    <Callout
+      tone="refusal"
+      as="section"
+      title={dict.common.refusalLabel}
+      heading={dict.common.refusal}
+      headingLevel={2}
+    >
+      <p className="max-w-reading">{headline(dict, refusal)}</p>
+      <ul className="space-y-1 text-caption">
         {refusal.conflicts.slice(0, 6).map((conflict) => (
           <li key={`${conflict.a}-${conflict.b}`} className="text-inkMuted">
             {describeConflict(dict, conflict)}
           </li>
         ))}
       </ul>
-      <p className="numeric mt-3 text-caption text-inkMuted">
+      <p className="numeric text-caption text-inkMuted">
         {dict.common.recordLength}: {refusal.availableDays.toFixed(1)} {dict.common.days} ·{' '}
         {dict.common.requiredLength}: {refusal.requiredDays.toFixed(1)} {dict.common.days}
       </p>
-    </section>
+    </Callout>
   )
 }

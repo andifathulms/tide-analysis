@@ -1,4 +1,5 @@
 import type { Dictionary } from '@/lib/i18n/dictionary'
+import { Callout } from '@/components/ui'
 
 /**
  * Invariant 15: this appears on every view that shows a predicted height, not
@@ -27,13 +28,9 @@ export function NavigationWarning({
   }
 
   return (
-    <aside
-      role="note"
-      className="rounded-r-card border-l-4 border-unresolved bg-unresolvedSoft/60 px-5 py-4"
-    >
-      <p className="eyebrow text-unresolved">{dict.warning.title}</p>
-      <p className="mt-1.5 max-w-reading text-body">{dict.warning.body}</p>
-      <p className="mt-1 max-w-reading text-body font-medium">{dict.warning.official}</p>
-    </aside>
+    <Callout tone="refusal" role="note" title={dict.warning.title} className="max-w-reading">
+      <p>{dict.warning.body}</p>
+      <p className="font-medium">{dict.warning.official}</p>
+    </Callout>
   )
 }

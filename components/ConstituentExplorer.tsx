@@ -10,6 +10,7 @@ import { constituent, type ConstituentName, type Species } from '@/lib/tide/cons
 import type { HarmonicFit } from '@/lib/tide/fit'
 import { predictHeights, residual, type PredictableConstant } from '@/lib/tide/predict'
 import { sliceRecord, type TideRecord } from '@/lib/tide/record'
+import { Callout } from '@/components/ui'
 
 const WINDOW_DAYS = 30
 
@@ -165,9 +166,9 @@ export function ConstituentExplorer({
        * so is the difference between teaching the distinction the project is
        * built on and quietly undermining it.
        */}
-      <p className="max-w-reading border-l-4 border-prediction bg-predictionSoft/60 px-card py-3 text-caption">
+      <Callout tone="note" size="caption" className="max-w-reading">
         {dict.komponen.explorerNotRefit}
-      </p>
+      </Callout>
 
       <div className="space-y-3">
         {grouped.map(({ species, constants }) => (

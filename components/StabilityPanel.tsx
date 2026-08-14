@@ -1,7 +1,7 @@
 import { fill, type Dictionary } from '@/lib/i18n/dictionary'
 import type { StabilityReport } from '@/lib/tide/stability'
 import { formatDate } from '@/lib/view/format'
-import { Scroller } from '@/components/ui'
+import { Callout, Scroller } from '@/components/ui'
 
 /**
  * Whether the constants above are a property of the harbour or of these months.
@@ -110,9 +110,9 @@ export function StabilityPanel({
         </p>
       )}
 
-      <p className="max-w-reading border-l-4 border-residual bg-residualSoft/60 px-card py-3 text-caption">
+      <Callout tone="warning" size="caption" className="max-w-reading">
         {dict.catatan.stabilityReading}
-      </p>
+      </Callout>
     </div>
   )
 }

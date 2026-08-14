@@ -1,6 +1,6 @@
 import { fill, type Dictionary } from '@/lib/i18n/dictionary'
 import type { RecoveryRow } from '@/lib/tide/recovery'
-import { Scroller } from '@/components/ui'
+import { Callout, Scroller } from '@/components/ui'
 
 /**
  * What the solver does when the answer is already known.
@@ -93,9 +93,9 @@ export function RecoveryPanel({
         </table>
       </Scroller>
 
-      <p className="max-w-reading border-l-4 border-prediction bg-predictionSoft/60 px-card py-3 text-caption">
+      <Callout tone="note" size="caption" className="max-w-reading">
         {fill(dict.resolusi.recoveryReading, { days: lengthDays })}
-      </p>
+      </Callout>
     </div>
   )
 }

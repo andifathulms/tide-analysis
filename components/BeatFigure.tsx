@@ -1,6 +1,7 @@
 import { fill, type Dictionary } from '@/lib/i18n/dictionary'
 import type { BeatFigure as Figure } from '@/lib/chart/beat'
 import { formatDays } from '@/lib/view/format'
+import { Callout } from '@/components/ui'
 
 /**
  * The mechanism behind T = 360° / |σᵢ − σⱼ|, drawn instead of asserted.
@@ -74,9 +75,9 @@ export function BeatFigure({ dict, figure }: { dict: Dictionary; figure: Figure 
       </ol>
 
       {/* The question the picture provokes, answered where it is provoked. */}
-      <p className="max-w-reading border-l-4 border-prediction bg-predictionSoft/60 px-card py-3 text-caption">
+      <Callout tone="note" size="caption" className="max-w-reading">
         {dict.resolusi.beatWhyFull}
-      </p>
+      </Callout>
     </div>
   )
 }

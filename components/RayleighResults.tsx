@@ -1,4 +1,5 @@
 import { ConstituentTable } from '@/components/table/ConstituentTable'
+import { Callout } from '@/components/ui'
 import { fill, type Dictionary } from '@/lib/i18n/dictionary'
 import { conditioningOf } from '@/lib/tide/fit'
 import type { ResolutionConflict } from '@/lib/tide/rayleigh'
@@ -68,20 +69,21 @@ export function RayleighResults({ dict, state }: { dict: Dictionary; state: Wind
       </div>
 
       {state.requested.type === 'refusal' && (
-        <section className="rounded-r-card border-l-4 border-unresolved bg-unresolvedSoft/60 px-card py-3">
-          <p className="eyebrow text-unresolved">{dict.common.refusalLabel}</p>
-          <h3 className="mt-1 text-title text-unresolved">{dict.common.refusal}</h3>
-          <p className="mt-2 text-body">
-            {fill(dict.resolusi.refusalIntro, { days: state.days })}
-          </p>
-          <ul className="mt-2 space-y-1 text-caption text-inkMuted">
+        <Callout
+          tone="refusal"
+          as="section"
+          title={dict.common.refusalLabel}
+          heading={dict.common.refusal}
+        >
+          <p>{fill(dict.resolusi.refusalIntro, { days: state.days })}</p>
+          <ul className="space-y-1 text-caption text-inkMuted">
             {state.requested.conflicts.slice(0, 5).map((conflict) => (
               <li key={`${conflict.a}-${conflict.b}-${conflict.requiredHours}`}>
                 {describe(dict, conflict)}
               </li>
             ))}
           </ul>
-        </section>
+        </Callout>
       )}
 
       {fit !== null && (

@@ -1,7 +1,7 @@
 import { fill, type Dictionary } from '@/lib/i18n/dictionary'
 import type { Derivation } from '@/lib/view/derivation'
 import { formatDateTime, UTC_DISPLAY } from '@/lib/view/format'
-import { Scroller } from '@/components/ui'
+import { Callout, Scroller } from '@/components/ui'
 
 /**
  * The step between the record and the constants, which the site never showed.
@@ -57,6 +57,7 @@ export function DerivationPanel({
             formula: argumentFormula(derivation.coefficients),
             offset,
           })}
+          <p className="mt-1.5 text-caption text-inkFaint">{dict.catatan.derivationElements}</p>
         </li>
 
         <li className="text-body">
@@ -136,9 +137,9 @@ export function DerivationPanel({
       </ol>
 
       {/* What the walkthrough left out, stated rather than left to be found. */}
-      <p className="max-w-reading border-l-4 border-residual bg-residualSoft/60 px-card py-3 text-caption">
+      <Callout tone="warning" size="caption" className="max-w-reading">
         {fill(dict.catatan.derivationHonesty, { name })}
-      </p>
+      </Callout>
     </div>
   )
 }

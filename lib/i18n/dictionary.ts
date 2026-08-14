@@ -216,6 +216,7 @@ export interface Dictionary {
     readonly derivationTitle: string
     readonly derivationLead: string
     readonly derivationArgument: string
+    readonly derivationElements: string
     readonly derivationColumns: string
     readonly derivationSolve: string
     readonly derivationBack: string
@@ -647,6 +648,8 @@ const id: Dictionary = {
       'Tabel di atas adalah hasilnya. Ini jalannya, dengan angka rekaman ini sendiri — tidak ada yang disederhanakan atau dibulatkan untuk contoh.',
     derivationArgument:
       'Langkah 1 — Di mana Bulan dan Matahari berada. Setiap komponen punya enam bilangan Doodson yang menyatakan berapa kali tiap elemen astronomi masuk ke dalam sudutnya. Untuk {name} keenamnya adalah {coefficients}, jadi sudut kesetimbangannya V(t) = {formula}{offset}. Polinomial elemennya dari Meeus, Astronomical Algorithms (ed. 2), bab 22 dan 47.',
+    derivationElements:
+      'τ = waktu bulan rata-rata · s = bujur rata-rata Bulan · h = bujur rata-rata Matahari · p = perigee Bulan · N = simpul menaik Bulan · p′ = perigee Matahari.',
     derivationColumns:
       'Langkah 2 — Dua kolom, per jam. cos(V + u) dan sin(V + u) dihitung untuk setiap baris rekaman. Inilah dua kolom {name} di dalam matriks rancangan; empat baris berturut-turut dari rekaman ini:',
     derivationSolve:
@@ -1149,6 +1152,8 @@ const en: Dictionary = {
       'The table above is the answer. This is the route to it, in this record’s own numbers — nothing simplified or rounded for the example.',
     derivationArgument:
       'Step 1 — Where the Moon and Sun are. Every constituent has six Doodson numbers saying how many times each astronomical element enters its angle. For {name} they are {coefficients}, so its equilibrium argument is V(t) = {formula}{offset}. The element polynomials are from Meeus, Astronomical Algorithms (2nd ed.), chapters 22 and 47.',
+    derivationElements:
+      'τ = mean lunar time · s = the Moon’s mean longitude · h = the Sun’s mean longitude · p = lunar perigee · N = the Moon’s ascending node · p′ = solar perigee.',
     derivationColumns:
       'Step 2 — Two columns, hour by hour. cos(V + u) and sin(V + u) are evaluated at every sample in the record. These are {name}’s two columns of the design matrix; four consecutive hours of this record:',
     derivationSolve:

@@ -114,14 +114,32 @@ export type CalloutTone = 'note' | 'warning' | 'refusal'
  * A block that says something the reader must not miss. Tone carries meaning:
  * refusal is the project's central honesty mechanism and wears the reserved
  * red, never decoration.
+ *
+ * `title` is the eyebrow label above everything; `heading` is a second,
+ * larger line beneath it for a callout naming an actual event (a refusal, a
+ * datum step) rather than just annotating what sits below. `size` sets the
+ * body copy scale — most callouts are a caption-sized aside, a refusal reads
+ * at body size because it is the page's primary content in that moment.
  */
 export function Callout({
   tone = 'note',
+  as: Tag = 'aside',
+  role,
   title,
+  heading,
+  headingLevel = 3,
+  size = 'body',
+  className = '',
   children,
 }: {
   tone?: CalloutTone
+  as?: 'aside' | 'section'
+  role?: string
   title?: string
+  heading?: ReactNode
+  headingLevel?: 2 | 3
+  size?: 'body' | 'caption'
+  className?: string
   children: ReactNode
 }) {
   const styles = {
@@ -138,14 +156,23 @@ export function Callout({
       heading: 'text-unresolved',
     },
   }[tone]
+  const Heading = headingLevel === 2 ? 'h2' : 'h3'
+  const hasLabel = title !== undefined || heading !== undefined
 
   return (
-    <aside className={`rounded-r-card px-card py-4 ${styles.wrap}`}>
-      {title !== undefined && (
-        <p className={`eyebrow ${styles.heading}`}>{title}</p>
+    <Tag role={role} className={`rounded-r-card px-card py-4 ${styles.wrap} ${className}`}>
+      {title !== undefined && <p className={`eyebrow ${styles.heading}`}>{title}</p>}
+      {heading !== undefined && (
+        <Heading className={`${title !== undefined ? 'mt-1' : ''} text-title ${styles.heading}`}>
+          {heading}
+        </Heading>
       )}
-      <div className="mt-1.5 space-y-2 text-body">{children}</div>
-    </aside>
+      <div
+        className={`${hasLabel ? 'mt-1.5' : ''} space-y-2 ${size === 'body' ? 'text-body' : 'text-caption'}`}
+      >
+        {children}
+      </div>
+    </Tag>
   )
 }
 
