@@ -264,6 +264,9 @@ export interface Dictionary {
     readonly explorerAll: string
     readonly explorerOnly: string
     readonly explorerCount: string
+    readonly explorerGroupSemidiurnal: string
+    readonly explorerGroupDiurnal: string
+    readonly explorerGroupShallow: string
     readonly formzahlTitle: string
     readonly publishedTitle: string
     readonly publishedNote: string
@@ -705,6 +708,9 @@ const id: Dictionary = {
     explorerAll: 'Semua',
     explorerOnly: 'M2 saja',
     explorerCount: '{count} dari {total} komponen',
+    explorerGroupSemidiurnal: 'Harian ganda (semidiurnal)',
+    explorerGroupDiurnal: 'Harian tunggal (diurnal)',
+    explorerGroupShallow: 'Perairan dangkal',
     formzahlTitle: 'Bilangan Formzahl dan tipe pasang surut',
     publishedTitle: 'Nilai terbit untuk perbandingan',
     publishedNote:
@@ -1204,6 +1210,9 @@ const en: Dictionary = {
     explorerAll: 'All',
     explorerOnly: 'M2 only',
     explorerCount: '{count} of {total} constituents',
+    explorerGroupSemidiurnal: 'Semidiurnal',
+    explorerGroupDiurnal: 'Diurnal',
+    explorerGroupShallow: 'Shallow water',
     formzahlTitle: 'Formzahl number and tide type',
     publishedTitle: 'Published values, for comparison',
     publishedNote:

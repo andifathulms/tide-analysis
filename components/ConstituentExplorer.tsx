@@ -6,7 +6,7 @@ import { buildChartModel } from '@/lib/chart/model'
 import { blendSeries, REBUILD_MS } from '@/lib/chart/motion'
 import { fill, type Dictionary } from '@/lib/i18n/dictionary'
 import { loadRecord } from '@/lib/records/registry'
-import type { ConstituentName } from '@/lib/tide/constituents'
+import { constituent, type ConstituentName, type Species } from '@/lib/tide/constituents'
 import type { HarmonicFit } from '@/lib/tide/fit'
 import { predictHeights, residual, type PredictableConstant } from '@/lib/tide/predict'
 import { sliceRecord, type TideRecord } from '@/lib/tide/record'
@@ -134,6 +134,27 @@ export function ConstituentExplorer({
     })
   }
 
+  /** Semidiurnal first: the explorer's own narrative starts there (M2, then S2). */
+  const SPECIES_ORDER: readonly Species[] = ['semidiurnal', 'diurnal', 'shallow-water', 'long-period']
+
+  const grouped = SPECIES_ORDER.map((species) => ({
+    species,
+    constants: fit.constants.filter((c) => constituent(c.name).species === species),
+  })).filter((group) => group.constants.length > 0)
+
+  function speciesLabel(species: Species): string {
+    switch (species) {
+      case 'semidiurnal':
+        return dict.komponen.explorerGroupSemidiurnal
+      case 'diurnal':
+        return dict.komponen.explorerGroupDiurnal
+      case 'shallow-water':
+        return dict.komponen.explorerGroupShallow
+      case 'long-period':
+        return species
+    }
+  }
+
   return (
     <div className="space-y-4">
       {/*
@@ -148,40 +169,52 @@ export function ConstituentExplorer({
         {dict.komponen.explorerNotRefit}
       </p>
 
-      <div className="flex flex-wrap gap-2">
-        {fit.constants.map((constant) => {
-          const on = enabled.has(constant.name)
-          return (
-            <button
-              key={constant.name}
-              type="button"
-              onClick={() => toggle(constant.name)}
-              aria-pressed={on}
-              className={`numeric rounded-full border px-3 py-1.5 text-caption ${
-                on
-                  ? 'border-prediction bg-predictionSoft text-prediction'
-                  : 'border-rule text-inkFaint hover:border-prediction/60'
-              }`}
-            >
-              {constant.name}
-              <span className="ml-1.5 text-micro opacity-70">{constant.amplitudeM.toFixed(3)}</span>
-            </button>
-          )
-        })}
-        <button
-          type="button"
-          onClick={() => setEnabled(new Set(fit.constants.map((c) => c.name)))}
-          className="rounded-sm border border-rule px-2.5 py-1 text-caption text-inkMuted hover:border-prediction/60"
-        >
-          {dict.komponen.explorerAll}
-        </button>
-        <button
-          type="button"
-          onClick={() => setEnabled(new Set(['M2']))}
-          className="rounded-sm border border-rule px-2.5 py-1 text-caption text-inkMuted hover:border-prediction/60"
-        >
-          {dict.komponen.explorerOnly}
-        </button>
+      <div className="space-y-3">
+        {grouped.map(({ species, constants }) => (
+          <div key={species}>
+            <p className="eyebrow mb-1.5">{speciesLabel(species)}</p>
+            <div className="flex flex-wrap gap-2">
+              {constants.map((constant) => {
+                const on = enabled.has(constant.name)
+                return (
+                  <button
+                    key={constant.name}
+                    type="button"
+                    onClick={() => toggle(constant.name)}
+                    aria-pressed={on}
+                    className={`numeric rounded-full border px-3 py-1.5 text-caption ${
+                      on
+                        ? 'border-prediction bg-predictionSoft text-prediction'
+                        : 'border-rule text-inkFaint hover:border-prediction/60'
+                    }`}
+                  >
+                    {constant.name}
+                    <span className="ml-1.5 text-micro opacity-70">
+                      {constant.amplitudeM.toFixed(3)}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        ))}
+
+        <div className="flex flex-wrap gap-2 border-t border-rule pt-3">
+          <button
+            type="button"
+            onClick={() => setEnabled(new Set(fit.constants.map((c) => c.name)))}
+            className="rounded-sm border border-rule px-2.5 py-1 text-caption text-inkMuted hover:border-prediction/60"
+          >
+            {dict.komponen.explorerAll}
+          </button>
+          <button
+            type="button"
+            onClick={() => setEnabled(new Set(['M2']))}
+            className="rounded-sm border border-rule px-2.5 py-1 text-caption text-inkMuted hover:border-prediction/60"
+          >
+            {dict.komponen.explorerOnly}
+          </button>
+        </div>
       </div>
 
       {/* Which constituents are on now — the chart change is invisible to a
