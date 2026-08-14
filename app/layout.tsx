@@ -4,10 +4,23 @@ import { SITE_URL } from '@/lib/view/site'
 import './globals.css'
 
 /** Self-hosted via next/font (PRD §12) — no runtime request to a font CDN. */
+/*
+ * Newsreader is the one family Next cannot build a metric-matched fallback
+ * for: Inter Tight and Roboto Mono both get a generated _Fallback face with
+ * ascent, descent and size-adjust overrides, and Newsreader gets none, so
+ * headings still shift when it swaps in.
+ *
+ * The stack below is what is available without either a new dependency to read
+ * the font's metrics or a set of hardcoded numbers I would be guessing at. It
+ * makes --font-prose self-sufficient — previously the variable resolved to a
+ * single family name and every consumer had to append its own fallback — but
+ * it does not remove the reflow. That needs real metrics for both faces.
+ */
 const prose = Newsreader({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-prose',
+  fallback: ['Georgia', 'Times New Roman', 'serif'],
 })
 
 const ui = Inter_Tight({
