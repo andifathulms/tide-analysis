@@ -268,12 +268,12 @@ export default async function RecordPage({
                    * already uses for provenance, not a new pattern.
                    */}
                   {stability !== null && (
-                    <details className="mt-4">
-                      <summary className="cursor-pointer text-title text-ink hover:text-prediction">
-                        <span className="eyebrow mr-2 inline-block align-middle">
-                          {dict.catatan.stabilityEyebrow}
-                        </span>
-                        {dict.catatan.stabilityTitle}
+                    <details className="group mt-4">
+                      <summary className="cursor-pointer space-y-1.5">
+                        <p className="eyebrow">{dict.catatan.stabilityEyebrow}</p>
+                        <p className="text-title text-ink group-hover:text-prediction">
+                          {dict.catatan.stabilityTitle}
+                        </p>
                       </summary>
                       <div className="mt-4">
                         <StabilityPanel dict={dict} report={stability} />
@@ -282,12 +282,12 @@ export default async function RecordPage({
                   )}
 
                   {derivation !== null && (
-                    <details className="mt-4">
-                      <summary className="cursor-pointer text-title text-ink hover:text-prediction">
-                        <span className="eyebrow mr-2 inline-block align-middle">
-                          {dict.catatan.derivationEyebrow}
-                        </span>
-                        {fill(dict.catatan.derivationTitle, { name: derivation.name })}
+                    <details className="group mt-4">
+                      <summary className="cursor-pointer space-y-1.5">
+                        <p className="eyebrow">{dict.catatan.derivationEyebrow}</p>
+                        <p className="text-title text-ink group-hover:text-prediction">
+                          {fill(dict.catatan.derivationTitle, { name: derivation.name })}
+                        </p>
                       </summary>
                       <div className="mt-4">
                         <DerivationPanel dict={dict} derivation={derivation} />
