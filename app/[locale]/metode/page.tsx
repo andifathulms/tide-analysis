@@ -33,25 +33,37 @@ export function generateStaticParams() {
 }
 
 /**
- * Split a dictionary template on a single `{key}` placeholder and put a node
- * in its place.
+ * Split a dictionary template on `{key}` placeholders and put a node in each
+ * one's place.
  *
- * Two sentences here need markup inside them — a book title in italics, a
- * command in mono — and the words either side of that markup fall in
- * different orders in the two languages. Keeping the whole sentence in the
- * dictionary and splicing the node in is the only way a translator can see
- * what they are translating.
+ * Several sentences here need markup inside them — a book title in italics, a
+ * command in mono, an equation in the numeric face — and the words either
+ * side of that markup fall in different orders in the two languages. Keeping
+ * the whole sentence in the dictionary and splicing the nodes in is the only
+ * way a translator can see what they are translating.
  */
-function splice(template: string, key: string, node: ReactNode): ReactNode {
-  const [before = '', after = ''] = template.split(`{${key}}`)
-  return (
-    <>
-      {before}
-      {node}
-      {after}
-    </>
-  )
+function splice(template: string, parts: Record<string, ReactNode>): ReactNode {
+  const pattern = new RegExp(`\\{(${Object.keys(parts).join('|')})\\}`, 'g')
+  const nodes: ReactNode[] = []
+  let lastIndex = 0
+  let match: RegExpExecArray | null
+  while ((match = pattern.exec(template)) !== null) {
+    if (match.index > lastIndex) nodes.push(template.slice(lastIndex, match.index))
+    nodes.push(<span key={match.index}>{parts[match[1] as string]}</span>)
+    lastIndex = pattern.lastIndex
+  }
+  nodes.push(template.slice(lastIndex))
+  return <>{nodes}</>
 }
+
+/** An equation, set apart from the flowing prose it sits inside. */
+function Formula({ children }: { children: ReactNode }) {
+  return <span className="numeric text-ink">{children}</span>
+}
+
+const ETA_FORMULA = 'η(t) = Z₀ + Σ f·H·cos(V(t) + u − g)'
+const AB_FORMULA = '(a, b) = f·H·(cos g, sin g)'
+const T_FORMULA = 'T = 360° / |σᵢ − σⱼ|'
 
 /** PRD §6.8: which record, which source and licence, which constituents,
  *  which method, and what the residual RMS is. Linked from every plot. */
@@ -75,33 +87,35 @@ export default async function MethodPage({ params }: { params: { locale: string 
       <section className="max-w-reading space-y-3">
         <h2 className="text-headline">{dict.metode.astroTitle}</h2>
         <p>
-          {splice(dict.metode.astroArguments, 'book', <em>Astronomical Algorithms</em>)}
+          {splice(dict.metode.astroArguments, { book: <em>Astronomical Algorithms</em> })}
         </p>
         <p>
-          {splice(
-            dict.metode.astroSpeeds,
-            'command',
-            <code className="numeric">pnpm test:astro</code>,
-          )}
+          {splice(dict.metode.astroSpeeds, {
+            command: <code className="numeric">pnpm test:astro</code>,
+          })}
         </p>
         <p>{dict.metode.astroNodal}</p>
       </section>
 
       <section className="max-w-reading space-y-3">
         <h2 className="text-headline">{dict.metode.fitTitle}</h2>
-        <p>{dict.metode.fitModel}</p>
+        <p>
+          {splice(dict.metode.fitModel, {
+            eta: <Formula>{ETA_FORMULA}</Formula>,
+            ab: <Formula>{AB_FORMULA}</Formula>,
+            kappa: <Formula>{dict.metode.fitKappaFormula}</Formula>,
+          })}
+        </p>
         <p>{dict.metode.fitConditioning}</p>
-        <p>{dict.metode.fitRayleigh}</p>
+        <p>{splice(dict.metode.fitRayleigh, { t: <Formula>{T_FORMULA}</Formula> })}</p>
       </section>
 
       <section className="space-y-3">
         <h2 className="text-headline">{dict.metode.setTitle}</h2>
         <p className="max-w-reading text-caption text-inkMuted">
-          {splice(
-            dict.metode.setLead,
-            'set',
-            <span className="numeric">{STANDARD_SET.join(', ')}</span>,
-          )}
+          {splice(dict.metode.setLead, {
+            set: <span className="numeric">{STANDARD_SET.join(', ')}</span>,
+          })}
         </p>
         {/* The column is meaningless without this, and it is the evidence for
             invariant 3: frequencies are computed, never tabulated. */}

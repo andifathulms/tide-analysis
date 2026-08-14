@@ -378,6 +378,7 @@ export interface Dictionary {
     readonly astroNodal: string
     readonly fitTitle: string
     readonly fitModel: string
+    readonly fitKappaFormula: string
     readonly fitConditioning: string
     readonly fitRayleigh: string
     readonly setTitle: string
@@ -860,11 +861,12 @@ const id: Dictionary = {
       'Koreksi nodal f dan u mengikuti deret ringkas Schureman sebagaimana disajikan Pugh (1987) tabel 4:2, dievaluasi di tengah jendela pencocokan. Nilainya ditampilkan di tabel komponen, tidak dilebur diam-diam ke dalam konstanta.',
     fitTitle: 'Pencocokan',
     fitModel:
-      'Model tinggi muka laut adalah η(t) = Z₀ + Σ f·H·cos(V(t) + u − g). Model ini linear terhadap pasangan (a, b) = f·H·(cos g, sin g), sehingga penyelesaiannya adalah kuadrat terkecil biasa. Matriks normal AᵀA didiagonalkan dengan rotasi Jacobi siklik; dari situ diperoleh sekaligus penyelesaian, nilai singular A, dan bilangan kondisi κ = σmaks/σmin.',
+      'Model tinggi muka laut adalah {eta}. Model ini linear terhadap pasangan {ab}, sehingga penyelesaiannya adalah kuadrat terkecil biasa. Matriks normal AᵀA didiagonalkan dengan rotasi Jacobi siklik; dari situ diperoleh sekaligus penyelesaian, nilai singular A, dan bilangan kondisi {kappa}.',
+    fitKappaFormula: 'κ = σmaks/σmin',
     fitConditioning:
       'κ adalah bagian wajib dari hasil, bukan diagnostik opsional. Ambangnya: κ < 10 baik, < 100 wajar, < 1000 marginal, selebihnya buruk.',
     fitRayleigh:
-      'Kriteria Rayleigh ditegakkan sebelum penyelesaian. Dua komponen hanya dapat dipisahkan bila rekaman mencapai T = 360° / |σᵢ − σⱼ|; bila tidak, permintaan ditolak dengan menyebut pasangan yang bentrok dan panjang rekaman yang dibutuhkan. Tidak ada jalur yang mengembalikan amplitudo tak stabil seolah-olah hasil.',
+      'Kriteria Rayleigh ditegakkan sebelum penyelesaian. Dua komponen hanya dapat dipisahkan bila rekaman mencapai {t}; bila tidak, permintaan ditolak dengan menyebut pasangan yang bentrok dan panjang rekaman yang dibutuhkan. Tidak ada jalur yang mengembalikan amplitudo tak stabil seolah-olah hasil.',
     setTitle: 'Himpunan komponen',
     setLead:
       'Himpunan baku yang diminta pada setiap stasiun: {set}. Seluruh komponen yang didefinisikan proyek ini:',
@@ -1364,11 +1366,12 @@ const en: Dictionary = {
       'The nodal corrections f and u follow Schureman’s compact series as presented in Pugh (1987) table 4:2, evaluated at the centre of the fit window. Their values are shown in the constituent table rather than folded silently into the constants.',
     fitTitle: 'The fit',
     fitModel:
-      'The sea level model is η(t) = Z₀ + Σ f·H·cos(V(t) + u − g). It is linear in the pair (a, b) = f·H·(cos g, sin g), so solving it is ordinary least squares. The normal matrix AᵀA is diagonalised by cyclic Jacobi rotation, which yields the solution, the singular values of A, and the condition number κ = σmax/σmin together.',
+      'The sea level model is {eta}. It is linear in the pair {ab}, so solving it is ordinary least squares. The normal matrix AᵀA is diagonalised by cyclic Jacobi rotation, which yields the solution, the singular values of A, and the condition number {kappa} together.',
+    fitKappaFormula: 'κ = σmax/σmin',
     fitConditioning:
       'κ is a required part of the result, not an optional diagnostic. The thresholds: κ < 10 good, < 100 fair, < 1000 marginal, anything beyond that poor.',
     fitRayleigh:
-      'The Rayleigh criterion is enforced before the solve. Two constituents can only be separated once the record reaches T = 360° / |σᵢ − σⱼ|; where it does not, the request is refused, naming the conflicting pair and the record length required. There is no path that returns unstable amplitudes as though they were results.',
+      'The Rayleigh criterion is enforced before the solve. Two constituents can only be separated once the record reaches {t}; where it does not, the request is refused, naming the conflicting pair and the record length required. There is no path that returns unstable amplitudes as though they were results.',
     setTitle: 'The constituent set',
     setLead:
       'The standard set requested at every station: {set}. Every constituent this project defines:',
