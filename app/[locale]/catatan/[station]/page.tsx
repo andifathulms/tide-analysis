@@ -257,37 +257,42 @@ export default async function RecordPage({
                 <Section eyebrow={dict.komponen.eyebrow} title={dict.komponen.title}>
                   <ConstituentTable dict={dict} constants={shown.outcome.constants} />
                   <Caption>{dict.komponen.tableCaption}</Caption>
-            <Caption>{dict.komponen.tableUncertainty}</Caption>
+                  <Caption>{dict.komponen.tableUncertainty}</Caption>
 
                   {/*
-                   * The step the site never showed. It belongs here, directly
-                   * under the table it derives, rather than on the method page
-                   * — a reader should be able to look up from the worked H and
-                   * g to the row they reproduce.
-                   */}
-                  {/*
-                   * The claim the site never tested: whether these constants
-                   * belong to the harbour or to these particular months. It
-                   * goes under the table it questions.
+                   * Stability and derivation go deeper than the table above —
+                   * whether these constants move, and how one of them was
+                   * built — and collapsed by default so the page has a
+                   * waypoint rather than stacking two more full sections onto
+                   * an already-long scroll. Same disclosure StationHeader
+                   * already uses for provenance, not a new pattern.
                    */}
                   {stability !== null && (
-                    <Section
-                      level={3}
-                      eyebrow={dict.catatan.stabilityEyebrow}
-                      title={dict.catatan.stabilityTitle}
-                    >
-                      <StabilityPanel dict={dict} report={stability} />
-                    </Section>
+                    <details className="mt-4">
+                      <summary className="cursor-pointer text-title text-ink hover:text-prediction">
+                        <span className="eyebrow mr-2 inline-block align-middle">
+                          {dict.catatan.stabilityEyebrow}
+                        </span>
+                        {dict.catatan.stabilityTitle}
+                      </summary>
+                      <div className="mt-4">
+                        <StabilityPanel dict={dict} report={stability} />
+                      </div>
+                    </details>
                   )}
 
                   {derivation !== null && (
-                    <Section
-                      level={3}
-                      eyebrow={dict.catatan.derivationEyebrow}
-                      title={fill(dict.catatan.derivationTitle, { name: derivation.name })}
-                    >
-                      <DerivationPanel dict={dict} derivation={derivation} />
-                    </Section>
+                    <details className="mt-4">
+                      <summary className="cursor-pointer text-title text-ink hover:text-prediction">
+                        <span className="eyebrow mr-2 inline-block align-middle">
+                          {dict.catatan.derivationEyebrow}
+                        </span>
+                        {fill(dict.catatan.derivationTitle, { name: derivation.name })}
+                      </summary>
+                      <div className="mt-4">
+                        <DerivationPanel dict={dict} derivation={derivation} />
+                      </div>
+                    </details>
                   )}
                 </Section>
               </>
