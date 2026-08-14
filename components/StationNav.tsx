@@ -21,7 +21,7 @@ export function StationNav({
   return (
     <nav
       aria-label={dict.common.station}
-      className="-mx-5 overflow-x-auto border-b border-rule px-5"
+      className="-mx-gutter overflow-x-auto border-b border-rule px-gutter"
     >
       <ul className="flex min-w-max gap-1 pb-px">
         {VIEWS.map((view) => {

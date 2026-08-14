@@ -133,7 +133,7 @@ export function FitWindowControl({
 
   return (
     <div className="space-y-5">
-      <div className="card p-4">
+      <div className="card p-card">
         <label className="block text-caption font-medium" htmlFor="fit-percent">
           {dict.catatan.splitLabel}
         </label>
@@ -206,7 +206,7 @@ export function FitWindowControl({
           )}
 
           {recomputed.model !== null && (
-            <div className="card p-4">
+            <div className="card p-card">
               <TideChart
                 model={recomputed.model}
                 observedLabel={dict.common.observed}
@@ -234,7 +234,7 @@ export function FitWindowControl({
             <>
               <FitDiagnostics dict={dict} fit={recomputed.analysis.outcome} />
               <section className="grid gap-4 sm:grid-cols-2">
-                <div className="card p-4">
+                <div className="card p-card">
                   <h3 className="eyebrow">
                     {dict.catatan.fitRms}
                   </h3>
@@ -242,7 +242,7 @@ export function FitWindowControl({
                     {recomputed.analysis.fitResidualRmsM?.toFixed(4)} m
                   </p>
                 </div>
-                <div className="card p-4">
+                <div className="card p-card">
                   <h3 className="eyebrow">
                     {dict.catatan.heldOutRms}
                   </h3>

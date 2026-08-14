@@ -221,7 +221,7 @@ export default async function MethodPage({ params }: { params: { locale: string 
           {MANIFEST.sources
             .filter((source) => source.id !== 'synthetic')
             .map((source) => (
-              <li key={source.id} className="card p-4">
+              <li key={source.id} className="card p-card">
                 <p className="font-medium">
                   {source.name}{' '}
                   <span className={source.enabled ? 'text-prediction' : 'text-unresolved'}>

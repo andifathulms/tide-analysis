@@ -233,7 +233,7 @@ export function ConstituentExplorer({
       {model === null ? (
         <p className="text-caption text-inkFaint">{dict.common.loading}</p>
       ) : (
-        <div className="card p-4">
+        <div className="card p-card">
           <TideChart
             model={model}
             observedLabel={dict.common.observed}

@@ -63,17 +63,17 @@ export default async function PredictionPage({
 
   if (shown.outcome.type !== 'fit') {
     return (
-      <div className="space-y-6">
+      <div className="space-y-section">
         {/*
-       * The page's masthead: which station, which view, and the warning that
-       * invariant 15 requires wherever a predicted height appears. One cluster
-       * at a tight rhythm, so the section rhythm below can be generous without
-       * pulling these three apart.
-       */}
-      <div className="space-y-4">
-        <StationNav dict={dict} locale={locale} stationId={station.stationId} active="prediksi" />
+         * The page's masthead: which station, which view, and the warning
+         * that invariant 15 requires wherever a predicted height appears.
+         * One cluster at a tight rhythm, so the section rhythm below can be
+         * generous without pulling these three apart.
+         */}
+        <div className="space-y-4">
+          <StationNav dict={dict} locale={locale} stationId={station.stationId} active="prediksi" />
           <NavigationWarning dict={dict} />
-      </div>
+        </div>
         <RefusalNotice dict={dict} refusal={shown.outcome} />
       </div>
     )
@@ -133,7 +133,7 @@ export default async function PredictionPage({
         {record.datum.code} · {dict.common.nodalAtPrediction}
       </p>
 
-      <figure className="card p-4">
+      <figure className="card p-card">
         <TideChart
           model={model}
           observedLabel={dict.common.predicted}
