@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-14T00:00:00.000Z",
+  "title": "Design System: Pasut — Tide Analysis",
+  "extensions": {
+    "colorMeta": {
+      "paper": { "role": "neutral", "displayName": "Chart Paper", "canonical": "rgb(247 243 233)", "tonalRamp": ["#20180C", "#3D2F1A", "#5C4B2B", "#8A7248", "#B39C70", "#D6C8A8", "#EEE6D2", "#F7F3E9"] },
+      "surface": { "role": "neutral", "displayName": "Card Surface", "canonical": "rgb(255 253 247)", "tonalRamp": ["#241F10", "#463D1F", "#6A5C30", "#9B8B52", "#C4B57C", "#E2D8B4", "#F5F0DD", "#FFFDF7"] },
+      "sunken": { "role": "neutral", "displayName": "Sunken Band", "canonical": "rgb(240 235 221)", "tonalRamp": ["#1F1B0D", "#3B331B", "#5A4E2B", "#877348", "#B09B70", "#D3C6A0", "#EBE3CE", "#F0EBDD"] },
+      "ink": { "role": "neutral", "displayName": "Instrument Ink", "canonical": "rgb(20 48 58)", "tonalRamp": ["#050D10", "#0D1E24", "#14303A", "#1E4652", "#2D5F6E", "#4A828F", "#7DAAB4", "#BFD9DE"] },
+      "ink-muted": { "role": "neutral", "displayName": "Muted Ink", "canonical": "rgb(74 91 98)", "tonalRamp": ["#131A1C", "#232E31", "#354347", "#4A5B62", "#647880", "#8AA0A6", "#B9C8CC", "#DEE7E9"] },
+      "ink-faint": { "role": "neutral", "displayName": "Faint Ink", "canonical": "rgb(85 98 105)", "tonalRamp": ["#161C1E", "#272F32", "#3A4448", "#556269", "#6F7D83", "#94A2A7", "#C0CACD", "#E2E7E8"] },
+      "grid": { "role": "neutral", "displayName": "Printed Grid", "canonical": "rgb(216 210 194)", "tonalRamp": ["#332C1D", "#5E5236", "#8B7B53", "#B0A276", "#C9BE9C", "#D8D2C2", "#E7E3D8", "#F3F1EA"] },
+      "rule": { "role": "neutral", "displayName": "Paper Rule", "canonical": "rgb(230 224 208)", "tonalRamp": ["#37301F", "#645639", "#928058", "#B6A87C", "#CFC4A2", "#E6E0D0", "#F0ECE1", "#F8F5EF"] },
+      "prediction": { "role": "primary", "displayName": "Harbour Blue", "canonical": "rgb(0 113 158)", "tonalRamp": ["#001A24", "#00344A", "#004E6F", "#006993", "#00719E", "#3D93B7", "#83BCD3", "#C6E1EC"] },
+      "residual": { "role": "secondary", "displayName": "Marigold Ochre (stroke)", "canonical": "rgb(188 119 21)", "tonalRamp": ["#2B1A05", "#4F3009", "#75470E", "#996013", "#BC7715", "#D3964C", "#E4BC8B", "#F2DFC5"] },
+      "residual-text": { "role": "secondary", "displayName": "Marigold Ochre (text)", "canonical": "rgb(143 87 17)", "tonalRamp": ["#211003", "#3D1F07", "#5A2E0B", "#77400F", "#8F5711", "#B27A2E", "#CFA35E", "#E7CD9F"] },
+      "unresolved": { "role": "tertiary", "displayName": "Reserved Alarm Red", "canonical": "rgb(176 57 43)", "tonalRamp": ["#280A07", "#4A140E", "#6D1E15", "#8F2B1F", "#B0392B", "#C56652", "#DA9C8D", "#EFCDC5"] },
+      "datum": { "role": "neutral", "displayName": "Datum Slate", "canonical": "rgb(90 102 112)", "tonalRamp": ["#15191C", "#262E32", "#39444A", "#526066", "#6C7B82", "#93A0A6", "#BFC9CC", "#E1E6E8"] },
+      "prediction-soft": { "role": "primary", "displayName": "Harbour Blue Tint", "canonical": "rgb(228 240 246)", "tonalRamp": ["#0C2A34", "#164659", "#226B85", "#3D93B7", "#83BCD3", "#B7DAE6", "#D5EAF1", "#E4F0F6"] },
+      "residual-soft": { "role": "secondary", "displayName": "Marigold Tint", "canonical": "rgb(248 238 220)", "tonalRamp": ["#3D2A0C", "#644719", "#966B29", "#C08F3E", "#DAB675", "#EDD3A6", "#F5E4C7", "#F8EEDC"] },
+      "unresolved-soft": { "role": "tertiary", "displayName": "Alarm Tint", "canonical": "rgb(247 231 228)", "tonalRamp": ["#3E140D", "#642119", "#8F3527", "#BC5A47", "#D8897C", "#E9B8AE", "#F2D4CD", "#F7E7E4"] }
+    },
+    "typographyMeta": {
+      "hero": { "displayName": "Hero", "purpose": "The landing page's single headline only." },
+      "display": { "displayName": "Display", "purpose": "Page-level h1s, e.g. a station name." },
+      "headline": { "displayName": "Headline", "purpose": "Section headings." },
+      "title": { "displayName": "Title", "purpose": "Subsection and card headings." },
+      "lead": { "displayName": "Lead", "purpose": "Intro paragraphs beneath a hero or headline." },
+      "body": { "displayName": "Body", "purpose": "Running prose, 65-75ch measure." },
+      "caption": { "displayName": "Caption", "purpose": "Table cells, nav labels, secondary metadata." },
+      "micro": { "displayName": "Micro / Eyebrow", "purpose": "Section eyebrows and badge text, uppercase, tracked." },
+      "numeric": { "displayName": "Numeric", "purpose": "Every amplitude, phase, frequency, and condition-number readout — tabular figures, must not reflow." }
+    },
+    "shadows": [
+      { "name": "card", "value": "0 1px 2px rgba(20,48,58,0.05), 0 1px 8px rgba(20,48,58,0.04)", "purpose": "Default card lift and the primary CTA — marks a distinct raised sheet on the paper." },
+      { "name": "raised", "value": "0 2px 4px rgba(20,48,58,0.06), 0 8px 24px rgba(20,48,58,0.06)", "purpose": "Reserved for the one element that must visibly float above everything, currently only the skip-to-content link on focus." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single primary action per view (e.g. hero CTA). Filled harbour blue, shifts to instrument ink on hover.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Lihat catatan</a>",
+      "css": ".ds-btn-primary { display: inline-block; background: var(--colour-prediction, #00719E); color: var(--colour-surface, #FFFDF7); font-family: 'Inter Tight', system-ui, sans-serif; font-size: 1rem; font-weight: 500; padding: 0.625rem 1.25rem; border-radius: 0.5rem; box-shadow: 0 1px 2px rgba(20,48,58,0.05), 0 1px 8px rgba(20,48,58,0.04); text-decoration: none; } .ds-btn-primary:hover { background: var(--colour-ink, #14303A); } .ds-btn-primary:focus-visible { outline: 2px solid var(--colour-prediction, #00719E); outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Outlined counterpart to the primary CTA. Border and text shift to harbour blue on hover; no fill change.",
+      "html": "<a class=\"ds-btn-secondary\" href=\"#\">Baca metode</a>",
+      "css": ".ds-btn-secondary { display: inline-block; background: var(--colour-surface, #FFFDF7); color: var(--colour-ink, #14303A); border: 1px solid var(--colour-rule, #E6E0D0); font-family: 'Inter Tight', system-ui, sans-serif; font-size: 1rem; font-weight: 500; padding: 0.625rem 1.25rem; border-radius: 0.5rem; text-decoration: none; } .ds-btn-secondary:hover { border-color: var(--colour-prediction, #00719E); color: var(--colour-prediction, #00719E); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--colour-prediction, #00719E); outline-offset: 2px; }"
+    },
+    {
+      "name": "Badge",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "Tone-colored pill for tide character tags and short status labels. Tone is prediction/residual/unresolved, always the matching soft-tint + full-strength pair.",
+      "html": "<span class=\"ds-badge ds-badge--prediction\">campuran condong ganda</span>",
+      "css": ".ds-badge { display: inline-flex; align-items: center; font-family: 'Inter Tight', system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.125rem 0.625rem; border-radius: 9999px; border: 1px solid transparent; } .ds-badge--prediction { background: var(--colour-prediction-soft, #E4F0F6); color: var(--colour-prediction, #00719E); border-color: rgba(0,113,158,0.3); }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Default raised container: a sheet resting on the paper, thin rule border, minimal shadow.",
+      "html": "<div class=\"ds-card\"><p>Isi kartu.</p></div>",
+      "css": ".ds-card { background: var(--colour-surface, #FFFDF7); border: 1px solid var(--colour-rule, #E6E0D0); border-radius: 0.5rem; box-shadow: 0 1px 2px rgba(20,48,58,0.05), 0 1px 8px rgba(20,48,58,0.04); padding: 1.25rem; }"
+    },
+    {
+      "name": "Alert Callout",
+      "kind": "custom",
+      "refersTo": "callout-unresolved",
+      "description": "The system's signature structural device: a left-accent-border block for the navigation warning, refusal notices, and diagnostics. Tone (prediction / residual / unresolved) is chosen for what the message is, never for variety.",
+      "html": "<aside class=\"ds-callout ds-callout--unresolved\" role=\"note\"><p class=\"ds-callout__eyebrow\">Bukan untuk navigasi</p><p>Alat ini dihitung dari rekaman mentah tanpa kendali mutu.</p></aside>",
+      "css": ".ds-callout { border-radius: 0 0.5rem 0.5rem 0; border-left: 4px solid; padding: 1rem 1.25rem; } .ds-callout--unresolved { border-left-color: var(--colour-unresolved, #B0392B); background: rgba(247,231,228,0.6); } .ds-callout__eyebrow { font-family: 'Inter Tight', system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--colour-unresolved, #B0392B); margin: 0 0 0.375rem; }"
+    },
+    {
+      "name": "Station Nav Tab",
+      "kind": "nav",
+      "refersTo": "nav-tab-active",
+      "description": "Underline-tab pattern for the five per-station lenses (record, constituents, resolution, comparison, prediction). No background change on any state — the underline alone carries it.",
+      "html": "<nav class=\"ds-tabs\" aria-label=\"Station\"><a class=\"ds-tab ds-tab--active\" aria-current=\"page\" href=\"#\">Catatan</a><a class=\"ds-tab\" href=\"#\">Komponen</a></nav>",
+      "css": ".ds-tabs { display: flex; gap: 0.25rem; border-bottom: 1px solid var(--colour-rule, #E6E0D0); } .ds-tab { display: inline-block; padding: 0.625rem 0.75rem; font-family: 'Inter Tight', system-ui, sans-serif; font-size: 0.8125rem; color: var(--colour-ink-muted, #4A5B62); border-bottom: 2px solid transparent; text-decoration: none; } .ds-tab:hover { border-bottom-color: var(--colour-rule, #E6E0D0); color: var(--colour-ink, #14303A); } .ds-tab--active { border-bottom-color: var(--colour-prediction, #00719E); color: var(--colour-prediction, #00719E); font-weight: 500; }"
+    },
+    {
+      "name": "Constituent Table Row",
+      "kind": "custom",
+      "refersTo": "table-row",
+      "description": "Flat, ruled table row. Unresolved constituents get an alarm-tint background and alarm-colored name text; numeric cells are always tabular.",
+      "html": "<table class=\"ds-table\"><tbody><tr class=\"ds-table__row\"><td>M2</td><td class=\"ds-table__numeric\">1.243</td></tr><tr class=\"ds-table__row ds-table__row--unresolved\"><td>K1</td><td class=\"ds-table__numeric\">—</td></tr></tbody></table>",
+      "css": ".ds-table { width: 100%; border-collapse: collapse; font-family: 'Inter Tight', system-ui, sans-serif; font-size: 0.8125rem; } .ds-table__row { border-bottom: 1px solid rgba(230,224,208,0.6); } .ds-table__row:hover { background: rgba(240,235,221,0.5); } .ds-table__row--unresolved { background: rgba(247,231,228,0.7); color: var(--colour-unresolved, #B0392B); } .ds-table__numeric { font-family: 'Roboto Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Chart Trace Key",
+      "kind": "custom",
+      "refersTo": "trace-key",
+      "description": "Legend swatch for the chart's three traces — a short rounded line, not a dot, matching the stroke it represents.",
+      "html": "<div class=\"ds-trace-key\"><span class=\"ds-trace-key__swatch ds-trace-key__swatch--prediction\"></span><span>Prediksi</span></div>",
+      "css": ".ds-trace-key { display: inline-flex; align-items: center; gap: 0.375rem; font-family: 'Inter Tight', system-ui, sans-serif; font-size: 0.75rem; color: var(--colour-ink-muted, #4A5B62); } .ds-trace-key__swatch { display: inline-block; width: 1.75rem; height: 3px; border-radius: 9999px; } .ds-trace-key__swatch--prediction { background: var(--colour-prediction, #00719E); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Marégraphe",
+    "overview": "The subject is the paper drum of a mechanical tide gauge — a pen tracing sea level onto a ruled roll for weeks at a time, the instrument's own visual language. Every surface in the app sits on that warm paper; the chart alone carries its ruling, because a grid the reader takes measurements off has no business repeating as wallpaper behind prose (a mistake the codebase made once and corrected — see globals.css). The site is a restrained instrument, not a decorated app: color and shape are reserved for meaning, never for polish. Prediction blue means \"the model agrees here.\" Residual ochre means \"this is what the model doesn't explain.\" Reserved red means \"this cannot be trusted\" — a refusal, an ill-conditioned fit, a gauge fault — and it never decorates anything else. There is no ambient motion; the one animated moment (a constituent toggling in and rebuilding the predicted curve) exists because that rebuild is real information, and everywhere else stillness is the honest choice, because the Rayleigh slider's fit is genuinely discontinuous and animating it would imply a continuity that isn't there.\n\nTwo audiences read this system at once — a lay Indonesian reader drawn in by curiosity, and a technical peer auditing the engineering — and the design doesn't split into two registers for them. The same ruled, quiet, high-contrast surface serves both: legible prose typography for the first, exact tabular-numeral readouts and a visible condition number for the second.",
+    "keyCharacteristics": [
+      "Warm ruled paper as the base surface everywhere; the grid itself belongs only to the chart.",
+      "A fixed three-trace chart vocabulary — ink for observation, blue for prediction (heavier stroke, drawn to visually merge with agreement), ochre for residual — validated together for colorblind separation and never reassigned.",
+      "Reserved red exists in exactly one register: things the record cannot support. It is never used for hover states, active states, or emphasis.",
+      "Flat by default; the two shadow tokens are earned, not decorative, and appear on a handful of surfaces only.",
+      "No transition or easing utilities anywhere in the codebase. Stillness is a deliberate visual argument, not an oversight.",
+      "Newsreader serif for anything read as prose or judgment (headings, body); Inter Tight sans for anything operated (nav, labels, controls); Roboto Mono tabular figures for anything counted (amplitudes, phases, condition numbers)."
+    ],
+    "rules": [
+      { "name": "The Reserved Red Rule", "body": "unresolved (and its soft tint) appear only for what the record genuinely cannot support: refused constituents, ill-conditioned fits, gauge faults, the navigation warning, and a number that fails a stated agreement threshold (two methods on the same constituent, or the same constituent across independently-fitted windows). Every trigger is a named, numeric tolerance in the code, never a judgment call in the component. If a use isn't one of those five, it isn't this color.", "section": "colors" },
+      { "name": "The Ruled Surface Rule", "body": "The grid token belongs to rulings that carry a measurement — the main chart's own grid, and the small inline scales that borrow its vocabulary on purpose: FormzahlComparison's number-line ticks, NodalCyclePanel's f-range markers, BeatFigure's mean-level reference. Page chrome uses rule (its quieter, page-level counterpart) for hairlines that carry no reading. Repeating grid behind prose, where nothing is being measured, is what turns an instrument into wallpaper.", "section": "colors" },
+      { "name": "The Read/Operate/Count Rule", "body": "Three fonts, three jobs, no overlap: Newsreader is for what you read and judge, Inter Tight is for what you operate, Roboto Mono is for what you count. A number outside a mono/tabular context is a bug, not a style choice.", "section": "typography" },
+      { "name": "The Earned Shadow Rule", "body": "A shadow means \"this specific surface sits above the paper,\" never \"this element is interactive\" or \"this element is important.\" Most cards, most rows, most controls stay flat and rely on a rule (border) instead.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep unresolved/red exclusive to genuine refusals, ill-conditioned fits, gauge faults, and the navigation warning — never as generic emphasis or a delete/danger affordance unrelated to those meanings.",
+      "Do set every amplitude, phase, frequency, and condition-number figure in the numeric (tabular, Roboto Mono) style, in a dedicated numeric context so columns align.",
+      "Do use the left-border-accent callout pattern (rounded-r-card, 4px tone border, soft-tint fill, eyebrow title) for any new alert-level message, choosing the tone from what the message actually is, not for visual variety.",
+      "Do keep grid scoped to rulings that measure something (the chart, and the inline scales that share its vocabulary); use the quieter rule token for page-level hairlines that don't.",
+      "Do let hover states shift only color/border/background — never introduce a transition, duration, or easing utility; the flat cut is a deliberate stance the codebase has never broken."
+    ],
+    "donts": [
+      "Don't add drop shadows to table rows, nav items, or badges — depth is reserved for card/shadow-card and the one shadow-raised exception on the skip link.",
+      "Don't retune prediction or residual independently of each other — they were validated together for colorblind separation and contrast, and moving one without the other can break that pairing.",
+      "Don't animate the Rayleigh slider's fit result or any other discontinuous computed value; a redraw, not a transition, is the honest representation of a fit that genuinely jumps.",
+      "Don't introduce a fourth \"read\" typeface or a second monospace — Newsreader/Inter Tight/Roboto Mono is a closed set tied to the Read/Operate/Count rule, not a starting palette to extend."
+    ]
+  }
+}
