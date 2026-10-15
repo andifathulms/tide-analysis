@@ -210,6 +210,7 @@ export default async function RecordPage({
                   residualLabel={dict.common.residual}
                   heldOutLabel={dict.catatan.heldOut}
                   titleId="record-chart-title"
+                  zone={zone}
                   description={
                     fill(dict.common.chartAlt, {
                       station: station.stationName,

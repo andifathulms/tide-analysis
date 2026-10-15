@@ -17,6 +17,7 @@ import {
   timeTicks,
   type Scale,
 } from './geometry'
+import { buildReadout, type LinearMap, type Readout, type ReadoutFrame } from './readout'
 
 export interface DatumLine {
   readonly label: string
@@ -68,6 +69,9 @@ export interface ChartModel {
   } | null
   readonly datumStepMarks: ReadonlyArray<{ readonly x: number; readonly label: string }>
   readonly xDomain: readonly [number, number]
+  /** What the crosshair reads off, and where it draws its marks. */
+  readonly readout: Readout
+  readonly frame: ReadoutFrame
 }
 
 const MARGIN = { top: 16, right: 84, bottom: 28, left: 56 }
@@ -129,6 +133,7 @@ export function buildChartModel(input: ChartInput): ChartModel {
   let residualRules: Array<{ y: number; label: string }> = []
   let residualZeroY: number | null = null
   let residualPlot: ChartModel['residualPlot'] = null
+  let residualMap: LinearMap | null = null
 
   if (hasResidual && input.residualM !== null) {
     const top = input.chartHeight
@@ -136,6 +141,7 @@ export function buildChartModel(input: ChartInput): ChartModel {
     const residualExtent = padDomain(extent(input.residualM), 0.15)
     const bound = Math.max(Math.abs(residualExtent[0]), Math.abs(residualExtent[1])) || 0.1
     const yr = linearScale([-bound, bound], [top + innerHeight, top])
+    residualMap = { d0: -bound, d1: bound, r0: top + innerHeight, r1: top }
     const decimated = decimate(input.timesSec, input.residualM, maxPoints, gapThresholdSec)
     residualPath = seriesPath(decimated.timesSec, decimated.values, x, yr, breakOnNaNOnly)
     residualZeroY = yr(0)
@@ -146,10 +152,12 @@ export function buildChartModel(input: ChartInput): ChartModel {
     residualPlot = { x: MARGIN.left, y: top, width: plotWidth, height: innerHeight }
   }
 
+  const plot = { x: MARGIN.left, y: MARGIN.top, width: plotWidth, height: plotHeight }
+
   return {
     width: input.width,
     height: input.chartHeight + residualHeight,
-    plot: { x: MARGIN.left, y: MARGIN.top, width: plotWidth, height: plotHeight },
+    plot,
     residualPlot,
     observedPath,
     modelPath,
@@ -181,6 +189,20 @@ export function buildChartModel(input: ChartInput): ChartModel {
             width: Math.max(x(input.heldOutWindow.endSec) - x(input.heldOutWindow.startSec), 0),
           },
     xDomain,
+    readout: buildReadout({
+      timesSec: input.timesSec,
+      observedM: input.observedM,
+      modelM: input.modelM,
+      residualM: hasResidual ? input.residualM : null,
+    }),
+    frame: {
+      width: input.width,
+      height: input.chartHeight + residualHeight,
+      plot,
+      x: { d0: xDomain[0], d1: xDomain[1], r0: MARGIN.left, r1: MARGIN.left + plotWidth },
+      y: { d0: yDomain[0], d1: yDomain[1], r0: MARGIN.top + plotHeight, r1: MARGIN.top },
+      residualY: residualMap,
+    },
   }
 }
 

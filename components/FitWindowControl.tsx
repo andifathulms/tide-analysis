@@ -10,6 +10,7 @@ import { loadRecord } from '@/lib/records/registry'
 import type { ConstituentName } from '@/lib/tide/constituents'
 import { analyse, type Analysis } from '@/lib/view/analysis'
 import type { TideRecord } from '@/lib/tide/record'
+import { zoneOf } from '@/lib/view/format'
 import { readIntParam, withIntParam } from '@/lib/view/queryState'
 
 const PERCENT_PARAM = 'fit'
@@ -214,6 +215,7 @@ export function FitWindowControl({
                 residualLabel={dict.common.residual}
                 heldOutLabel={dict.catatan.heldOut}
                 titleId="fit-window-chart-title"
+                zone={record === null ? undefined : zoneOf(record)}
                 description={
                   fill(dict.common.chartAlt, {
                     station: stationName,

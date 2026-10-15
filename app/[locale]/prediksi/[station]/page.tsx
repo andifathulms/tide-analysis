@@ -139,6 +139,7 @@ export default async function PredictionPage({
         <TideChart
           model={model}
           observedLabel={dict.common.predicted}
+          zone={zone}
           predictedLabel={dict.common.predicted}
           residualLabel={dict.common.residual}
         />
