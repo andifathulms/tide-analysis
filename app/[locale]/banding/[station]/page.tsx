@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { NavigationWarning } from '@/components/NavigationWarning'
-import { StationHeader, StationNav } from '@/components/StationNav'
+import { StageNav, StationHeader } from '@/components/StationNav'
 import { RefusalNotice } from '@/components/Diagnostics'
 import { Card, Scroller, Section, Stat } from '@/components/ui'
 import { dictionary, fill, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
@@ -71,14 +71,16 @@ export default async function ComparisonPage({
        * pulling these three apart.
        */}
       <div className="space-y-4">
-        <StationNav dict={dict} locale={locale} stationId={station.stationId} active="banding" />
         <StationHeader
+          locale={locale}
+          view="banding"
           dict={dict}
           station={station}
           datumLabel={record.datum.label}
           zone={zoneOf(record)}
           gapHours={summary.gapHours}
         />
+        <StageNav dict={dict} locale={locale} stationId={station.stationId} active="banding" />
         <NavigationWarning dict={dict} compact />
       </div>
 

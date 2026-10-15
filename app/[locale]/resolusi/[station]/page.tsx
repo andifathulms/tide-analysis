@@ -5,7 +5,7 @@ import { NavigationWarning } from '@/components/NavigationWarning'
 import { CoveragePanel } from '@/components/CoveragePanel'
 import { RayleighResults } from '@/components/RayleighResults'
 import { RayleighSlider } from '@/components/RayleighSlider'
-import { StationHeader, StationNav } from '@/components/StationNav'
+import { StageNav, StationHeader } from '@/components/StationNav'
 import { Section } from '@/components/ui'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations, stationSummary } from '@/lib/records/registry'
@@ -91,14 +91,16 @@ export default async function ResolutionPage({
        * pulling these three apart.
        */}
       <div className="space-y-4">
-        <StationNav dict={dict} locale={locale} stationId={summary.stationId} active="resolusi" />
         <StationHeader
+          locale={locale}
+          view="resolusi"
           dict={dict}
           station={summary}
           datumLabel={analysis.record.datum.label}
           zone={zoneOf(analysis.record)}
           gapHours={analysis.summary.gapHours}
         />
+        <StageNav dict={dict} locale={locale} stationId={summary.stationId} active="resolusi" />
         <NavigationWarning dict={dict} compact />
       </div>
 

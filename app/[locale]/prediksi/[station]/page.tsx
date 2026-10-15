@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { TideChart } from '@/components/chart/TideChart'
-import { StationHeader, StationNav } from '@/components/StationNav'
+import { StageNav, StationHeader } from '@/components/StationNav'
 import { RefusalNotice } from '@/components/Diagnostics'
 import { Scroller, Section } from '@/components/ui'
 import { dictionary, fill, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
@@ -71,7 +71,7 @@ export default async function PredictionPage({
          * generous without pulling these three apart.
          */}
         <div className="space-y-4">
-          <StationNav dict={dict} locale={locale} stationId={station.stationId} active="prediksi" />
+          <StageNav dict={dict} locale={locale} stationId={station.stationId} active="prediksi" />
           <NavigationWarning dict={dict} />
         </div>
         <RefusalNotice dict={dict} refusal={shown.outcome} />
@@ -112,8 +112,9 @@ export default async function PredictionPage({
 
   return (
     <div className="space-y-section">
-      <StationNav dict={dict} locale={locale} stationId={station.stationId} active="prediksi" />
       <StationHeader
+        locale={locale}
+        view="prediksi"
         dict={dict}
         station={station}
         datumLabel={record.datum.label}
@@ -121,6 +122,7 @@ export default async function PredictionPage({
         zone={zone}
         gapHours={summary.gapHours}
       />
+      <StageNav dict={dict} locale={locale} stationId={station.stationId} active="prediksi" />
       <NavigationWarning dict={dict} />
 
       <Section

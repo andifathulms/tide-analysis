@@ -7,7 +7,7 @@ import { CorrelationPanel } from '@/components/CorrelationPanel'
 import { NodalCyclePanel } from '@/components/NodalCyclePanel'
 import { FitDiagnostics, RefusalNotice } from '@/components/Diagnostics'
 import { NavigationWarning } from '@/components/NavigationWarning'
-import { StationHeader, StationNav } from '@/components/StationNav'
+import { StageNav, StationHeader } from '@/components/StationNav'
 import { Caption, Card, Section, Stat } from '@/components/ui'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations, stationSummary } from '@/lib/records/registry'
@@ -85,8 +85,9 @@ export default async function ConstituentsPage({
        * pulling these three apart.
        */}
       <div className="space-y-4">
-        <StationNav dict={dict} locale={locale} stationId={station.stationId} active="komponen" />
         <StationHeader
+          locale={locale}
+          view="komponen"
           dict={dict}
           station={station}
           datumLabel={record.datum.label}
@@ -96,9 +97,14 @@ export default async function ConstituentsPage({
           character={
             analysis.character === null
               ? undefined
-              : dict.tideType[analysis.character.type].label
+              : {
+                  type: analysis.character.type,
+                  label: dict.tideType[analysis.character.type].label,
+                  value: analysis.character.value,
+                }
           }
         />
+        <StageNav dict={dict} locale={locale} stationId={station.stationId} active="komponen" />
         <NavigationWarning dict={dict} compact />
       </div>
 

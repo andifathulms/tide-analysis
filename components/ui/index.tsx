@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
 import Link from 'next/link'
+import type { TideType } from '@/lib/tide/formzahl'
+import { formzahlRank } from '@/lib/view/stages'
 
 /**
  * The small set of pieces every page is built from.
@@ -225,6 +227,33 @@ export function Badge({
       className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-micro font-medium ${toneClass}`}
     >
       {children}
+    </span>
+  )
+}
+
+/** Literal class names, so Tailwind can see them. */
+const FZ_FILL = { 1: 'bg-fz1', 2: 'bg-fz2', 3: 'bg-fz3', 4: 'bg-fz4' } as const
+
+/** The swatch of a tide character on the ordered Formzahl ramp. */
+export function FormzahlSwatch({ type, className = 'h-2.5 w-2.5' }: { type: TideType; className?: string }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`inline-block shrink-0 rounded-full ${FZ_FILL[formzahlRank(type)]} ${className}`}
+    />
+  )
+}
+
+/**
+ * A station's tide character: the swatch, the class in words, and F itself.
+ * The colour is never the only carrier — the class is always printed.
+ */
+export function FormzahlPill({ type, label, value }: { type: TideType; label: string; value: number }) {
+  return (
+    <span className="inline-flex items-center gap-2 rounded-full border border-rule bg-surface px-3 py-1 text-caption font-semibold text-ink">
+      <FormzahlSwatch type={type} />
+      {label}
+      <span className="numeric font-normal text-inkFaint">F {value.toFixed(3)}</span>
     </span>
   )
 }

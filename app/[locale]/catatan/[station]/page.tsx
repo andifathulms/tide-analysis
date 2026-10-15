@@ -7,7 +7,7 @@ import { ConstituentTable } from '@/components/table/ConstituentTable'
 import { FitDiagnostics, RefusalNotice } from '@/components/Diagnostics'
 import { FitWindowControl } from '@/components/FitWindowControl'
 import { LeakagePanel } from '@/components/LeakagePanel'
-import { StationHeader, StationNav } from '@/components/StationNav'
+import { StageNav, StationHeader } from '@/components/StationNav'
 import { Callout, Caption, Card, Section, Stat, TraceKey } from '@/components/ui'
 import { dictionary, fill, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations, stationSummary } from '@/lib/records/registry'
@@ -133,8 +133,9 @@ export default async function RecordPage({
        * pulling these three apart.
        */}
       <div className="space-y-4">
-        <StationNav dict={dict} locale={locale} stationId={station.stationId} active="catatan" />
         <StationHeader
+          locale={locale}
+          view="catatan"
           dict={dict}
           station={station}
           datumLabel={record.datum.label}
@@ -144,9 +145,14 @@ export default async function RecordPage({
           character={
             analysis.character === null
               ? undefined
-              : dict.tideType[analysis.character.type].label
+              : {
+                  type: analysis.character.type,
+                  label: dict.tideType[analysis.character.type].label,
+                  value: analysis.character.value,
+                }
           }
         />
+        <StageNav dict={dict} locale={locale} stationId={station.stationId} active="catatan" />
         <NavigationWarning dict={dict} compact />
       </div>
 

@@ -267,6 +267,7 @@ export async function Home({ locale }: { locale: Locale }) {
       )}
 
       <Section
+        id="stasiun"
         eyebrow={dict.home.stationsEyebrow}
         title={dict.home.stationsTitle}
         lead={dict.home.stationsLead}

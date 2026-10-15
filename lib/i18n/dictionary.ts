@@ -38,6 +38,19 @@ export interface Dictionary {
     readonly light: string
     readonly dark: string
   }
+  /** The station workspace, as the four stages of the inverse problem. */
+  readonly stages: Record<
+    'rekam' | 'urai' | 'uji' | 'ramal',
+    { readonly title: string; readonly detail: string }
+  >
+  readonly shell: {
+    readonly stations: string
+    readonly learn: string
+    readonly switchStation: string
+    readonly stages: string
+    readonly checks: string
+    readonly onThisPage: string
+  }
   readonly nav: {
     readonly beranda: string
     readonly catatan: string
@@ -418,6 +431,20 @@ const id: Dictionary = {
     system: 'Ikuti sistem',
     light: 'Terang',
     dark: 'Gelap',
+  },
+  stages: {
+    rekam: { title: 'Rekam', detail: 'Pengamatan dan kecocokan' },
+    urai: { title: 'Urai', detail: 'Komponen harmonik' },
+    uji: { title: 'Uji', detail: 'Resolusi dan banding' },
+    ramal: { title: 'Ramal', detail: 'Pasang dan surut ke depan' },
+  },
+  shell: {
+    stations: 'Stasiun',
+    learn: 'Pelajari',
+    switchStation: 'Ganti stasiun',
+    stages: 'Tahap analisis',
+    checks: 'Dua cara menguji',
+    onThisPage: 'Di halaman ini',
   },
   nav: {
     beranda: 'Beranda',
@@ -929,6 +956,20 @@ const en: Dictionary = {
     system: 'Match system',
     light: 'Light',
     dark: 'Dark',
+  },
+  stages: {
+    rekam: { title: 'Record', detail: 'Observation and fit' },
+    urai: { title: 'Decompose', detail: 'Harmonic constituents' },
+    uji: { title: 'Test', detail: 'Resolution and comparison' },
+    ramal: { title: 'Predict', detail: 'High and low water ahead' },
+  },
+  shell: {
+    stations: 'Stations',
+    learn: 'Learn',
+    switchStation: 'Switch station',
+    stages: 'Analysis stages',
+    checks: 'Two ways to test',
+    onThisPage: 'On this page',
   },
   nav: {
     beranda: 'Home',

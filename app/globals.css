@@ -390,6 +390,16 @@
 }
 
 /**
+ * On a phone the stage bar is fixed to the bottom of the screen; reserve its
+ * height at the foot of the page so it never covers the footer's last line.
+ */
+@media (max-width: 639px) {
+  body:has([data-stage-bar]) {
+    padding-bottom: calc(4.25rem + env(safe-area-inset-bottom));
+  }
+}
+
+/**
  * The chart rebuild is the one moment that moves (PRD §9). Everything else is
  * still, and under this preference the rebuild stops too — the curve cuts
  * straight to the value it already computed.

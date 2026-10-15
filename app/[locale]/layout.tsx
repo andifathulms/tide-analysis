@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { BrandMark } from '@/components/BrandMark'
 import { MakerSignature } from '@/components/MakerSignature'
+import { SiteNav } from '@/components/SiteNav'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 
@@ -61,24 +62,13 @@ export default function LocaleLayout({
           {/* The lockup: the mark, then the wordmark in the site's own serif. */}
           <Link href={`/${locale}`} className="group flex items-center gap-2.5">
             <BrandMark className="h-7 w-7 shrink-0 rounded-[6px]" />
-            <span className="text-title font-extrabold leading-none tracking-tight text-ink">
+            <span className="text-title font-extrabold leading-none tracking-tight text-ink max-[480px]:sr-only">
               {dict.siteName}
             </span>
           </Link>
 
           <nav className="flex items-center gap-1 text-caption">
-            <Link
-              href={`/${locale}`}
-              className="rounded px-2.5 py-1.5 text-inkMuted hover:bg-sunken hover:text-ink"
-            >
-              {dict.nav.beranda}
-            </Link>
-            <Link
-              href={`/${locale}/metode`}
-              className="rounded px-2.5 py-1.5 text-inkMuted hover:bg-sunken hover:text-ink"
-            >
-              {dict.nav.metode}
-            </Link>
+            <SiteNav dict={dict} locale={locale} />
             {/*
              * The toggle was an 11px box in the faint ink at the far right —
              * effectively invisible to the reader who most needs it, since
@@ -91,7 +81,7 @@ export default function LocaleLayout({
               lang={other}
               hrefLang={other}
               aria-label={otherName}
-              className="ml-1 rounded-card border border-rule px-2.5 py-1.5 text-caption font-medium text-inkMuted hover:border-ink hover:text-ink"
+              className="ml-1 rounded-full border border-rule px-3 py-1.5 text-caption font-medium text-inkMuted transition-colors duration-150 ease-tide hover:border-ink hover:text-ink"
             >
               <span className="sm:hidden">{other.toUpperCase()}</span>
               <span className="hidden sm:inline">{otherName}</span>
