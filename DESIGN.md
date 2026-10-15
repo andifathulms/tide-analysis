@@ -1,78 +1,103 @@
 ---
 name: Pasut — Tide Analysis
-description: A tidal harmonic analysis instrument styled as a mechanical tide gauge's paper chart — computed constants, honest refusals, warm ruled paper.
+description: A tidal harmonic analysis instrument styled as a hydrographic plotting table — cool chart paper, a night watch in the dark, computed constants and honest refusals.
 colors:
-  paper: "#F7F3E9"
-  surface: "#FFFDF7"
-  sunken: "#F0EBDD"
-  ink: "#14303A"
-  ink-muted: "#4A5B62"
-  ink-faint: "#556269"
-  grid: "#D8D2C2"
-  rule: "#E6E0D0"
-  prediction: "#00719E"
-  residual: "#BC7715"
-  residual-text: "#8F5711"
-  unresolved: "#B0392B"
-  datum: "#5A6670"
-  prediction-soft: "#E4F0F6"
-  residual-soft: "#F8EEDC"
-  unresolved-soft: "#F7E7E4"
+  paper: "#F2F5F6"
+  surface: "#FFFFFF"
+  sunken: "#E7EDF0"
+  ink: "#0B2533"
+  ink-muted: "#41566A"
+  ink-faint: "#56697A"
+  grid: "#C6D3D9"
+  rule: "#D8E1E5"
+  prediction: "#0068A6"
+  residual: "#B8740C"
+  residual-text: "#8A5508"
+  unresolved: "#BE3428"
+  datum: "#596A78"
+  prediction-soft: "#E1EFF7"
+  residual-soft: "#F7EEDD"
+  unresolved-soft: "#FBE9E6"
+  night: "#071A26"
+  night-ink: "#DCE7EC"
+  night-prediction: "#53B6EC"
+  night-residual: "#E3A13A"
+  fz-1: "#C3B5E8"
+  fz-2: "#9A82D6"
+  fz-3: "#7158BD"
+  fz-4: "#4B3391"
+colors-dark:
+  paper: "#06131B"
+  surface: "#0C1E29"
+  sunken: "#0A1922"
+  ink: "#E4EDF1"
+  ink-muted: "#A9BAC4"
+  ink-faint: "#8EA0AC"
+  grid: "#1D3646"
+  rule: "#18303E"
+  prediction: "#53B6EC"
+  residual: "#E3A13A"
+  residual-text: "#EBB561"
+  unresolved: "#FF7A6B"
+  datum: "#93A3AE"
 typography:
   hero:
-    fontFamily: "Newsreader, Georgia, Times New Roman, serif"
-    fontSize: "3rem"
-    fontWeight: 500
-    lineHeight: "3.25rem"
-    letterSpacing: "-0.03em"
+    fontFamily: "Plus Jakarta Sans, system-ui, sans-serif"
+    fontSize: "3.75rem"
+    fontWeight: 800
+    lineHeight: "1.04"
+    letterSpacing: "-0.045em"
   display:
-    fontFamily: "Newsreader, Georgia, Times New Roman, serif"
+    fontFamily: "Plus Jakarta Sans, system-ui, sans-serif"
     fontSize: "2.5rem"
-    fontWeight: 500
-    lineHeight: "2.9rem"
-    letterSpacing: "-0.02em"
+    fontWeight: 800
+    lineHeight: "2.75rem"
+    letterSpacing: "-0.035em"
   headline:
-    fontFamily: "Newsreader, Georgia, Times New Roman, serif"
+    fontFamily: "Plus Jakarta Sans, system-ui, sans-serif"
     fontSize: "1.75rem"
-    fontWeight: 500
+    fontWeight: 700
     lineHeight: "2.25rem"
-    letterSpacing: "-0.015em"
+    letterSpacing: "-0.025em"
   title:
-    fontFamily: "Newsreader, Georgia, Times New Roman, serif"
+    fontFamily: "Plus Jakarta Sans, system-ui, sans-serif"
     fontSize: "1.4375rem"
-    fontWeight: 500
+    fontWeight: 700
     lineHeight: "1.95rem"
-    letterSpacing: "-0.01em"
+    letterSpacing: "-0.015em"
   lead:
-    fontFamily: "Inter Tight, system-ui, sans-serif"
+    fontFamily: "Plus Jakarta Sans, system-ui, sans-serif"
     fontSize: "1.1875rem"
     fontWeight: 400
     lineHeight: "1.85rem"
   body:
-    fontFamily: "Inter Tight, system-ui, sans-serif"
+    fontFamily: "Plus Jakarta Sans, system-ui, sans-serif"
     fontSize: "1rem"
     fontWeight: 400
     lineHeight: "1.65rem"
   caption:
-    fontFamily: "Inter Tight, system-ui, sans-serif"
+    fontFamily: "Plus Jakarta Sans, system-ui, sans-serif"
     fontSize: "0.8125rem"
     fontWeight: 400
     lineHeight: "1.25rem"
   micro:
-    fontFamily: "Inter Tight, system-ui, sans-serif"
+    fontFamily: "Plus Jakarta Sans, system-ui, sans-serif"
     fontSize: "0.75rem"
-    fontWeight: 500
+    fontWeight: 600
     lineHeight: "1.0625rem"
-    letterSpacing: "0.06em"
+    letterSpacing: "0.08em"
   numeric:
-    fontFamily: "Roboto Mono, ui-monospace, monospace"
+    fontFamily: "IBM Plex Mono, ui-monospace, monospace"
     fontSize: "1rem"
     fontWeight: 400
     fontFeature: "tnum"
+  accent:
+    fontFamily: "Newsreader, Georgia, serif"
+    fontStyle: "italic"
+    fontWeight: 400
 rounded:
-  card: "0.5rem"
+  card: "0.75rem"
   full: "9999px"
-  sm: "0.25rem"
 spacing:
   card: "1.25rem"
   gutter: "1.25rem"
@@ -80,182 +105,134 @@ spacing:
   section: "4rem"
 components:
   button-primary:
-    backgroundColor: "{colors.prediction}"
+    backgroundColor: "{colors.ink}"
     textColor: "{colors.surface}"
     typography: "{typography.body}"
-    rounded: "{rounded.card}"
-    padding: "0.625rem 1.25rem"
-  button-primary-hover:
-    backgroundColor: "{colors.ink}"
-  button-secondary:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body}"
-    rounded: "{rounded.card}"
-    padding: "0.625rem 1.25rem"
-  button-secondary-hover:
-    textColor: "{colors.prediction}"
-  badge:
-    backgroundColor: "{colors.prediction-soft}"
-    textColor: "{colors.prediction}"
-    typography: "{typography.micro}"
     rounded: "{rounded.full}"
-    padding: "0.125rem 0.625rem"
+    padding: "0.625rem 1.25rem"
+  button-secondary:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink}"
+    border: "{colors.rule}"
+    rounded: "{rounded.full}"
+    padding: "0.625rem 1.25rem"
   card:
     backgroundColor: "{colors.surface}"
     rounded: "{rounded.card}"
     padding: "{spacing.card}"
-  callout-unresolved:
-    backgroundColor: "{colors.unresolved-soft}"
-    textColor: "{colors.unresolved}"
-    rounded: "{rounded.card}"
-    padding: "1.25rem 1.25rem 1.25rem 1.25rem"
-  nav-tab-active:
-    textColor: "{colors.prediction}"
-    typography: "{typography.caption}"
-  nav-tab-inactive:
-    textColor: "{colors.ink-muted}"
-    typography: "{typography.caption}"
 ---
 
 # Design System: Pasut — Tide Analysis
 
 ## Overview
 
-**Creative North Star: "The Marégraphe"**
+**Creative North Star: "The Plotting Table"**
 
-The subject is the paper drum of a mechanical tide gauge — a pen tracing sea level onto a ruled roll for weeks at a time, the instrument's own visual language. Every surface in the app sits on that warm paper; the chart alone carries its ruling, because a grid the reader takes measurements off has no business repeating as wallpaper behind prose (a mistake the codebase made once and corrected — see `globals.css`). The site is a restrained instrument, not a decorated app: color and shape are reserved for meaning, never for polish. Prediction blue means "the model agrees here." Residual ochre means "this is what the model doesn't explain." Reserved red means "this cannot be trusted" — a refusal, an ill-conditioned fit, a gauge fault — and it never decorates anything else. There is no ambient motion; the one animated moment (a constituent toggling in and rebuilding the predicted curve) exists because that rebuild is real information, and everywhere else stillness is the honest choice, because the Rayleigh slider's fit is genuinely discontinuous and animating it would imply a continuity that isn't there.
+A hydrographic office's chart table: cool paper under daylight, a ruled chart that a reader takes measurements from, and seas lettered in italic. In the dark theme it becomes the night watch. The chart is the instrument and gets the most space and the most colour on every screen. The interface around it stays quiet.
 
-Two audiences read this system at once — a lay Indonesian reader drawn in by curiosity, and a technical peer auditing the engineering — and the design doesn't split into two registers for them. The same ruled, quiet, high-contrast surface serves both: legible prose typography for the first, exact tabular-numeral readouts and a visible condition number for the second.
+It replaced, in October 2026, a warm-cream "marégraphe" look with serif headlines. That look read as an essay about the numbers rather than an instrument producing them, and it kept the chart at card scale. The principles underneath carried over unchanged.
 
-**Key Characteristics:**
-- Warm ruled paper as the base surface everywhere; the grid itself belongs only to the chart.
-- A fixed three-trace chart vocabulary — ink for observation, blue for prediction (heavier stroke, drawn to visually merge with agreement), ochre for residual — validated together for colorblind separation and never reassigned.
-- Reserved red exists in exactly one register: things the record cannot support. It is never used for hover states, active states, or emphasis.
-- Flat by default; the two shadow tokens are earned, not decorative, and appear on a handful of surfaces only.
-- No transition or easing utilities anywhere in the codebase. Stillness is a deliberate visual argument, not an oversight.
-- Newsreader serif for anything read as prose or judgment (headings, body); Inter Tight sans for anything operated (nav, labels, controls); Roboto Mono tabular figures for anything counted (amplitudes, phases, condition numbers).
+Two audiences read the same surface: a lay Indonesian reader drawn by curiosity, and a technical peer auditing the engineering. They get legible prose and plain-language stages for the first, and exact tabular readouts and a visible κ for the second.
 
-## Colors
+**Key characteristics**
+- **Colour means data.** The three series and the reserved red carry meaning. Actions, links, focus and active states are ink, so blue on screen always means the fitted model.
+- **One bold surface.** The night band sits behind the home hero only. Everything else is calm paper.
+- **Two designed themes.** Light and dark are each measured. Dark is not an inversion.
+- **The inverse problem is the navigation.** Every station is worked through four stages in order: Rekam → Urai → Uji → Ramal.
+- **Motion is rare and honest.** Colour transitions and one chart draw-in. Nothing computed ever tweens.
 
-Chart-paper warmth throughout, three validated data traces, and one reserved alarm color that never leaks into decoration.
+## Colours
 
-### Primary
-- **Harbour Blue** (`#00719E`, token `prediction`): the fitted/predicted trace, the one primary action per view, active nav state, focus rings, text selection tint. Chosen (over an earlier teal) because its chroma clears the floor at which a colorblind reader can hold it apart from the ochre residual trace — do not retune without re-validating that separation.
+Every token is an RGB channel triple in `:root` (`app/globals.css`), redefined for the dark theme under both `prefers-color-scheme: dark` (unless the reader chose light) and `[data-theme='dark']`. Components name tokens only; `tailwind.config.ts` holds no literals.
 
-### Secondary
-- **Marigold Ochre** (`#BC7715` stroke / `#8F5711` as text, tokens `residual` / `residual-text`): the residual trace beneath the chart, and the honest measure of what the harmonic model doesn't explain. The stroke value is tuned for separation on the chart face and sits under the text-contrast floor, which is why it has a darker text sibling — always reach for `residual-text` when the color carries type, `residual` only for the stroke itself.
+### The three series
+- **Prediction** (`#0068A6` / dark `#53B6EC`): the fitted model, and nothing else. It is drawn heavier than the observation, so agreement reads as the blue line absorbing the ink one.
+- **Residual** (`#B8740C` stroke, `#8A5508` text / dark `#E3A13A`, `#EBB561`): what the model does not explain. The stroke sits under the text floor on purpose, so use `residualText` for type.
+- **Observation** is **ink**: the thin line.
 
-### Tertiary
-- **Reserved Alarm Red** (`#B0392B`, token `unresolved`): constituents the record cannot resolve, ill-conditioned fits, gauge datum steps, the navigation-safety warning, and a number that disagrees with itself beyond a stated tolerance — least squares vs. Admiralty on the same constituent (`FormzahlComparison`, >0.03 m or >10°), or a constant's spread across independently-fitted windows (`StabilityPanel`, above `NOTABLE_SWING`). This color is load-bearing precisely because it appears nowhere else — never a hover state, never a delete button, never generic emphasis.
+Blue and ochre were chosen as the pair that survives every common colour-vision deficiency, and they sit in different lightness bands in both themes. Re-tune them together or not at all.
 
-### Neutral
-- **Chart Paper** (`#F7F3E9`, token `paper`): the base surface of every page — the instrument's own paper stock.
-- **Card Surface** (`#FFFDF7`, token `surface`): raised surfaces — cards, tables, controls, header bar — a shade lighter than the paper it sits on.
-- **Sunken Band** (`#F0EBDD`, token `sunken`): recessed secondary panels, row hover states, the held-out extrapolation window on the chart.
-- **Instrument Ink** (`#14303A`, token `ink`): primary text and the observed trace — near-black with a marine cast, 12.5:1 on paper.
-- **Muted Ink** (`#4A5B62`, token `ink-muted`): secondary prose, inactive nav labels, 6.4:1 on paper.
-- **Faint Ink** (`#556269`, token `ink-faint`): eyebrows, captions, labels — the smallest text on the site, held to 5.7:1 on paper deliberately (a prior value measured only 4.63:1 on the sunken surface, under the bar).
-- **Printed Grid** (`#D8D2C2`, token `grid`): ruling for anything measured — the chart's own grid, and the small inline scales that share its vocabulary (Formzahl ticks, the nodal f-range, the beat figure's mean line). Never used for text, never used where nothing is being measured.
-- **Paper Rule** (`#E6E0D0`, token `rule`): hairlines — card borders, table rules, nav underlines — the page-level echo of the chart's grid.
-- **Datum Slate** (`#5A6670`, token `datum`): datum reference lines on the chart face and their labels.
-- **Prediction Tint** (`#E4F0F6`), **Residual Tint** (`#F8EEDC`), **Unresolved Tint** (`#F7E7E4`): soft background fills for badges and callouts, always paired with their full-strength sibling for the border or text that carries the meaning.
+### Reserved red
+**Unresolved** (`#BE3428` / dark `#FF7A6B`) is used only for refused constituents, ill-conditioned fits, gauge datum steps, the navigation warning, and a number that fails a stated agreement tolerance. Never for hover, emphasis or decoration.
 
-### Named Rules
-**The Reserved Red Rule.** `unresolved` (and its soft tint) appear only for what the record genuinely cannot support: refused constituents, ill-conditioned fits, gauge datum steps, the navigation warning, and a number that fails a stated agreement threshold — two methods on the same constituent, or the same constituent across independently-fitted windows. Every trigger is a named, numeric tolerance somewhere in the code, never a judgment call made in the component. If a use isn't one of those five, it isn't this color.
+### Neutrals
+Paper `#F2F5F6` (cool, a slight sea-blue bias), surface `#FFFFFF`, sunken `#E7EDF0`, ink `#0B2533`, muted `#41566A`, faint `#56697A`, plus two hairlines: `grid` for rulings a reader measures from, `rule` for page chrome. Dark equivalents are in the front matter.
 
-**The Ruled Surface Rule.** The `grid` token belongs to rulings that carry a measurement — the main chart's own grid, and the small inline scales that borrow its vocabulary on purpose: `FormzahlComparison`'s number-line ticks, `NodalCyclePanel`'s f-range markers, `BeatFigure`'s mean-level reference. Page chrome uses `rule` (its quieter, page-level counterpart) for hairlines that carry no reading — borders, table rules, nav underlines. Repeating `grid` behind prose, where nothing is being measured, is what turns an instrument into wallpaper; repeating it on another ruled scale is the same instrument doing the same job twice.
+### The night band
+`night` `#071A26` with its own ink set. Inside `.night` the series and ink tokens re-scope to the band, so a `TideChart` placed there reads correctly with no changes. Measured on the band: observation 14.1:1, prediction 7.8:1, residual 8.0:1.
+
+### Tide character
+`fz-1`…`fz-4` form an ordered single-hue violet ramp, from two tides a day to one. Violet so it can never be read as a series. It is used for fills only, and the class name is always printed beside it. In the dark theme the ramp flips, so "more diurnal" stays "more contrast".
+
+### Contrast
+Every colour used as text clears 4.5:1 on paper, surface, sunken and its own tint, in both themes. The tightest pairing is faint ink on the prediction tint at 4.84:1. Graphical strokes clear 3:1.
+
+### Named rules
+**The Colour-Means-Data Rule.** If a colour is not one of the three series, the reserved red, or the Formzahl ramp, it is ink or a neutral. A button the colour of the model trace says "the model" when it means "click".
+
+**The Reserved Red Rule.** As above. Every trigger is a named numeric tolerance in code, never a judgement made in a component.
+
+**The Ruled Surface Rule.** `grid` belongs to rulings that carry a measurement (the chart, the atlas graticule, the spectrum scale, inline Formzahl and nodal scales). Page chrome uses `rule`.
 
 ## Typography
 
-**Display/Prose Font:** Newsreader (fallback: Georgia, Times New Roman, serif)
-**UI Font:** Inter Tight (fallback: system-ui, sans-serif)
-**Numeric Font:** Roboto Mono, tabular figures (fallback: ui-monospace, monospace)
+| Role | Face | Use |
+|---|---|---|
+| Read and operate | **Plus Jakarta Sans** 400–800 | headings, body, controls. Drawn by Tokotype, an Indonesian foundry, and it holds up over long Indonesian prose. |
+| Count | **IBM Plex Mono** 400/500, tabular | every amplitude, phase, frequency, κ, date in a readout. Slashed zero, distinct 1/l. |
+| Accent | **Newsreader** italic | one phrase in the hero, and sea names on the atlas, the way nautical charts letter water. Never a heading system. |
 
-**Character:** A screen-native serif carrying the register of a scientific report for anything read as prose or judgment, paired with a tight, quiet grotesque for anything operated, and a monospace with locked tabular figures for anything counted. The pairing signals "this is measured, not marketed."
+Scale (ratio 1.2 from 16px): 12 · 13 · 16 · 19 · 23 · 28 · 40 · 60. Headings are 700, page titles 800 with tracking tightened as size grows.
 
-### Hierarchy
-- **Hero** (500, 3rem / 48px, 3.25rem line-height, Newsreader): the landing page's single headline only.
-- **Display** (500, 2.5rem / 40px, 2.9rem line-height, Newsreader): page-level h1s (e.g. a station name).
-- **Headline** (500, 1.75rem / 28px, 2.25rem line-height, Newsreader): section headings.
-- **Title** (500, 1.4375rem / 23px, 1.95rem line-height, Newsreader): subsection and card headings.
-- **Lead** (400, 1.1875rem / 19px, 1.85rem line-height, Inter Tight): intro paragraphs under a hero or headline.
-- **Body** (400, 1rem / 16px, 1.65 line-height, Inter Tight): running prose; 65–75ch reading measure via the `max-w-reading` (38rem) container.
-- **Caption** (400, 0.8125rem / 13px, 1.25rem line-height, Inter Tight): table cells, nav labels, secondary metadata.
-- **Micro/Eyebrow** (500, 0.75rem / 12px, 0.06em tracking, uppercase, Inter Tight): the small label above a section or stat, and badge text.
-- **Numeric** (400, tabular-nums, Roboto Mono): every amplitude, phase, frequency, and condition-number readout. Columns must align and must not reflow as they update — this is a correctness requirement, not a style preference (PRD invariant: figures are tabular everywhere).
-
-### Named Rules
-**The Read/Operate/Count Rule.** Three fonts, three jobs, no overlap: Newsreader is for what you read and judge, Inter Tight is for what you operate, Roboto Mono is for what you count. A number outside a mono/tabular context is a bug, not a style choice.
+**The Read/Operate/Count Rule** still holds. A number outside a mono, tabular context is a bug.
 
 ## Layout
 
-Single-column, generous, paper-width content. `max-w-reading` (38rem / ~65ch) bounds running prose; `max-w-page` (76rem) bounds the overall page shell, including the sticky header row and footer. The chart itself is the one element allowed to run the page's full width at generous height — it is the instrument, not a widget, and gets the space to read as one.
+`max-w-page` (76rem) bounds the shell and `max-w-reading` (38rem) bounds prose. The home hero breaks out edge to edge (`mx-[calc(50%-50vw)]`, with `overflow-x-clip` on the layout root).
 
-Spacing is named by role rather than by scale step: `space-card` (1.25rem) is internal card padding, `space-gutter` (1.25rem) is the page's horizontal margin, `space-block` (1.5rem) separates stacked content blocks, `space-section` (4rem) separates major page sections and sits above the footer. A sticky masthead (`header-height`, 3.5rem) reserves scroll-padding so focus and fragment jumps never land underneath it.
+**Charts** keep their viewBox aspect ratio. Below 36rem they scroll sideways inside a focusable frame instead of shrinking into a letterboxed strip.
 
-Station sub-navigation is a horizontally-scrollable underline-tab row (`StationNav`) directly under the page header, present on every station view (record, constituents, resolution, comparison, prediction) so the reader always knows which of the five lenses they're in.
+### Navigation
+- **Masthead**: the lockup, then **Stasiun · Pelajari · Metode** (pill links, the active one on `sunken`), the language switch, and the theme toggle (system → light → dark).
+- **Station header**: breadcrumb, station name, a **station switcher** (a native `<details>`, keeps the reader on the same stage), the Formzahl pill, and provenance (period, datum, gaps, source) in a ruled strip.
+- **Stage nav**: four stages, numbered because they are a sequence. On wider screens it is a row of four with the active stage underlined in ink. On phones the same element is a bar fixed to the bottom, and `body:has([data-stage-bar])` reserves its height. Uji adds a second switch between **Resolusi** and **Banding**.
+- **Page index**: long views carry an "On this page" row of jump links.
 
-## Elevation & Depth
+## Elevation and shape
 
-Flat by default; shadow is rare and earned, never a general interactive signal. Depth mostly comes from tonal layering — paper sitting a shade darker than the surfaces resting on it — not from shadow.
+Flat by default. `shadow-card` is for raised sheets and primary buttons, and `shadow-raised` is for floating things (the crosshair readout, the switcher menu, the skip link). Shadows are their own variables, because ink turns pale in the dark theme.
 
-### Shadow Vocabulary
-- **`shadow-card`** (`0 1px 2px rgb(ink/0.05), 0 1px 8px rgb(ink/0.04)`): the default card lift, and the primary CTA button — marks "this is a distinct, raised sheet on the paper."
-- **`shadow-raised`** (`0 2px 4px rgb(ink/0.06), 0 8px 24px rgb(ink/0.06)`): reserved for the rare moment something needs to visibly float above everything else — currently only the skip-to-content link on focus.
+Cards use `rounded-card` (0.75rem). Buttons, pills, switches and badges are fully round. Callouts keep the left-border accent (`rounded-r-card`, 4px border in the tone colour).
 
-### Named Rules
-**The Earned Shadow Rule.** A shadow means "this specific surface sits above the paper," never "this element is interactive" or "this element is important." Most cards, most rows, most controls stay flat and rely on a rule (border) instead.
+## Motion
 
-## Shapes
-
-One consistent corner radius carries almost the entire system: `rounded-card` (0.5rem) on cards, buttons, badgeless callouts, and form controls. Alert/callout blocks (the navigation warning, refusal notices, diagnostics callouts) use `rounded-r-card` — radius on the right corners only, because the left edge carries a 4px solid accent border in the alert's color instead, so the two treatments don't compete. Fully round (`rounded-full`) is reserved for pill badges and the small trace-key/legend line-swatches. Small inline icon buttons (social links in the footer) use the plain `rounded`/`rounded-sm` default. The brand mark itself is an exception by design — its own fixed-color SVG tile with an independently chosen ~22% corner radius, described in code as "artwork on its own tile," not a token consumer.
+- **Colour transitions** of 150ms on hover and focus (`ease-tide`). Colour only, never layout.
+- **Chart draw-in** once, on the home chart only. It is staggered by duration, never by delay: a delayed trace waits at its invisible start, and a stalled clock (a background tab, a renderer capturing the page) would leave it missing. The resting state is fully drawn.
+- **Crosshair** follows the pointer instantly. It reports samples, and a sample does not glide.
+- **The constituent toggle rebuild** is unchanged.
+- **Never animated**: the Rayleigh slider's result, κ, refusals, or any fitted number. A fit that jumps must redraw rather than tween, or the motion would imply a continuity the numbers do not have.
+- `prefers-reduced-motion` turns the draw-in off entirely and shortens everything else to nothing.
 
 ## Components
 
-### Buttons
-- **Shape:** `rounded-card` (0.5rem), horizontal padding 1.25rem, vertical 0.625rem.
-- **Primary:** filled `prediction` background, `surface` text, `shadow-card`. Hover swaps the fill to `ink` (not a lighter/darker version of the same blue — a deliberate shift to the darkest ink on the site, signalling "committed").
-- **Secondary:** outlined — `surface` background, `rule` border, `ink` text. Hover shifts both border and text to `prediction`, no fill change.
-- There is no dedicated `Button` component in code; both variants are hand-styled `Link`s at each call site, always with this same pair of class recipes.
+- **ButtonLink** (`components/ui`): the one action recipe. Primary is an ink pill; secondary is outlined.
+- **Callout**: note (neutral ink), warning (residual), refusal (unresolved).
+- **FormzahlPill / FormzahlSwatch**: a tide character on the ramp, always with its label and F.
+- **PageIndex**: the "On this page" row.
+- **TideChart**: grid, datum lines, held-out band, observation (ink, 1.1px), model (prediction, 2px), residual band, datum-step marks in reserved red, and the **crosshair** (`ChartCrosshair`), which shows a timestamp in the record's local zone and the three heights. Over a gap it shows nothing.
+- **StationAtlas**: Natural Earth coastline on `rule`, dashed graticule, italic sea names, gauge marks sized by F and filled from the ramp. Every mark links to its station.
+- **ConstituentSpectrum**: one panel per species on a shared amplitude scale. Unresolved constituents are a dashed red mark with the record length they need, and no bar.
 
-### Badges
-- **Style:** pill (`rounded-full`), tone-colored border + soft-tint background + full-strength text, `micro` typography, generous horizontal padding relative to height (0.625rem / 0.125rem).
-- **Tones:** `prediction` (default/informational — tide character, general tags), `residual`, `unresolved` — always the matching soft/full pair from the same token family, never a mismatched combination.
+## Do's and don'ts
 
-### Cards
-- **Corner Style:** `rounded-card` (0.5rem).
-- **Background:** `surface`, with a `rule` 1px border.
-- **Shadow Strategy:** `shadow-card` — see Elevation.
-- **Internal Padding:** `space-card` (1.25rem).
+**Do**
+- reach for ink for anything a reader clicks;
+- set every number in the mono with tabular figures;
+- check both themes when adding a token, and measure the contrast;
+- keep the navigation warning beside every predicted height, on every view.
 
-### Alert / Callout Blocks (signature component)
-The left-border-accent pattern is the system's one distinctive structural device, reused identically across the navigation warning, refusal notices, and diagnostic callouts: `rounded-r-card`, a 4px solid left border in the alert's tone color, a soft-tint background at ~60% opacity, and an `eyebrow`-styled title in the same full-strength tone. Three tones carry three meanings — informational note (`prediction`), residual/caution (`residual`), refusal/unresolved (`unresolved`) — and the tone is never chosen for visual variety, only for which of those three the message actually is. A compact variant (no left border, plain `rounded-card` + thin matching-tone border) exists for the same warning inline in tighter spaces, such as within a card.
-
-### Tables
-- **Style:** no card wrapper — bare, ruled (`border-collapse`), sitting directly on the page or inside a card. Header cells use `eyebrow` styling; body rows are separated by `rule/60` hairlines with a `sunken/50` hover highlight, no radius, no shadow — tables stay flat and ruled even where cards around them are not.
-- **State:** unresolved constituent rows get `unresolvedSoft/70` row background with `unresolved` name text — the same reserved-red language as the callouts, applied at row granularity.
-- **Numerals:** every numeric column sits in a `numeric` (tabular-nums, Roboto Mono) context so figures align and don't reflow as they update.
-
-### Navigation
-- **Masthead:** sticky, `paper/90` with backdrop blur, bottom `rule` hairline, fixed `header-height` (3.5rem). Logo lockup (BrandMark + serif wordmark) at left; primary links + locale switcher at right. Link default is quiet `inkMuted`, hover adds a `sunken` background and shifts to `ink`; the locale switcher is visually distinct — its own bordered pill that highlights `prediction` on hover, since switching language is a different kind of action than navigating.
-- **Station tabs (StationNav):** underline-tab pattern — active tab gets a 2px `prediction`-colored bottom border and medium-weight `prediction` text; inactive tabs have a transparent border that reveals `rule` on hover, text shifting `inkMuted` → `ink`. No background change on any state — the underline alone carries it.
-- **Skip link:** visually hidden until focus, then a filled `prediction` pill with `shadow-raised` — the one place `shadow-raised` appears outside its reserved role, because a keyboard user needs it to visibly float above the sticky header it's escaping.
-
-### The Chart (signature component)
-The chart is inline SVG built from precomputed path geometry (`lib/chart`), not a component-level visual choice but the project's central artifact, and it carries the system's whole trace vocabulary in one place: the printed `grid` at 0.5px stroke; `datum` reference lines at 0.75–1px, dashed when non-emphasized; the observed trace in `ink` at 1.1px with rounded joins; the predicted/model trace in `prediction` at 2px — deliberately heavier, so agreement reads as the thicker blue line absorbing the thinner ink one; the residual trace in `residual` at 1.1px with its own `residual/50` zero-line; a gauge datum step drawn in dashed `unresolved` — tying the reserved-red language to a real measurement fault, not just UI chrome; and the held-out/extrapolation window rendered as a `sunken` fill sitting behind everything else. No transitions animate any of this except the one deliberate constituent-toggle rebuild.
-
-## Do's and Don'ts
-
-### Do:
-- **Do** keep `unresolved`/red exclusive to genuine refusals, ill-conditioned fits, gauge faults, and the navigation warning — never as generic emphasis or a delete/danger affordance unrelated to those meanings.
-- **Do** set every amplitude, phase, frequency, and condition-number figure in the `numeric` (tabular, Roboto Mono) style, in a dedicated numeric context so columns align.
-- **Do** use the left-border-accent callout pattern (`rounded-r-card`, 4px tone border, soft-tint fill, eyebrow title) for any new alert-level message, choosing the tone from what the message actually is, not for visual variety.
-- **Do** keep `grid` scoped to rulings that measure something (the chart, and the inline scales that share its vocabulary); use the quieter `rule` token for page-level hairlines that don't.
-- **Do** let hover states shift only color/border/background — never introduce a transition, duration, or easing utility; the flat cut is a deliberate stance the codebase has never broken.
-
-### Don't:
-- **Don't** add drop shadows to table rows, nav items, or badges — depth is reserved for `card`/`shadow-card` and the one `shadow-raised` exception on the skip link.
-- **Don't** retune `prediction` or `residual` independently of each other — they were validated together for colorblind separation and contrast, and moving one without the other can break that pairing.
-- **Don't** animate the Rayleigh slider's fit result or any other discontinuous computed value; a redraw, not a transition, is the honest representation of a fit that genuinely jumps.
-- **Don't** introduce a fourth "read" typeface or a second monospace — Newsreader/Inter Tight/Roboto Mono is a closed set tied to the Read/Operate/Count rule, not a starting palette to extend.
+**Don't**
+- use prediction blue for an action, or the reserved red for anything but its five meanings;
+- animate a computed result;
+- add a fourth typeface, or use the serif for headings;
+- put `grid` behind prose.

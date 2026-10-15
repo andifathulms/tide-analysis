@@ -60,7 +60,7 @@ A lookup tool that sums published harmonic constants is an afternoon's work and 
 
 - Eight bundled IOC station records (Sabang, Padang, Benoa, Bitung, Ambon, Surabaya, Semarang, Kolinamil/Jakarta Port), 212 days hourly each, real sea-level observations with declared gaps and rejected spikes — not synthetic, not fabricated.
 - Published Formzahl reference values used for fixture testing: 0.557 (Segara Anakan), 0.35–0.39 (Teluk Balikpapan), plus the four regimes recovered directly from the bundled stations' own fits (see CLAUDE.md "Current state" table).
-- 366 passing tests, `pnpm build` exporting 90 pages, `pnpm lint`/`pnpm typecheck` clean, at time of writing (2026-08-14) — treat as a snapshot, verify against current state before citing.
+- 407 passing tests, `pnpm build` exporting 90 pages, `pnpm lint`/`pnpm typecheck` clean, at time of writing (2026-10-15) — treat as a snapshot, verify against current state before citing.
 - No testimonials, customer logos, press, or case studies exist and none should be fabricated — this is a personal open-source portfolio project, not a marketed product.
 
 ## Product Principles
