@@ -390,6 +390,50 @@
 }
 
 /**
+ * The chart draw-in: the one entrance animation on the site, and only on a
+ * chart that is shown rather than refitted. The resting state is fully drawn
+ * (offset 0), so with the animation removed — reduced motion, a thumbnail, a
+ * print — the chart is complete.
+ *
+ * What never animates: the Rayleigh slider, κ, a refusal, any fitted number.
+ * A fit that jumps discontinuously must redraw, not tween, or the motion
+ * would imply a continuity the numbers do not have.
+ */
+.chart-draw .trace {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  animation: chart-draw 1.4s cubic-bezier(0.22, 0.7, 0.2, 1);
+}
+
+/*
+ * Staggered by duration, never by delay: a delayed trace sits at its
+ * invisible start until the delay ends, and anything that stalls the clock —
+ * a background tab, a renderer capturing the page — leaves it missing.
+ */
+.chart-draw .trace-model {
+  animation-duration: 1.9s;
+}
+
+.chart-draw .trace-residual {
+  animation-duration: 2.3s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chart-draw .trace {
+    animation: none;
+  }
+}
+
+@keyframes chart-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/**
  * On a phone the stage bar is fixed to the bottom of the screen; reserve its
  * height at the foot of the page so it never covers the footer's last line.
  */

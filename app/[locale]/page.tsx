@@ -4,16 +4,17 @@ import { notFound } from 'next/navigation'
 import { FormzahlComparison, type FormzahlRow } from '@/components/FormzahlComparison'
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { TideChart } from '@/components/chart/TideChart'
-import { Badge, ButtonLink, Card, Section, Stat, TraceKey } from '@/components/ui'
+import { StationAtlas } from '@/components/StationAtlas'
+import { Badge, ButtonLink, Card, FormzahlSwatch, Section, Stat, TraceKey } from '@/components/ui'
+import { buildAtlasModel } from '@/lib/chart/atlas'
+import { GAUGE_LOCATIONS } from '@/lib/records/locations'
+import { STAGES, viewsOf } from '@/lib/view/stages'
 import { pageMetadata } from '@/lib/view/metadata'
 import { dictionary, fill, isLocale, type Locale } from '@/lib/i18n/dictionary'
 import { MANIFEST, stations } from '@/lib/records/registry'
 import { formatDate, formatDays } from '@/lib/view/format'
 import { heroChart } from '@/lib/view/hero'
 import { analyseStation } from '@/lib/view/station'
-
-/** The five views, in the order a reader should meet them. */
-const TOOLS = ['catatan', 'komponen', 'resolusi', 'banding', 'prediksi'] as const
 
 /** Fitted at build time, one per bundled station. Nothing is quoted. */
 async function formzahlRows(): Promise<FormzahlRow[]> {
@@ -80,6 +81,28 @@ export async function Home({ locale }: { locale: Locale }) {
   const hero = await heroChart()
   const blocked = MANIFEST.sources.filter((s) => !s.enabled && s.id !== 'synthetic')
 
+  const numberLocale = locale === 'id' ? 'id-ID' : 'en-GB'
+  const accentStart = dict.home.heroTitle.lastIndexOf(dict.home.heroAccent)
+
+  /* Every bundled station with a location and a fitted character. */
+  const atlas = buildAtlasModel(
+    formzahl.flatMap((row) => {
+      const where = GAUGE_LOCATIONS[row.stationId]
+      if (where === undefined) return []
+      return [
+        {
+          stationId: row.stationId,
+          name: where.mapName,
+          lonDeg: where.lonDeg,
+          latDeg: where.latDeg,
+          formzahl: row.value,
+          type: row.type,
+          label: where.label,
+        },
+      ]
+    }),
+  )
+
   const totalDays = list.reduce((sum, s) => sum + s.lengthDays, 0)
   const totalSamples = list.reduce((sum, s) => sum + s.sampleCount, 0)
 
@@ -106,125 +129,122 @@ export async function Home({ locale }: { locale: Locale }) {
 
   return (
     <div className="space-y-section">
-      {/* The hero says what this is in one breath, for a reader who has never
-          heard of a tidal constituent — and then shows it, because the subject
-          is an instrument and prose is a poor substitute for looking at one. */}
-      <section className="space-y-block pt-2">
-        <div className="max-w-3xl space-y-4">
-          <h1 className="text-display sm:text-hero">{dict.home.heroTitle}</h1>
-          <p className="max-w-reading text-lead text-inkMuted">{dict.home.heroLead}</p>
-        </div>
+      {/*
+       * The hero says what this is in one breath, for a reader who has never
+       * heard of a tidal constituent — and then shows it, because the subject
+       * is an instrument and prose is a poor substitute for looking at one.
+       *
+       * It sits on the night band, the site's one bold surface, run edge to
+       * edge: the chart is the most striking thing the project has and was
+       * drawn at card scale. `.night` re-scopes the series tokens, so the
+       * same TideChart reads against the band unchanged.
+       */}
+      <section className="night -mt-8 mx-[calc(50%-50vw)] border-b border-nightRule sm:-mt-10">
+        <div className="mx-auto max-w-page space-y-8 px-gutter pb-10 pt-12 sm:pb-12 sm:pt-16">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:items-end">
+            <div className="space-y-5">
+              <h1 className="max-w-[18ch] text-display sm:text-hero">
+                {accentStart < 0 ? (
+                  dict.home.heroTitle
+                ) : (
+                  <>
+                    {dict.home.heroTitle.slice(0, accentStart)}
+                    <span className="accent-serif text-prediction">{dict.home.heroAccent}</span>
+                    {dict.home.heroTitle.slice(accentStart + dict.home.heroAccent.length)}
+                  </>
+                )}
+              </h1>
+              <p className="max-w-reading text-lead text-inkMuted">{dict.home.heroLead}</p>
+            </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          {entry !== undefined && (
-            <ButtonLink href={`/${locale}/catatan/${entry}`}>
-              {dict.home.openStation} {entryName}
-            </ButtonLink>
-          )}
-          <ButtonLink href={`/${locale}/metode`} variant="secondary">
-            {dict.home.readMethod}
-          </ButtonLink>
-        </div>
+            <div className="space-y-6">
+              <div className="flex flex-wrap items-center gap-3">
+                {entry !== undefined && (
+                  <ButtonLink href={`/${locale}/catatan/${entry}`}>
+                    {dict.home.openStation} {entryName} <span aria-hidden="true">→</span>
+                  </ButtonLink>
+                )}
+                <ButtonLink href={`/${locale}/metode`} variant="secondary">
+                  {dict.home.readMethod}
+                </ButtonLink>
+              </div>
+              <dl className="grid grid-cols-3 gap-4 border-t border-nightRule pt-5">
+                <Stat label={dict.home.statStations} value={list.length} />
+                <Stat
+                  label={dict.home.statDays}
+                  value={Math.round(totalDays).toLocaleString(numberLocale)}
+                />
+                <Stat label={dict.home.statSamples} value={totalSamples.toLocaleString(numberLocale)} />
+              </dl>
+            </div>
+          </div>
 
-        {hero !== null && (
-          <figure className="card space-y-4 overflow-hidden p-card">
-            <TraceKey
-              items={[
-                { colour: 'ink', label: dict.common.observed, meaning: dict.catatan.keyObserved },
-                {
-                  colour: 'prediction',
-                  label: dict.common.predicted,
-                  meaning: dict.catatan.keyPredicted,
-                },
-                {
-                  colour: 'residual',
-                  label: dict.common.residual,
-                  meaning: dict.catatan.keyResidual,
-                },
-              ]}
-            />
-            <TideChart
-              model={hero.model}
-              observedLabel={dict.common.observed}
-              predictedLabel={dict.common.predicted}
-              residualLabel={dict.common.residual}
-              titleId="hero-chart-title"
-              description={
-                fill(dict.common.chartAlt, {
-                  station: hero.stationName,
-                  days: heroWindowDays,
-                  count: hero.constituentCount,
-                }) +
-                (hero.residualRmsM === null
-                  ? ''
-                  : fill(dict.common.chartAltRms, { rms: hero.residualRmsM.toFixed(3) }))
-              }
-            />
-            <figcaption className="text-caption text-inkFaint">
-              {dict.home.heroChartNote}{' '}
-              <Link
-                href={`/${locale}/catatan/${hero.stationId}`}
-                className="link"
-              >
-                {hero.stationName}
-              </Link>
-              {' · '}
-              <span className="numeric">{heroWindowDays}</span> {dict.home.heroChartWindow}
-              {hero.residualRmsM !== null && (
-                <>
-                  {' · '}
-                  {dict.common.residualRms}{' '}
-                  <span className="numeric">{hero.residualRmsM.toFixed(3)} m</span>
-                </>
-              )}
-            </figcaption>
-          </figure>
-        )}
-      </section>
-
-      {/* Invariant 15: the hero now shows a predicted height, so the warning
-          belongs beside it rather than further down the page. */}
-      <NavigationWarning dict={dict} />
-
-      <section className="space-y-4">
-        <dl className="grid max-w-2xl grid-cols-2 gap-block border-t border-rule pt-5 sm:grid-cols-3">
-          <Stat label={dict.home.statStations} value={list.length} />
-          <Stat label={dict.home.statDays} value={Math.round(totalDays)} unit={dict.common.days} />
-          <Stat label={dict.home.statSamples} value={totalSamples.toLocaleString('id-ID')} />
-        </dl>
-        {/*
-         * This was a fourth stat reading "Constants shipped: 0". It is the
-         * project's central claim, but a large zero is the universal sign for
-         * an empty dataset, and a stranger read it as the site being broken
-         * rather than as the point. It says the same thing in words.
-         */}
-        <p className="max-w-reading text-body text-inkMuted">{dict.home.computedClaim}</p>
-      </section>
-
-      {entry !== undefined && (
-        <Section eyebrow={dict.home.toolsEyebrow} title={dict.home.toolsTitle}>
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {TOOLS.map((segment) => (
-              <Card as="li" key={segment}>
-                <Link
-                  href={
-                    // Resolution has an index of its own: the separation
-                    // ladder needs no station, and it lists the stations at
-                    // the foot of the page rather than presuming one.
-                    segment === 'resolusi'
-                      ? `/${locale}/resolusi`
-                      : `/${locale}/${segment}/${entry}`
-                  }
-                  className="text-title font-bold tracking-tight text-ink hover:underline hover:underline-offset-4"
-                >
-                  {dict.nav[segment]}
+          {hero !== null && (
+            <figure className="space-y-4 border-t border-nightRule pt-6">
+              <TraceKey
+                items={[
+                  { colour: 'ink', label: dict.common.observed, meaning: dict.catatan.keyObserved },
+                  {
+                    colour: 'prediction',
+                    label: dict.common.predicted,
+                    meaning: dict.catatan.keyPredicted,
+                  },
+                  {
+                    colour: 'residual',
+                    label: dict.common.residual,
+                    meaning: dict.catatan.keyResidual,
+                  },
+                ]}
+              />
+              <TideChart
+                model={hero.model}
+                observedLabel={dict.common.observed}
+                predictedLabel={dict.common.predicted}
+                residualLabel={dict.common.residual}
+                titleId="hero-chart-title"
+                drawIn
+                description={
+                  fill(dict.common.chartAlt, {
+                    station: hero.stationName,
+                    days: heroWindowDays,
+                    count: hero.constituentCount,
+                  }) +
+                  (hero.residualRmsM === null
+                    ? ''
+                    : fill(dict.common.chartAltRms, { rms: hero.residualRmsM.toFixed(3) }))
+                }
+              />
+              <figcaption className="text-caption text-inkFaint">
+                {dict.home.heroChartNote}{' '}
+                <Link href={`/${locale}/catatan/${hero.stationId}`} className="link">
+                  {hero.stationName}
                 </Link>
-                <p className="mt-2 text-body text-inkMuted">{dict.home.tools[segment]}</p>
-              </Card>
-            ))}
-          </ul>
-        </Section>
-      )}
+                {' · '}
+                <span className="numeric">{heroWindowDays}</span> {dict.home.heroChartWindow}
+                {hero.residualRmsM !== null && (
+                  <>
+                    {' · '}
+                    {dict.common.residualRms}{' '}
+                    <span className="numeric">{hero.residualRmsM.toFixed(3)} m</span>
+                  </>
+                )}
+              </figcaption>
+            </figure>
+          )}
+
+          {/* Invariant 15: the hero shows a predicted height, so the warning
+              sits on the band beside it, not further down the page. */}
+          <NavigationWarning dict={dict} />
+        </div>
+      </section>
+
+      {/*
+       * This was a fourth stat reading "Constants shipped: 0". It is the
+       * project's central claim, but a large zero is the universal sign for
+       * an empty dataset, and a stranger read it as the site being broken
+       * rather than as the point. It says the same thing in words.
+       */}
+      <p className="max-w-reading text-lead text-inkMuted">{dict.home.computedClaim}</p>
 
       {/* Three steps, in words a reader without oceanography can follow. */}
       <Section eyebrow={dict.home.plainEyebrow} title={dict.home.plainTitle}>
@@ -262,6 +282,7 @@ export async function Home({ locale }: { locale: Locale }) {
           title={dict.home.characterTitle}
           lead={dict.home.characterLead}
         >
+          <StationAtlas model={atlas} dict={dict} locale={locale} />
           <FormzahlComparison dict={dict} locale={locale} rows={formzahl} />
         </Section>
       )}
@@ -295,7 +316,10 @@ export async function Home({ locale }: { locale: Locale }) {
                    */}
                   {character !== undefined && (
                     <p className="flex flex-wrap items-center gap-2">
-                      <Badge tone="prediction">{dict.tideType[character.type].label}</Badge>
+                      <span className="inline-flex items-center gap-1.5 text-caption font-semibold text-ink">
+                        <FormzahlSwatch type={character.type} />
+                        {dict.tideType[character.type].label}
+                      </span>
                       <span className="numeric text-caption text-inkFaint">
                         F {character.value.toFixed(2)}
                       </span>
@@ -314,6 +338,35 @@ export async function Home({ locale }: { locale: Locale }) {
           </ul>
         )}
       </Section>
+
+      {/*
+       * The station workspace, as its four stages. They are a sequence — the
+       * inverse problem in order — so they are numbered; the number is the
+       * same one the stage bar carries on every station page.
+       */}
+      {entry !== undefined && (
+        <Section eyebrow={dict.home.toolsEyebrow} title={dict.home.toolsTitle}>
+          <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {STAGES.map((stage, index) => (
+              <Card as="li" key={stage} className="flex flex-col gap-2">
+                <span className="numeric text-caption text-inkFaint">{index + 1}</span>
+                <Link
+                  href={`/${locale}/${viewsOf(stage)[0] ?? 'catatan'}/${entry}`}
+                  className="text-title font-bold tracking-tight text-ink hover:underline hover:underline-offset-4"
+                >
+                  {dict.stages[stage].title}
+                </Link>
+                <p className="text-caption font-semibold text-inkFaint">{dict.stages[stage].detail}</p>
+                {viewsOf(stage).map((view) => (
+                  <p key={view} className="text-body text-inkMuted">
+                    {dict.home.tools[view]}
+                  </p>
+                ))}
+              </Card>
+            ))}
+          </ol>
+        </Section>
+      )}
 
       {blocked.length > 0 && (
         <Section eyebrow={dict.home.gateEyebrow} title={dict.home.gateTitle} lead={dict.home.gateLead}>

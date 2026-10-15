@@ -173,6 +173,9 @@ export interface Dictionary {
   }
   readonly home: {
     readonly heroTitle: string
+    /** The closing phrase of heroTitle, set in the italic accent. */
+    readonly heroAccent: string
+    readonly atlasNote: string
     readonly heroLead: string
     readonly plainTitle: string
     readonly plainExample: string
@@ -507,7 +510,7 @@ const id: Dictionary = {
     provenance: 'Sumber, lisensi, dan catatan datum',
     nodalAtPrediction: 'f dan u dihitung pada waktu prediksi',
     chartAlt:
-      'Grafik pasang surut {station} sepanjang {days} hari: garis hitam tinggi air terekam, garis biru hasil hitungan {count} komponen di atasnya, pita ochre selisih keduanya pada sumbu waktu yang sama.',
+      'Grafik pasang surut {station} sepanjang {days} hari: garis tipis tinggi air terekam, garis biru hasil hitungan {count} komponen di atasnya, pita ochre selisih keduanya pada sumbu waktu yang sama.',
     chartAltRms: ' RMS residu {rms} m.',
   },
   tableName: {
@@ -588,6 +591,9 @@ const id: Dictionary = {
   },
   home: {
     heroTitle: 'Pasang surut, dihitung dari air laut yang sebenarnya',
+    heroAccent: 'air laut yang sebenarnya',
+    atlasNote:
+      'Posisi alat menurut metadata IOC; warna menurut bilangan Formzahl yang dihitung dari rekaman tiap stasiun. Garis pantai: Natural Earth (domain publik).',
     heroLead:
       'Lihat pasang surut pelabuhan-pelabuhan Indonesia diurai menjadi gelombang penyusunnya, lalu diramalkan ke depan. Semua angkanya dihitung di sini, bukan disalin dari tabel.',
     plainTitle: 'Cara kerjanya, dalam tiga langkah',
@@ -596,7 +602,7 @@ const id: Dictionary = {
     plainSteps: [
       {
         title: 'Air laut direkam',
-        body: 'Alat di pelabuhan mencatat tinggi air setiap jam selama tujuh bulan. Itulah garis hitam pada grafik: apa adanya, termasuk cuaca dan gangguan alat.',
+        body: 'Alat di pelabuhan mencatat tinggi air setiap jam selama tujuh bulan. Itulah garis tipis pada grafik: apa adanya, termasuk cuaca dan gangguan alat.',
       },
       {
         title: 'Rekaman diuraikan',
@@ -634,8 +640,8 @@ const id: Dictionary = {
     statSamples: 'Bacaan jam-jaman',
     computedClaim:
       'Tidak ada satu pun tabel konstanta harmonik yang dikirim sebagai data. Setiap amplitudo dan fase di situs ini keluar dari pencocokan atas rekaman yang ditampilkan bersamanya.',
-    toolsEyebrow: 'Yang bisa dilakukan',
-    toolsTitle: 'Lima cara memeriksa satu rekaman',
+    toolsEyebrow: 'Ruang kerja stasiun',
+    toolsTitle: 'Empat tahap, satu rekaman',
     tools: {
       catatan: 'Rekaman, hasil pencocokan di atasnya, dan sisa yang tak terjelaskan.',
       komponen: 'Amplitudo dan fase tiap gelombang penyusun, beserta koreksi nodalnya.',
@@ -663,11 +669,11 @@ const id: Dictionary = {
     keyObserved: 'tinggi air yang benar-benar terekam alat',
     keyPredicted: 'hasil hitungan dari komponen pasang surut',
     keyResidual: 'selisih keduanya — cuaca, angin, dan gangguan alat',
-    fitRmsNote: 'Rata-rata jarak antara garis hitam dan garis biru pada bagian yang dipakai menghitung.',
+    fitRmsNote: 'Rata-rata jarak antara garis tipis dan garis biru pada bagian yang dipakai menghitung.',
     heldOutRmsNote: 'Pada bagian yang sengaja tidak dilihat saat menghitung. Inilah ujian yang sebenarnya.',
     readingTitle: 'Cara membaca grafik ini',
     readingBody:
-      'Bila garis biru menempel pada garis hitam, komponen pasang surut sudah menjelaskan hampir semua gerakan air. Bagian yang diarsir di sebelah kanan tidak pernah dilihat saat menghitung — di sana garis biru murni ramalan. Pita ochre di bawah adalah selisihnya; ia tidak pernah disembunyikan atau dihaluskan.',
+      'Bila garis biru menempel pada garis tipis, komponen pasang surut sudah menjelaskan hampir semua gerakan air. Bagian yang diarsir di sebelah kanan tidak pernah dilihat saat menghitung — di sana garis biru murni ramalan. Pita ochre di bawah adalah selisihnya; ia tidak pernah disembunyikan atau dihaluskan.',
     fallbackNote:
       'Yang ditampilkan di bawah adalah himpunan terbesar yang masih didukung jendela ini:',
     leakageTitle: 'Berapa besar yang hilang karena penolakan itu',
@@ -1032,7 +1038,7 @@ const en: Dictionary = {
     provenance: 'Source, licence and datum notes',
     nodalAtPrediction: 'f and u are computed at the prediction time',
     chartAlt:
-      'Tide chart for {station} over {days} days: a black line for the recorded water level, a blue line over it computed from {count} constituents, and an ochre band beneath for the difference, on the same time axis.',
+      'Tide chart for {station} over {days} days: a thin line for the recorded water level, a blue line over it computed from {count} constituents, and an ochre band beneath for the difference, on the same time axis.',
     chartAltRms: ' Residual RMS {rms} m.',
   },
   tableName: {
@@ -1114,6 +1120,9 @@ const en: Dictionary = {
   },
   home: {
     heroTitle: 'Tides, computed from the sea itself',
+    heroAccent: 'the sea itself',
+    atlasNote:
+      'Gauge positions from IOC station metadata; colour by the Formzahl number fitted from each station’s own record. Coastline: Natural Earth (public domain).',
     heroLead:
       'Watch the tide at Indonesian ports taken apart into the waves it is made of, then predicted forward. Every number is computed here rather than copied from a table.',
     plainTitle: 'How it works, in three steps',
@@ -1122,7 +1131,7 @@ const en: Dictionary = {
     plainSteps: [
       {
         title: 'The sea is recorded',
-        body: 'A gauge in a harbour writes down the water level every hour for seven months. That is the black line on the chart: as it came, weather and instrument trouble included.',
+        body: 'A gauge in a harbour writes down the water level every hour for seven months. That is the thin line on the chart: as it came, weather and instrument trouble included.',
       },
       {
         title: 'The record is taken apart',
@@ -1160,8 +1169,8 @@ const en: Dictionary = {
     statSamples: 'Hourly readings',
     computedClaim:
       'No harmonic constant table ships as data. Every amplitude and phase on this site came out of a fit to the record displayed beside it.',
-    toolsEyebrow: 'What you can do',
-    toolsTitle: 'Five ways to interrogate one record',
+    toolsEyebrow: 'The station workspace',
+    toolsTitle: 'Four stages, one record',
     tools: {
       catatan: 'The record, the fit laid over it, and what the fit could not explain.',
       komponen: 'Amplitude and phase per constituent wave, with the nodal corrections applied.',
@@ -1189,11 +1198,11 @@ const en: Dictionary = {
     keyObserved: 'the water level the gauge actually recorded',
     keyPredicted: 'what the fitted constituents say it should be',
     keyResidual: 'the difference — weather, wind and instrument trouble',
-    fitRmsNote: 'Mean distance between the black line and the blue one, over the part used to fit.',
+    fitRmsNote: 'Mean distance between the thin line and the blue one, over the part used to fit.',
     heldOutRmsNote: 'Over the part deliberately not seen while fitting. This is the real test.',
     readingTitle: 'How to read this chart',
     readingBody:
-      'Where the blue line sits on the black one, the constituents have explained almost all of the water’s movement. The shaded part on the right was never seen while fitting — there the blue line is pure prediction. The ochre band beneath is the difference, and it is never hidden or smoothed.',
+      'Where the blue line sits on the thin one, the constituents have explained almost all of the water’s movement. The shaded part on the right was never seen while fitting — there the blue line is pure prediction. The ochre band beneath is the difference, and it is never hidden or smoothed.',
     fallbackNote: 'What follows is the largest set this window can still support:',
     leakageTitle: 'What that refusal cost',
     leakageLead:

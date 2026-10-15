@@ -15,6 +15,7 @@ export function TideChart({
   heldOutLabel,
   description,
   titleId = 'chart-title',
+  drawIn = false,
 }: {
   model: ChartModel
   observedLabel: string
@@ -28,10 +29,24 @@ export function TideChart({
   description?: string
   /** Unique when a page draws more than one chart. */
   titleId?: string
+  /**
+   * Draw the traces in once on load: observation first, the model laid over
+   * it, the residual last. Only for a chart that is shown, not recomputed —
+   * a fit that changes must redraw, never tween (see globals.css).
+   */
+  drawIn?: boolean
 }) {
+  const length = drawIn ? 1 : undefined
   return (
-    <figure className="w-full overflow-x-auto">
+    // A tab stop, because below 36rem this box scrolls sideways and a
+    // keyboard has no other way in (WCAG 2.1.1; see Scroller).
+    <figure className="w-full overflow-x-auto" tabIndex={0} aria-labelledby={titleId}>
       {/*
+       * Height follows the viewBox's aspect ratio. A fixed height with a
+       * shrinking width letterboxed the chart on a phone — a thin strip of
+       * tide inside a tall empty box. Below 36rem the figure scrolls
+       * sideways instead, so axis labels stay legible.
+       *
        * <title> is the native accessible name for an SVG and is where the
        * description belongs. role="img" stays on top of it because without a
        * role several screen readers walk into the shapes and read the axis
@@ -39,11 +54,9 @@ export function TideChart({
        */}
       <svg
         viewBox={`0 0 ${model.width} ${model.height}`}
-        width="100%"
-        height={model.height}
         role="img"
         aria-labelledby={titleId}
-        className="block"
+        className={`block h-auto w-full min-w-[36rem] ${drawIn ? 'chart-draw' : ''}`}
       >
         <title id={titleId}>
           {description ?? `${observedLabel} · ${predictedLabel} · ${residualLabel}`}
@@ -187,12 +200,19 @@ export function TideChart({
         </g>
 
         {model.modelPath !== null && (
-          <path d={model.modelPath} fill="none" className="stroke-prediction" strokeWidth={2} />
+          <path
+            d={model.modelPath}
+            fill="none"
+            className="trace trace-model stroke-prediction"
+            strokeWidth={2}
+            pathLength={length}
+          />
         )}
         <path
           d={model.observedPath}
           fill="none"
-          className="stroke-ink"
+          className="trace stroke-ink"
+          pathLength={length}
           strokeWidth={1.1}
           strokeLinejoin="round"
           strokeLinecap="round"
@@ -211,7 +231,8 @@ export function TideChart({
             <path
               d={model.residualPath}
               fill="none"
-              className="stroke-residual"
+              className="trace trace-residual stroke-residual"
+              pathLength={length}
               strokeWidth={1.1}
               strokeLinejoin="round"
             />

@@ -39,7 +39,7 @@ export default function LocaleLayout({
    * (PRD §9) — and is what /id pages want anyway.
    */
   return (
-    <div lang={locale} className="flex min-h-screen flex-col">
+    <div lang={locale} className="flex min-h-screen flex-col overflow-x-clip">
       {/*
        * Eight tab stops stand between the top of every page and its content —
        * three in the header, five more in the station nav — repeated across

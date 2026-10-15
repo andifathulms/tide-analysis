@@ -15,6 +15,7 @@
     "records:fetch": "tsx scripts/fetch-records.ts",
     "records:sweep": "tsx scripts/sweep-stations.ts",
     "records:validate": "tsx scripts/validate-records.ts",
+    "atlas:coastline": "tsx scripts/build-coastline.ts",
     "typecheck": "tsc --noEmit",
     "lint": "next lint"
   },
