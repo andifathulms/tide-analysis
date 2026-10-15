@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import Link from 'next/link'
 
 /**
  * The small set of pieces every page is built from.
@@ -45,6 +46,35 @@ export function Section({
       )}
       {children}
     </section>
+  )
+}
+
+/**
+ * The one action recipe. Actions are ink, never prediction blue: blue means
+ * the fitted model, and a button the same colour as the model's trace says
+ * "the model" when it means "click". Inside `.night` the ink tokens re-scope,
+ * so the same recipe reads on the hero band.
+ */
+export function ButtonLink({
+  href,
+  children,
+  variant = 'primary',
+}: {
+  href: string
+  children: ReactNode
+  variant?: 'primary' | 'secondary'
+}) {
+  const style =
+    variant === 'primary'
+      ? 'bg-ink text-surface shadow-card hover:bg-ink/85'
+      : 'border border-rule bg-surface/40 text-ink hover:border-ink'
+  return (
+    <Link
+      href={href}
+      className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-body font-semibold transition-colors duration-150 ease-tide ${style}`}
+    >
+      {children}
+    </Link>
   )
 }
 
@@ -144,8 +174,8 @@ export function Callout({
 }) {
   const styles = {
     note: {
-      wrap: 'border-l-4 border-prediction bg-predictionSoft/60',
-      heading: 'text-prediction',
+      wrap: 'border-l-4 border-ink/70 bg-sunken/70',
+      heading: 'text-ink',
     },
     warning: {
       wrap: 'border-l-4 border-residual bg-residualSoft/60',

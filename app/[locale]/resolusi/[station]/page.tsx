@@ -157,7 +157,7 @@ export default async function ResolutionPage({
         <p className="mt-3 text-caption text-inkFaint">
           <Link
             href={`/${locale}/resolusi`}
-            className="text-prediction underline underline-offset-4 hover:text-ink"
+            className="link"
           >
             {dict.resolusi.ladderTitle}
           </Link>

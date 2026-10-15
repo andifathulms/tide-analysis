@@ -365,13 +365,26 @@
     box-shadow: theme('boxShadow.card');
   }
 
+  /** An inline link: ink, with an underline that firms up on hover. */
+  .link {
+    color: rgb(var(--colour-ink));
+    text-decoration-line: underline;
+    text-decoration-color: rgb(var(--colour-ink-faint) / 0.6);
+    text-underline-offset: 4px;
+    transition: text-decoration-color 150ms;
+  }
+
+  .link:hover {
+    text-decoration-color: rgb(var(--colour-ink));
+  }
+
   /* The eyebrow above a section title: small, spaced, quiet. */
   .eyebrow {
     font-size: var(--text-micro);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: rgb(var(--colour-ink-faint));
-    font-weight: 500;
+    font-weight: 600;
   }
 
 }

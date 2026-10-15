@@ -85,7 +85,7 @@ export function FitDiagnostics({
         <p>
           <Link
             href={correlationHref}
-            className="text-prediction underline underline-offset-4 hover:text-ink"
+            className="link"
           >
             {dict.kappa.where}
           </Link>

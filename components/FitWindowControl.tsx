@@ -156,7 +156,7 @@ export function FitWindowControl({
               setTouched(true)
               setPercent(Number(event.target.value))
             }}
-            className="w-full min-w-[10rem] flex-1 accent-prediction"
+            className="w-full min-w-[10rem] flex-1 accent-ink"
           />
           <output htmlFor="fit-percent" className="numeric min-w-[9rem] text-title">
             {percent}%

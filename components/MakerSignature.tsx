@@ -71,7 +71,7 @@ export function MakerSignature() {
           href={MAKER.portfolio}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-inkMuted underline underline-offset-4 hover:text-prediction"
+          className="link text-inkMuted"
         >
           {MAKER.name}
         </a>{' '}
@@ -86,7 +86,7 @@ export function MakerSignature() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={link.label}
-              className="block rounded p-1.5 text-inkFaint hover:bg-sunken hover:text-prediction"
+              className="block rounded p-1.5 text-inkFaint hover:bg-sunken hover:text-ink"
             >
               <span className="block h-[18px] w-[18px]">{link.icon}</span>
             </a>

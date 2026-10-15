@@ -63,7 +63,7 @@ export function FormzahlComparison({
                 <th scope="row" className="py-1.5 pr-4 text-left font-medium">
                   <Link
                     href={`/${locale}/komponen/${row.stationId}`}
-                    className="hover:text-prediction"
+                    className="hover:underline hover:underline-offset-4"
                   >
                     {row.stationName}
                   </Link>

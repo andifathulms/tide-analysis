@@ -51,7 +51,7 @@ export default function LocaleLayout({
        */}
       <a
         href="#isi"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-gutter focus:top-3 focus:z-30 focus:rounded-card focus:bg-prediction focus:px-4 focus:py-2 focus:text-body focus:font-medium focus:text-surface focus:shadow-raised"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-gutter focus:top-3 focus:z-30 focus:rounded-card focus:bg-ink focus:px-4 focus:py-2 focus:text-body focus:font-medium focus:text-surface focus:shadow-raised"
       >
         {dict.skipToContent}
       </a>
@@ -91,7 +91,7 @@ export default function LocaleLayout({
               lang={other}
               hrefLang={other}
               aria-label={otherName}
-              className="ml-1 rounded-card border border-rule px-2.5 py-1.5 text-caption font-medium text-inkMuted hover:border-prediction hover:text-prediction"
+              className="ml-1 rounded-card border border-rule px-2.5 py-1.5 text-caption font-medium text-inkMuted hover:border-ink hover:text-ink"
             >
               <span className="sm:hidden">{other.toUpperCase()}</span>
               <span className="hidden sm:inline">{otherName}</span>

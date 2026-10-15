@@ -186,7 +186,7 @@ export function ConstituentExplorer({
                     className={`numeric rounded-full border px-3 py-1.5 text-caption ${
                       on
                         ? 'border-prediction bg-predictionSoft text-prediction'
-                        : 'border-rule text-inkFaint hover:border-prediction/60'
+                        : 'border-rule text-inkFaint hover:border-ink/60'
                     }`}
                   >
                     {constant.name}
@@ -204,14 +204,14 @@ export function ConstituentExplorer({
           <button
             type="button"
             onClick={() => setEnabled(new Set(fit.constants.map((c) => c.name)))}
-            className="rounded-sm border border-rule px-2.5 py-1 text-caption text-inkMuted hover:border-prediction/60"
+            className="rounded-sm border border-rule px-2.5 py-1 text-caption text-inkMuted hover:border-ink/60"
           >
             {dict.komponen.explorerAll}
           </button>
           <button
             type="button"
             onClick={() => setEnabled(new Set(['M2']))}
-            className="rounded-sm border border-rule px-2.5 py-1 text-caption text-inkMuted hover:border-prediction/60"
+            className="rounded-sm border border-rule px-2.5 py-1 text-caption text-inkMuted hover:border-ink/60"
           >
             {dict.komponen.explorerOnly}
           </button>

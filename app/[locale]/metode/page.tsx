@@ -188,7 +188,7 @@ export default async function MethodPage({ params }: { params: { locale: string 
                     <th scope="row" className="py-1.5 pr-4 text-left font-medium">
                       <Link
                         href={`/${locale}/catatan/${analysis.station.stationId}`}
-                        className="hover:text-prediction"
+                        className="hover:underline hover:underline-offset-4"
                       >
                         {analysis.station.stationName}
                       </Link>
@@ -255,7 +255,7 @@ export default async function MethodPage({ params }: { params: { locale: string 
                   <p className="mt-1">
                     <a
                       href={source.termsUrl}
-                      className="text-prediction underline underline-offset-2"
+                      className="link"
                       rel="noreferrer"
                     >
                       {source.termsUrl}

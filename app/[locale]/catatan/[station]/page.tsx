@@ -271,7 +271,7 @@ export default async function RecordPage({
                     <details className="group mt-4">
                       <summary className="cursor-pointer space-y-1.5">
                         <p className="eyebrow">{dict.catatan.stabilityEyebrow}</p>
-                        <p className="text-title text-ink group-hover:text-prediction">
+                        <p className="text-title text-ink group-hover:underline group-hover:decoration-inkFaint group-hover:underline-offset-4">
                           {dict.catatan.stabilityTitle}
                         </p>
                       </summary>
@@ -285,7 +285,7 @@ export default async function RecordPage({
                     <details className="group mt-4">
                       <summary className="cursor-pointer space-y-1.5">
                         <p className="eyebrow">{dict.catatan.derivationEyebrow}</p>
-                        <p className="text-title text-ink group-hover:text-prediction">
+                        <p className="text-title text-ink group-hover:underline group-hover:decoration-inkFaint group-hover:underline-offset-4">
                           {fill(dict.catatan.derivationTitle, { name: derivation.name })}
                         </p>
                       </summary>
@@ -304,7 +304,7 @@ export default async function RecordPage({
       <p className="text-caption">
         <Link
           href={`/${locale}/metode`}
-          className="text-prediction underline underline-offset-4 hover:text-ink"
+          className="link"
         >
           {dict.metode.title}
         </Link>

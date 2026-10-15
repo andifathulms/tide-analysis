@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { FormzahlComparison, type FormzahlRow } from '@/components/FormzahlComparison'
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { TideChart } from '@/components/chart/TideChart'
-import { Badge, Card, Section, Stat, TraceKey } from '@/components/ui'
+import { Badge, ButtonLink, Card, Section, Stat, TraceKey } from '@/components/ui'
 import { pageMetadata } from '@/lib/view/metadata'
 import { dictionary, fill, isLocale, type Locale } from '@/lib/i18n/dictionary'
 import { MANIFEST, stations } from '@/lib/records/registry'
@@ -117,19 +117,13 @@ export async function Home({ locale }: { locale: Locale }) {
 
         <div className="flex flex-wrap items-center gap-3">
           {entry !== undefined && (
-            <Link
-              href={`/${locale}/catatan/${entry}`}
-              className="rounded-card bg-prediction px-5 py-2.5 text-body font-medium text-surface shadow-card hover:bg-ink"
-            >
+            <ButtonLink href={`/${locale}/catatan/${entry}`}>
               {dict.home.openStation} {entryName}
-            </Link>
+            </ButtonLink>
           )}
-          <Link
-            href={`/${locale}/metode`}
-            className="rounded-card border border-rule bg-surface px-5 py-2.5 text-body font-medium text-ink hover:border-prediction hover:text-prediction"
-          >
+          <ButtonLink href={`/${locale}/metode`} variant="secondary">
             {dict.home.readMethod}
-          </Link>
+          </ButtonLink>
         </div>
 
         {hero !== null && (
@@ -170,7 +164,7 @@ export async function Home({ locale }: { locale: Locale }) {
               {dict.home.heroChartNote}{' '}
               <Link
                 href={`/${locale}/catatan/${hero.stationId}`}
-                className="text-prediction underline underline-offset-4 hover:text-ink"
+                className="link"
               >
                 {hero.stationName}
               </Link>
@@ -237,7 +231,7 @@ export async function Home({ locale }: { locale: Locale }) {
         <ol className="grid gap-4 md:grid-cols-3">
           {dict.home.plainSteps.map((step, index) => (
             <Card as="li" key={step.title}>
-              <span className="numeric text-caption text-prediction">0{index + 1}</span>
+              <span className="numeric text-caption text-inkFaint">0{index + 1}</span>
               <h3 className="mt-2 text-title">{step.title}</h3>
               <p className="mt-2 text-body text-inkMuted">{step.body}</p>
               {/*
