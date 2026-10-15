@@ -1,38 +1,47 @@
 import type { Metadata, Viewport } from 'next'
-import { Newsreader, Inter_Tight, Roboto_Mono } from 'next/font/google'
+import { Newsreader, Plus_Jakarta_Sans, IBM_Plex_Mono } from 'next/font/google'
 import { SITE_URL } from '@/lib/view/site'
+import { THEME_BOOT_SCRIPT } from '@/lib/view/theme'
 import './globals.css'
 
 /** Self-hosted via next/font (PRD §12) — no runtime request to a font CDN. */
-/*
- * Newsreader is the one family Next cannot build a metric-matched fallback
- * for: Inter Tight and Roboto Mono both get a generated _Fallback face with
- * ascent, descent and size-adjust overrides, and Newsreader gets none, so
- * headings still shift when it swaps in.
- *
- * The stack below is what is available without either a new dependency to read
- * the font's metrics or a set of hardcoded numbers I would be guessing at. It
- * makes --font-prose self-sufficient — previously the variable resolved to a
- * single family name and every consumer had to append its own fallback — but
- * it does not remove the reflow. That needs real metrics for both faces.
- */
-const prose = Newsreader({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-prose',
-  fallback: ['Georgia', 'Times New Roman', 'serif'],
-})
 
-const ui = Inter_Tight({
+/**
+ * Read and operate: one family. Plus Jakarta Sans was drawn by Tokotype, an
+ * Indonesian foundry, and holds up over long Indonesian prose; at 800 with
+ * tight tracking it carries the headlines the serif used to.
+ */
+const ui = Plus_Jakarta_Sans({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-ui',
 })
 
-const mono = Roboto_Mono({
+/**
+ * Count: every amplitude, phase and κ. Plex Mono's slashed zero and distinct
+ * 1/l matter in a table of constants, and it stays legible at 12–13px.
+ */
+const mono = IBM_Plex_Mono({
   subsets: ['latin'],
+  weight: ['400', '500'],
   display: 'swap',
   variable: '--font-mono',
+})
+
+/**
+ * The accent only: italic, the way nautical charts letter water. One phrase
+ * per hero and the seas on the station atlas — never a heading system.
+ * Next builds no metric-matched fallback for Newsreader, so an accent that
+ * swaps in late can still shift its own line; it is short enough not to
+ * matter.
+ */
+const prose = Newsreader({
+  subsets: ['latin'],
+  style: ['italic'],
+  weight: ['400', '500'],
+  display: 'swap',
+  variable: '--font-prose',
+  fallback: ['Georgia', 'Times New Roman', 'serif'],
 })
 
 /**
@@ -113,18 +122,34 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   /*
-   * The paper the site is printed on, so the browser chrome matches it.
-   * The one place a raw value is unavoidable — this is emitted as a meta tag
-   * before any stylesheet loads, so it cannot read --colour-paper. Keep it in
+   * The browser chrome, matched to the paper in each theme. These are the one
+   * place a raw value is unavoidable — they are emitted as meta tags before
+   * any stylesheet loads, so they cannot read --colour-paper. Keep them in
    * step with that token by hand.
    */
-  themeColor: '#F7F3E9',
-  colorScheme: 'light',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#F2F5F6' },
+    { media: '(prefers-color-scheme: dark)', color: '#06131B' },
+  ],
+  colorScheme: 'light dark',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="id" className={`${prose.variable} ${ui.variable} ${mono.variable}`}>
+    /*
+     * suppressHydrationWarning: the boot script may set data-theme on <html>
+     * before React hydrates, and that attribute is meant to differ from the
+     * server's markup. It silences this one element only.
+     */
+    <html
+      lang="id"
+      className={`${prose.variable} ${ui.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        {/* Before paint, so a reader who chose a theme never sees the other flash. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
+      </head>
       <body className="min-h-screen bg-paper text-ink antialiased">{children}</body>
     </html>
   )

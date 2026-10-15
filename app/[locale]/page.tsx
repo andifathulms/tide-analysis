@@ -221,7 +221,7 @@ export async function Home({ locale }: { locale: Locale }) {
                       ? `/${locale}/resolusi`
                       : `/${locale}/${segment}/${entry}`
                   }
-                  className="prose-serif text-title text-ink hover:text-prediction"
+                  className="text-title font-bold tracking-tight text-ink hover:underline hover:underline-offset-4"
                 >
                   {dict.nav[segment]}
                 </Link>
@@ -288,7 +288,7 @@ export async function Home({ locale }: { locale: Locale }) {
                 <div className="space-y-2">
                   <Link
                     href={`/${locale}/catatan/${station.stationId}`}
-                    className="prose-serif text-title text-ink hover:text-prediction"
+                    className="text-title font-bold tracking-tight text-ink hover:underline hover:underline-offset-4"
                   >
                     {station.stationName}
                   </Link>

@@ -218,7 +218,7 @@ export default function LadderPage({ params }: { params: { locale: string } }) {
               <Card as="li" key={station.stationId}>
                 <Link
                   href={`/${locale}/resolusi/${station.stationId}`}
-                  className="prose-serif text-title text-ink hover:text-prediction"
+                  className="text-title font-bold tracking-tight text-ink hover:underline hover:underline-offset-4"
                 >
                   {station.stationName}
                 </Link>

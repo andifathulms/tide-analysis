@@ -31,6 +31,13 @@ export interface Dictionary {
   readonly siteName: string
   readonly tagline: string
   readonly skipToContent: string
+  /** The theme toggle: its name, and what each state is called. */
+  readonly theme: {
+    readonly label: string
+    readonly system: string
+    readonly light: string
+    readonly dark: string
+  }
   readonly nav: {
     readonly beranda: string
     readonly catatan: string
@@ -406,6 +413,12 @@ const id: Dictionary = {
   siteName: 'Tide Analysis',
   tagline: 'Analisis harmonik pasang surut dari pengamatan nyata',
   skipToContent: 'Lompat ke isi',
+  theme: {
+    label: 'Tema',
+    system: 'Ikuti sistem',
+    light: 'Terang',
+    dark: 'Gelap',
+  },
   nav: {
     beranda: 'Beranda',
     catatan: 'Catatan',
@@ -911,6 +924,12 @@ const en: Dictionary = {
   siteName: 'Tide Analysis',
   tagline: 'Tidal harmonic analysis from real observations',
   skipToContent: 'Skip to content',
+  theme: {
+    label: 'Theme',
+    system: 'Match system',
+    light: 'Light',
+    dark: 'Dark',
+  },
   nav: {
     beranda: 'Home',
     catatan: 'Record',

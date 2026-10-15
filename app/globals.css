@@ -16,77 +16,109 @@
  * its own soft tint; graphical-only strokes clear 3:1.
  */
 :root {
+  /*
+   * The palette is a hydrographic plotting table: cool chart-table paper by
+   * day, a night watch in the dark theme, and one deep night band reserved for
+   * the two hero surfaces (home, method). It replaced a warm cream marégraphe
+   * paper in October 2026.
+   *
+   * The rule the palette enforces: colour means data. The three series and
+   * the reserved red carry meaning; actions, links and active states are ink.
+   * Contrast figures are measured, light theme first, then dark.
+   */
+
   /* --- Surfaces ------------------------------------------------------ */
-  /** The chart roll itself — every page sits on it. */
-  --colour-paper: 247 243 233;
-  /** Raised surfaces: cards, tables, controls. */
-  --colour-surface: 255 253 247;
-  /** A recessed band, for asides and secondary panels. */
-  --colour-sunken: 240 235 221;
+  /** The page itself: cool paper with a slight sea-blue bias. */
+  --colour-paper: 242 245 246;
+  /** Raised surfaces: cards, tables, controls, the chart face. */
+  --colour-surface: 255 255 255;
+  /** A recessed band — row hover, the held-out window on the chart. */
+  --colour-sunken: 231 237 240;
 
   /* --- Ink ----------------------------------------------------------- */
-  /** Primary ink — text, and the observed trace.   12.5:1 on paper */
-  --colour-ink: 20 48 58;
-  /** Secondary prose.                               6.4:1 on paper */
-  --colour-ink-muted: 74 91 98;
+  /** Primary ink — text, the observed trace, and every action. 14.4:1 · 15.8:1 */
+  --colour-ink: 11 37 51;
+  /** Secondary prose.                                 6.9:1 · 9.4:1 */
+  --colour-ink-muted: 65 86 106;
   /**
-   * Labels, eyebrows, captions.                     5.7:1 on paper
-   *
-   * Was #5D6B71, which measured 4.63:1 on sunken — over the bar, but with no
-   * margin, and it carries the eyebrow that labels every section on the site.
+   * Labels, eyebrows, captions.                       5.2:1 · 7.0:1
+   * Its weakest pairing is the prediction tint, 4.84:1 — still over the bar.
    */
-  --colour-ink-faint: 85 98 105;
+  --colour-ink-faint: 86 105 122;
 
   /* --- Rules --------------------------------------------------------- */
-  /** The printed ruling, and the hairlines that echo it. Never text. */
-  --colour-grid: 216 210 194;
-  --colour-rule: 230 224 208;
+  /** The printed ruling, for anything a reader measures from. Never text. */
+  --colour-grid: 198 211 217;
+  /** Page-level hairlines that carry no reading. */
+  --colour-rule: 216 225 229;
 
   /* --- The three series ---------------------------------------------- */
   /**
-   * Validated together against lightness band, chroma floor, CVD separation
-   * across all pairs, the normal-vision floor, and contrast. Do not retune one
-   * without re-running the trio: they have to stay apart from each other as
-   * well as from the paper.
+   * Blue against ochre is the pair that survives every common colour-vision
+   * deficiency, and the two sit in different lightness bands in both themes.
+   * Re-tune them together or not at all.
    */
-  /** Prediction.                                     4.9:1 on paper */
-  --colour-prediction: 0 113 158;
-  /**
-   * Residual, as a chart stroke.                    3.3:1 — graphical only
-   *
-   * Nudged four units down from #C07A16, which measured 2.92:1 where the
-   * trace crosses the shaded held-out region — under the 3:1 floor for a
-   * graphical object, on the one part of the chart that carries the argument.
-   * CVD separation from the other two traces is unchanged.
-   */
-  --colour-residual: 188 119 21;
-  /**
-   * Residual, as text.                               5.4:1 on paper
-   *
-   * The stroke ochre is tuned to sit apart from the other two traces on the
-   * chart face, which puts it under the text floor. The residual is the honest
-   * measure of the fit (invariant 10) and was being set in the least legible
-   * colour on the site; it now has a darker sibling for type. Same hue, so the
-   * RMS readout still reads as belonging to the ochre band.
-   */
-  --colour-residual-text: 143 87 17;
-  /** Unresolved. Reserved — refusals and ill-conditioning, never decoration. */
-  --colour-unresolved: 176 57 43;
-  /** Datum lines on the chart face, and their labels. 5.3:1 on paper */
-  --colour-datum: 90 102 112;
+  /** Prediction — the fitted model, and nothing else.  5.4:1 · 8.3:1 */
+  --colour-prediction: 0 104 166;
+  /** Residual, as a chart stroke.   3.2:1 on sunken — graphical only · 8.4:1 */
+  --colour-residual: 184 116 12;
+  /** Residual, as text.                               5.7:1 · 10.1:1 */
+  --colour-residual-text: 138 85 8;
+  /** Unresolved. Reserved — refusals and ill-conditioning. 5.2:1 · 7.4:1 */
+  --colour-unresolved: 190 52 40;
+  /** Datum lines on the chart face, and their labels. 5.1:1 · 7.2:1 */
+  --colour-datum: 89 106 120;
 
   /* --- Tints, for fills that must stay behind the marks --------------- */
-  --colour-prediction-soft: 228 240 246;
-  --colour-residual-soft: 248 238 220;
-  --colour-unresolved-soft: 247 231 228;
+  --colour-prediction-soft: 225 239 247;
+  --colour-residual-soft: 247 238 221;
+  --colour-unresolved-soft: 251 233 230;
 
+  /* --- The night band -------------------------------------------------- */
+  /**
+   * One bold surface, used behind the home hero and the method masthead only.
+   * Its own ink set, because a series has to read on it in both themes:
+   * observation 14.1:1, prediction 7.8:1, residual 8.0:1, muted 8.1:1.
+   */
+  --colour-night: 7 26 38;
+  --colour-night-raised: 12 37 54;
+  --colour-night-rule: 27 58 80;
+  --colour-night-grid: 24 52 74;
+  --colour-night-ink: 220 231 236;
+  --colour-night-muted: 157 178 190;
+  --colour-night-prediction: 83 182 236;
+  --colour-night-residual: 227 161 58;
+  /** The navigation warning, where it sits on the band.  7.8:1 */
+  --colour-night-alert: 255 138 124;
+
+  /* --- Tide character -------------------------------------------------- */
+  /**
+   * Formzahl, as an ordered single-hue ramp: two tides a day to one. Violet so
+   * it can never be read as one of the three series. Fills only — the class
+   * name is always printed beside it in ink.
+   */
+  --colour-fz-1: 195 181 232;
+  --colour-fz-2: 154 130 214;
+  --colour-fz-3: 113 88 189;
+  --colour-fz-4: 75 51 145;
+
+  /* --- Depth ------------------------------------------------------------ */
+  /** Shadows take their own colour: ink turns pale in the dark theme. */
+  --shadow-card: 0 1px 2px rgb(11 37 51 / 0.05), 0 2px 10px rgb(11 37 51 / 0.05);
+  --shadow-raised: 0 2px 4px rgb(11 37 51 / 0.06), 0 16px 36px -12px rgb(11 37 51 / 0.2);
+
+  color-scheme: light;
   /* --- Type scale ----------------------------------------------------- */
   /**
    * One scale, ratio 1.2 from a 16px body. Consecutive steps for text sizes;
    * display and hero skip a step, because a headline that merely continues the
    * run of body sizes does not read as a headline.
    *
-   *   12 · 13 · 16 · 19 · 23 · 28 · (33) · 40 · 48
+   *   12 · 13 · 16 · 19 · 23 · 28 · (33) · 40 · (48) · 60
+   *
+   * Hero skips a second step since the sans took over the headlines: at 800
+   * weight and tight tracking, 48px read as a large title rather than as the
+   * page's one statement.
    *
    * Body was 15px. Micro was 11px. Both sat under the legibility floor for the
    * long Indonesian prose this site is mostly made of.
@@ -98,7 +130,7 @@
   --text-title: 1.4375rem;
   --text-headline: 1.75rem;
   --text-display: 2.5rem;
-  --text-hero: 3rem;
+  --text-hero: 3.75rem;
   /**
    * Axis and trace labels inside the chart. Not a step on the scale above:
    * the SVG is drawn in viewBox units and scaled to the container, so this is
@@ -132,6 +164,74 @@
   --space-section: 4rem;
 }
 
+/**
+ * The night watch. Designed, not inverted: every token is re-measured on the
+ * dark paper, and the ramp flips so "more diurnal" stays "more contrast".
+ *
+ * Two selectors carry the same values: the system preference, unless the
+ * reader chose light, and the reader's explicit choice of dark. The choice is
+ * written to <html data-theme> by the script in app/layout.tsx before paint.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --colour-paper: 6 19 27;
+    --colour-surface: 12 30 41;
+    --colour-sunken: 10 25 34;
+    --colour-ink: 228 237 241;
+    --colour-ink-muted: 169 186 196;
+    --colour-ink-faint: 142 160 172;
+    --colour-grid: 29 54 70;
+    --colour-rule: 24 48 62;
+    --colour-prediction: 83 182 236;
+    --colour-residual: 227 161 58;
+    --colour-residual-text: 235 181 97;
+    --colour-unresolved: 255 122 107;
+    --colour-datum: 147 163 174;
+    --colour-prediction-soft: 14 42 59;
+    --colour-residual-soft: 42 32 16;
+    --colour-unresolved-soft: 51 20 15;
+    --colour-night: 10 33 48;
+    --colour-night-raised: 15 43 61;
+    --colour-night-rule: 31 66 88;
+    --colour-fz-1: 90 75 140;
+    --colour-fz-2: 125 102 194;
+    --colour-fz-3: 160 138 230;
+    --colour-fz-4: 205 191 251;
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 2px 10px rgb(0 0 0 / 0.25);
+    --shadow-raised: 0 2px 4px rgb(0 0 0 / 0.4), 0 16px 36px -12px rgb(0 0 0 / 0.7);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --colour-paper: 6 19 27;
+  --colour-surface: 12 30 41;
+  --colour-sunken: 10 25 34;
+  --colour-ink: 228 237 241;
+  --colour-ink-muted: 169 186 196;
+  --colour-ink-faint: 142 160 172;
+  --colour-grid: 29 54 70;
+  --colour-rule: 24 48 62;
+  --colour-prediction: 83 182 236;
+  --colour-residual: 227 161 58;
+  --colour-residual-text: 235 181 97;
+  --colour-unresolved: 255 122 107;
+  --colour-datum: 147 163 174;
+  --colour-prediction-soft: 14 42 59;
+  --colour-residual-soft: 42 32 16;
+  --colour-unresolved-soft: 51 20 15;
+  --colour-night: 10 33 48;
+  --colour-night-raised: 15 43 61;
+  --colour-night-rule: 31 66 88;
+  --colour-fz-1: 90 75 140;
+  --colour-fz-2: 125 102 194;
+  --colour-fz-3: 160 138 230;
+  --colour-fz-4: 205 191 251;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 2px 10px rgb(0 0 0 / 0.25);
+  --shadow-raised: 0 2px 4px rgb(0 0 0 / 0.4), 0 16px 36px -12px rgb(0 0 0 / 0.7);
+  color-scheme: dark;
+}
+
 @layer base {
   html {
     background-color: rgb(var(--colour-paper));
@@ -151,7 +251,7 @@
     font-size: var(--text-body);
     line-height: 1.65;
     /*
-     * Warm paper, and nothing printed on it.
+     * Plain paper, and nothing printed on it.
      *
      * The page carried the same ruling as the chart for a while, which was a
      * mistake: the chart's grid is a measurement scale a reader takes values
@@ -163,15 +263,25 @@
     background-color: rgb(var(--colour-paper));
   }
 
-  /* Prose and headings wear the serif; controls and labels wear the sans. */
+  /*
+   * Headings wear the sans at weight, tightly tracked. The serif is kept for
+   * one accent only (`.accent-serif`): the italic that nautical charts letter
+   * water in.
+   */
   h1,
   h2,
   h3,
   h4 {
-    font-family: theme('fontFamily.prose');
-    font-weight: 500;
+    font-family: theme('fontFamily.ui');
+    font-weight: 700;
+    letter-spacing: -0.02em;
     color: rgb(var(--colour-ink));
     text-wrap: balance;
+  }
+
+  h1 {
+    font-weight: 800;
+    letter-spacing: -0.035em;
   }
 
   p {
@@ -183,7 +293,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid rgb(var(--colour-prediction));
+    outline: 2px solid rgb(var(--colour-ink));
     outline-offset: 2px;
     border-radius: 2px;
   }
@@ -202,7 +312,7 @@
    * native rendering — including how it behaves under forced colours.
    */
   input[type='range'] {
-    accent-color: rgb(var(--colour-prediction));
+    accent-color: rgb(var(--colour-ink));
     height: var(--control-hit);
     cursor: pointer;
   }
@@ -216,8 +326,35 @@
     font-feature-settings: 'tnum' 1;
   }
 
-  .prose-serif {
+  /** The italic accent — a phrase in a hero, a sea's name on the atlas. */
+  .accent-serif {
     font-family: theme('fontFamily.prose');
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  /**
+   * The night band: the one bold surface. It re-scopes the series tokens so a
+   * chart drawn inside it reads against the band rather than the paper —
+   * components keep naming `ink`, `prediction`, `residual`, unchanged.
+   */
+  .night {
+    --colour-surface: var(--colour-night);
+    --colour-sunken: var(--colour-night-raised);
+    --colour-ink: var(--colour-night-ink);
+    --colour-ink-muted: var(--colour-night-muted);
+    --colour-ink-faint: var(--colour-night-muted);
+    --colour-grid: var(--colour-night-grid);
+    --colour-rule: var(--colour-night-rule);
+    --colour-datum: var(--colour-night-muted);
+    --colour-prediction: var(--colour-night-prediction);
+    --colour-residual: var(--colour-night-residual);
+    --colour-residual-text: var(--colour-night-residual);
+    --colour-unresolved: var(--colour-night-alert);
+    --colour-unresolved-soft: var(--colour-night-raised);
+    background-color: rgb(var(--colour-night));
+    color: rgb(var(--colour-night-ink));
   }
 
   /* A raised sheet on the ruled paper. */

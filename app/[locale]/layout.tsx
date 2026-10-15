@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { BrandMark } from '@/components/BrandMark'
 import { MakerSignature } from '@/components/MakerSignature'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 
 export function generateStaticParams() {
@@ -60,7 +61,7 @@ export default function LocaleLayout({
           {/* The lockup: the mark, then the wordmark in the site's own serif. */}
           <Link href={`/${locale}`} className="group flex items-center gap-2.5">
             <BrandMark className="h-7 w-7 shrink-0 rounded-[6px]" />
-            <span className="prose-serif text-title leading-none text-ink group-hover:text-prediction">
+            <span className="text-title font-extrabold leading-none tracking-tight text-ink">
               {dict.siteName}
             </span>
           </Link>
@@ -95,6 +96,7 @@ export default function LocaleLayout({
               <span className="sm:hidden">{other.toUpperCase()}</span>
               <span className="hidden sm:inline">{otherName}</span>
             </Link>
+            <ThemeToggle dict={dict} />
           </nav>
         </div>
       </header>
