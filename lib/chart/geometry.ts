@@ -135,34 +135,69 @@ export function seriesPath(
   return path
 }
 
-/** Thin a long series to at most `maxPoints`, keeping extremes in each bucket. */
+/**
+ * Thin a long series to at most about `maxPoints`, keeping extremes in each
+ * bucket.
+ *
+ * With `gapThresholdSec`, buckets never span a gap in the record, and each gap
+ * comes out as a NaN sample — which `seriesPath` draws as a break. The caller
+ * must then break on NaN only, not on spacing: after thinning, consecutive
+ * kept samples sit several sampling intervals apart everywhere, and treating
+ * that spacing as a gap drew every long record as scattered dashes.
+ */
 export function decimate(
   timesSec: ArrayLike<number>,
   values: ArrayLike<number>,
   maxPoints: number,
+  gapThresholdSec?: number,
 ): { timesSec: Float64Array; values: Float64Array } {
   const n = timesSec.length
-  if (n <= maxPoints) {
-    return { timesSec: Float64Array.from(timesSec), values: Float64Array.from(values) }
-  }
-  const bucketSize = Math.ceil(n / Math.floor(maxPoints / 2))
   const outTimes: number[] = []
   const outValues: number[] = []
-  for (let start = 0; start < n; start += bucketSize) {
-    const end = Math.min(start + bucketSize, n)
-    let minIndex = start
-    let maxIndex = start
-    for (let i = start; i < end; i += 1) {
-      if ((values[i] as number) < (values[minIndex] as number)) minIndex = i
-      if ((values[i] as number) > (values[maxIndex] as number)) maxIndex = i
+  const bucketSize = n <= maxPoints ? 1 : Math.ceil(n / Math.floor(maxPoints / 2))
+
+  const thinRun = (from: number, to: number) => {
+    if (bucketSize === 1) {
+      for (let i = from; i < to; i += 1) {
+        outTimes.push(timesSec[i] as number)
+        outValues.push(values[i] as number)
+      }
+      return
     }
-    const [first, second] = minIndex <= maxIndex ? [minIndex, maxIndex] : [maxIndex, minIndex]
-    outTimes.push(timesSec[first] as number)
-    outValues.push(values[first] as number)
-    if (second !== first) {
-      outTimes.push(timesSec[second] as number)
-      outValues.push(values[second] as number)
+    for (let start = from; start < to; start += bucketSize) {
+      const end = Math.min(start + bucketSize, to)
+      let minIndex = start
+      let maxIndex = start
+      for (let i = start; i < end; i += 1) {
+        if ((values[i] as number) < (values[minIndex] as number)) minIndex = i
+        if ((values[i] as number) > (values[maxIndex] as number)) maxIndex = i
+      }
+      const [first, second] = minIndex <= maxIndex ? [minIndex, maxIndex] : [maxIndex, minIndex]
+      outTimes.push(timesSec[first] as number)
+      outValues.push(values[first] as number)
+      if (second !== first) {
+        outTimes.push(timesSec[second] as number)
+        outValues.push(values[second] as number)
+      }
     }
   }
+
+  if (gapThresholdSec === undefined) {
+    thinRun(0, n)
+  } else {
+    let runStart = 0
+    for (let i = 1; i <= n; i += 1) {
+      const atGap =
+        i === n || (timesSec[i] as number) - (timesSec[i - 1] as number) > gapThresholdSec
+      if (!atGap) continue
+      thinRun(runStart, i)
+      if (i < n) {
+        outTimes.push(((timesSec[i - 1] as number) + (timesSec[i] as number)) / 2)
+        outValues.push(Number.NaN)
+      }
+      runStart = i
+    }
+  }
+
   return { timesSec: Float64Array.from(outTimes), values: Float64Array.from(outValues) }
 }

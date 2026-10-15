@@ -106,17 +106,23 @@ export function buildChartModel(input: ChartInput): ChartModel {
   ])
   const y = linearScale(yDomain, [MARGIN.top + plotHeight, MARGIN.top])
 
-  // A break in the trace wherever the record has no observation.
+  /*
+   * A break in the trace wherever the record has no observation. Gaps are
+   * found on the full series, before thinning, and arrive at seriesPath as NaN
+   * samples — so the path breaks on those alone (an infinite spacing
+   * threshold), never on the spacing thinning itself creates.
+   */
   const gapThresholdSec = input.intervalSec * 1.5
+  const breakOnNaNOnly = Number.POSITIVE_INFINITY
   const maxPoints = Math.max(Math.round(plotWidth * 2), 200)
 
-  const observed = decimate(input.timesSec, input.observedM, maxPoints)
-  const observedPath = seriesPath(observed.timesSec, observed.values, x, y, gapThresholdSec)
+  const observed = decimate(input.timesSec, input.observedM, maxPoints, gapThresholdSec)
+  const observedPath = seriesPath(observed.timesSec, observed.values, x, y, breakOnNaNOnly)
 
   let modelPath: string | null = null
   if (input.modelM !== null) {
-    const modelled = decimate(input.timesSec, input.modelM, maxPoints)
-    modelPath = seriesPath(modelled.timesSec, modelled.values, x, y, gapThresholdSec)
+    const modelled = decimate(input.timesSec, input.modelM, maxPoints, gapThresholdSec)
+    modelPath = seriesPath(modelled.timesSec, modelled.values, x, y, breakOnNaNOnly)
   }
 
   let residualPath: string | null = null
@@ -130,8 +136,8 @@ export function buildChartModel(input: ChartInput): ChartModel {
     const residualExtent = padDomain(extent(input.residualM), 0.15)
     const bound = Math.max(Math.abs(residualExtent[0]), Math.abs(residualExtent[1])) || 0.1
     const yr = linearScale([-bound, bound], [top + innerHeight, top])
-    const decimated = decimate(input.timesSec, input.residualM, maxPoints)
-    residualPath = seriesPath(decimated.timesSec, decimated.values, x, yr, gapThresholdSec)
+    const decimated = decimate(input.timesSec, input.residualM, maxPoints, gapThresholdSec)
+    residualPath = seriesPath(decimated.timesSec, decimated.values, x, yr, breakOnNaNOnly)
     residualZeroY = yr(0)
     residualRules = heightTicks([-bound, bound], 3).map((value) => ({
       y: yr(value),
