@@ -50,6 +50,13 @@ export interface Dictionary {
     readonly stages: string
     readonly checks: string
     readonly onThisPage: string
+    readonly index: {
+      readonly chart: string
+      readonly diagnostics: string
+      readonly constituents: string
+      readonly stability: string
+      readonly derivation: string
+    }
   }
   readonly nav: {
     readonly beranda: string
@@ -265,6 +272,12 @@ export interface Dictionary {
     readonly noRecords: string
   }
   readonly komponen: {
+    readonly spectrumEyebrow: string
+    readonly spectrumTitle: string
+    readonly spectrumLead: string
+    readonly spectrumUnit: string
+    readonly spectrumUnresolved: string
+    readonly species: Record<'long-period' | 'diurnal' | 'semidiurnal' | 'shallow-water', string>
     readonly eyebrow: string
     readonly tableCaption: string
     readonly tableUncertainty: string
@@ -448,6 +461,13 @@ const id: Dictionary = {
     stages: 'Tahap analisis',
     checks: 'Dua cara menguji',
     onThisPage: 'Di halaman ini',
+    index: {
+      chart: 'Grafik',
+      diagnostics: 'Diagnostik',
+      constituents: 'Komponen',
+      stability: 'Stabilitas',
+      derivation: 'Derivasi',
+    },
   },
   nav: {
     beranda: 'Beranda',
@@ -728,6 +748,18 @@ const id: Dictionary = {
       'Ini bukan konstanta harmonik dan tidak boleh diperlakukan sebagai amplitudo. Sebagian dari tiap angka di atas adalah milik komponen yang bercampur dengannya — semakin tinggi korelasi yang tertera, semakin besar bagian itu, dan pada 0,9 ke atas angkanya tidak lagi berarti apa pun sendirian. Berapa persisnya bagian itu tidak dapat diketahui; justru itulah sebabnya penyelesaian menolak. Fase sengaja tidak ditampilkan.',
   },
   komponen: {
+    spectrumEyebrow: 'Spektrum',
+    spectrumTitle: 'Di mana energi pasang surut berada',
+    spectrumLead:
+      'Setiap batang adalah satu komponen pada frekuensinya, tingginya amplitudo H hasil pencocokan. Komponen yang tidak dapat dipisahkan rekaman ini ditandai dengan garis putus merah — tanpa angka, hanya apa yang dibutuhkannya.',
+    spectrumUnit: 'siklus per hari',
+    spectrumUnresolved: 'belum terurai · dengan {other}, perlu {days} hari',
+    species: {
+      'long-period': 'Periode panjang',
+      diurnal: 'Harian (diurnal)',
+      semidiurnal: 'Tengah harian (semidiurnal)',
+      'shallow-water': 'Perairan dangkal',
+    },
     eyebrow: 'Komponen',
     tableCaption:
       'H adalah setengah tinggi gelombang komponen itu; g adalah keterlambatannya terhadap posisi Bulan atau Matahari, dan kolom di sebelahnya menyatakan hal yang sama dalam jam — g dibagi kecepatan komponen. f dan u adalah koreksi 18,6 tahunan yang sudah diterapkan dan tetap ditampilkan.',
@@ -976,6 +1008,13 @@ const en: Dictionary = {
     stages: 'Analysis stages',
     checks: 'Two ways to test',
     onThisPage: 'On this page',
+    index: {
+      chart: 'Chart',
+      diagnostics: 'Diagnostics',
+      constituents: 'Constituents',
+      stability: 'Stability',
+      derivation: 'Derivation',
+    },
   },
   nav: {
     beranda: 'Home',
@@ -1256,6 +1295,18 @@ const en: Dictionary = {
       'This is not a harmonic constant and must not be read as an amplitude. Part of each number above belongs to whatever it is mixed in with — the higher the correlation shown, the larger that part, and above about 0.9 the number means nothing on its own at all. How much exactly cannot be known, which is why the solve refused in the first place. No phase is shown, deliberately.',
   },
   komponen: {
+    spectrumEyebrow: 'Spectrum',
+    spectrumTitle: 'Where the tide’s energy sits',
+    spectrumLead:
+      'Each bar is one constituent at its frequency, its height the fitted amplitude H. A constituent this record cannot separate is marked with a dashed red line — no number, only what it would need.',
+    spectrumUnit: 'cycles per day',
+    spectrumUnresolved: 'unresolved · with {other}, needs {days} days',
+    species: {
+      'long-period': 'Long period',
+      diurnal: 'Diurnal',
+      semidiurnal: 'Semidiurnal',
+      'shallow-water': 'Shallow water',
+    },
     eyebrow: 'Constituents',
     tableCaption:
       'H is half the height of that constituent’s wave; g is how late it arrives behind the Moon or Sun, and the column beside it says the same thing in hours — g divided by the constituent’s speed. f and u are the 18.6-year corrections, applied and still shown.',

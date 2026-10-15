@@ -231,6 +231,34 @@ export function Badge({
   )
 }
 
+/**
+ * "On this page": the long views' sections as a row of jump links, so six
+ * panels read as a map rather than a scroll. Plain fragment links — the
+ * masthead's scroll-padding keeps each target clear of the sticky header.
+ */
+export function PageIndex({
+  label,
+  items,
+}: {
+  label: string
+  items: ReadonlyArray<{ readonly href: string; readonly label: string }>
+}) {
+  return (
+    <nav aria-label={label} className="flex flex-wrap items-center gap-x-2 gap-y-2">
+      <span className="eyebrow mr-1">{label}</span>
+      {items.map((item) => (
+        <a
+          key={item.href}
+          href={item.href}
+          className="rounded-full border border-rule bg-surface px-3 py-1 text-caption text-inkMuted transition-colors duration-150 ease-tide hover:border-ink hover:text-ink"
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+  )
+}
+
 /** Literal class names, so Tailwind can see them. */
 const FZ_FILL = { 1: 'bg-fz1', 2: 'bg-fz2', 3: 'bg-fz3', 4: 'bg-fz4' } as const
 

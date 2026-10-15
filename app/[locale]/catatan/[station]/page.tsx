@@ -8,7 +8,7 @@ import { FitDiagnostics, RefusalNotice } from '@/components/Diagnostics'
 import { FitWindowControl } from '@/components/FitWindowControl'
 import { LeakagePanel } from '@/components/LeakagePanel'
 import { StageNav, StationHeader } from '@/components/StationNav'
-import { Callout, Caption, Card, Section, Stat, TraceKey } from '@/components/ui'
+import { Callout, Caption, Card, PageIndex, Section, Stat, TraceKey } from '@/components/ui'
 import { dictionary, fill, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations, stationSummary } from '@/lib/records/registry'
 import { buildChartModel } from '@/lib/chart/model'
@@ -154,9 +154,28 @@ export default async function RecordPage({
         />
         <StageNav dict={dict} locale={locale} stationId={station.stationId} active="catatan" />
         <NavigationWarning dict={dict} compact />
+        <PageIndex
+          label={dict.shell.onThisPage}
+          items={[
+            { href: '#grafik', label: dict.shell.index.chart },
+            ...(shown.outcome.type === 'fit'
+              ? [
+                  { href: '#diagnostik', label: dict.shell.index.diagnostics },
+                  { href: '#komponen', label: dict.shell.index.constituents },
+                ]
+              : []),
+            ...(stability !== null ? [{ href: '#stabilitas', label: dict.shell.index.stability }] : []),
+            ...(derivation !== null ? [{ href: '#derivasi', label: dict.shell.index.derivation }] : []),
+          ]}
+        />
       </div>
 
-      <Section eyebrow={dict.catatan.eyebrow} title={dict.catatan.title} lead={dict.catatan.lead}>
+      <Section
+        id="grafik"
+        eyebrow={dict.catatan.eyebrow}
+        title={dict.catatan.title}
+        lead={dict.catatan.lead}
+      >
         <Card>
           <TraceKey
             items={[
@@ -230,6 +249,7 @@ export default async function RecordPage({
 
             {shown.outcome.type === 'fit' && (
               <>
+                <div id="diagnostik" />
                 <FitDiagnostics
                   dict={dict}
                   fit={shown.outcome}
@@ -261,7 +281,7 @@ export default async function RecordPage({
                   <p className="max-w-reading">{dict.catatan.readingBody}</p>
                 </Callout>
 
-                <Section eyebrow={dict.komponen.eyebrow} title={dict.komponen.title}>
+                <Section id="komponen" eyebrow={dict.komponen.eyebrow} title={dict.komponen.title}>
                   <ConstituentTable dict={dict} constants={shown.outcome.constants} />
                   <Caption>{dict.komponen.tableCaption}</Caption>
                   <Caption>{dict.komponen.tableUncertainty}</Caption>
@@ -275,7 +295,7 @@ export default async function RecordPage({
                    * already uses for provenance, not a new pattern.
                    */}
                   {stability !== null && (
-                    <details className="group mt-4">
+                    <details id="stabilitas" className="group mt-4">
                       <summary className="cursor-pointer space-y-1.5">
                         <p className="eyebrow">{dict.catatan.stabilityEyebrow}</p>
                         <p className="text-title text-ink group-hover:underline group-hover:decoration-inkFaint group-hover:underline-offset-4">
@@ -289,7 +309,7 @@ export default async function RecordPage({
                   )}
 
                   {derivation !== null && (
-                    <details className="group mt-4">
+                    <details id="derivasi" className="group mt-4">
                       <summary className="cursor-pointer space-y-1.5">
                         <p className="eyebrow">{dict.catatan.derivationEyebrow}</p>
                         <p className="text-title text-ink group-hover:underline group-hover:decoration-inkFaint group-hover:underline-offset-4">

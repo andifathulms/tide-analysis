@@ -8,6 +8,8 @@ import { NodalCyclePanel } from '@/components/NodalCyclePanel'
 import { FitDiagnostics, RefusalNotice } from '@/components/Diagnostics'
 import { NavigationWarning } from '@/components/NavigationWarning'
 import { StageNav, StationHeader } from '@/components/StationNav'
+import { ConstituentSpectrum } from '@/components/ConstituentSpectrum'
+import { buildSpectrumModel } from '@/lib/chart/spectrum'
 import { Caption, Card, Section, Stat } from '@/components/ui'
 import { dictionary, isLocale, LOCALES, type Locale } from '@/lib/i18n/dictionary'
 import { stations, stationSummary } from '@/lib/records/registry'
@@ -112,6 +114,18 @@ export default async function ConstituentsPage({
 
       {shown.outcome.type === 'fit' && (
         <>
+          <Section
+            id="spektrum"
+            eyebrow={dict.komponen.spectrumEyebrow}
+            title={dict.komponen.spectrumTitle}
+            lead={dict.komponen.spectrumLead}
+          >
+            <ConstituentSpectrum
+              dict={dict}
+              model={buildSpectrumModel(shown.outcome.constants, fallback?.dropped ?? [])}
+            />
+          </Section>
+
           <Section
             eyebrow={dict.komponen.eyebrow}
             title={dict.komponen.title}
